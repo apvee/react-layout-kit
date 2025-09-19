@@ -6,8 +6,17 @@
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "llm-full.txt"
   ],
+  "typesVersions": {
+    "*": {
+      "components/*": ["./dist/components/*.d.ts"],
+      "core/*": ["./dist/core/*.d.ts"],
+      "types": ["./dist/types.d.ts"],
+      "hooks": ["./dist/hooks.d.ts"]
+    }
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,89 +24,89 @@
       "require": "./dist/index.js"
     },
     "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.mjs",
-      "require": "./dist/types/index.js"
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.mjs",
+      "require": "./dist/types.js"
     },
     "./components/Box": {
-      "types": "./dist/components/Box/index.d.ts",
-      "import": "./dist/components/Box/index.mjs",
-      "require": "./dist/components/Box/index.js"
+      "types": "./dist/components/Box.d.ts",
+      "import": "./dist/components/Box.mjs",
+      "require": "./dist/components/Box.js"
     },
     "./components/AreaGrid": {
-      "types": "./dist/components/AreaGrid/index.d.ts",
-      "import": "./dist/components/AreaGrid/index.mjs",
-      "require": "./dist/components/AreaGrid/index.js"
+      "types": "./dist/components/AreaGrid.d.ts",
+      "import": "./dist/components/AreaGrid.mjs",
+      "require": "./dist/components/AreaGrid.js"
     },
     "./components/AspectRatio": {
-      "types": "./dist/components/AspectRatio/index.d.ts",
-      "import": "./dist/components/AspectRatio/index.mjs",
-      "require": "./dist/components/AspectRatio/index.js"
+      "types": "./dist/components/AspectRatio.d.ts",
+      "import": "./dist/components/AspectRatio.mjs",
+      "require": "./dist/components/AspectRatio.js"
     },
-    "./Center": {
-      "types": "./dist/components/Center/index.d.ts",
-      "import": "./dist/components/Center/index.mjs",
-      "require": "./dist/components/Center/index.js"
+    "./components/Center": {
+      "types": "./dist/components/Center.d.ts",
+      "import": "./dist/components/Center.mjs",
+      "require": "./dist/components/Center.js"
     },
     "./components/Container": {
-      "types": "./dist/components/Container/index.d.ts",
-      "import": "./dist/components/Container/index.mjs",
-      "require": "./dist/components/Container/index.js"
+      "types": "./dist/components/Container.d.ts",
+      "import": "./dist/components/Container.mjs",
+      "require": "./dist/components/Container.js"
     },
     "./components/Flex": {
-      "types": "./dist/components/Flex/index.d.ts",
-      "import": "./dist/components/Flex/index.mjs",
-      "require": "./dist/components/Flex/index.js"
+      "types": "./dist/components/Flex.d.ts",
+      "import": "./dist/components/Flex.mjs",
+      "require": "./dist/components/Flex.js"
     },
-    "./Grid": {
-      "types": "./dist/components/Grid/index.d.ts",
-      "import": "./dist/components/Grid/index.mjs",
-      "require": "./dist/components/Grid/index.js"
+    "./components/Grid": {
+      "types": "./dist/components/Grid.d.ts",
+      "import": "./dist/components/Grid.mjs",
+      "require": "./dist/components/Grid.js"
     },
-    "./Stack": {
-      "types": "./dist/components/Stack/index.d.ts",
-      "import": "./dist/components/Stack/index.mjs",
-      "require": "./dist/components/Stack/index.js"
+    "./components/Stack": {
+      "types": "./dist/components/Stack.d.ts",
+      "import": "./dist/components/Stack.mjs",
+      "require": "./dist/components/Stack.js"
     },
     "./components/Group": {
-      "types": "./dist/components/Group/index.d.ts",
-      "import": "./dist/components/Group/index.mjs",
-      "require": "./dist/components/Group/index.js"
+      "types": "./dist/components/Group.d.ts",
+      "import": "./dist/components/Group.mjs",
+      "require": "./dist/components/Group.js"
     },
-    "./SimpleGrid": {
-      "types": "./dist/components/SimpleGrid/index.d.ts",
-      "import": "./dist/components/SimpleGrid/index.mjs",
-      "require": "./dist/components/SimpleGrid/index.js"
+    "./components/SimpleGrid": {
+      "types": "./dist/components/SimpleGrid.d.ts",
+      "import": "./dist/components/SimpleGrid.mjs",
+      "require": "./dist/components/SimpleGrid.js"
     },
     "./components/Space": {
-      "types": "./dist/components/Space/index.d.ts",
-      "import": "./dist/components/Space/index.mjs",
-      "require": "./dist/components/Space/index.js"
+      "types": "./dist/components/Space.d.ts",
+      "import": "./dist/components/Space.mjs",
+      "require": "./dist/components/Space.js"
     },
     "./core/components": {
-      "types": "./dist/core/components/index.d.ts",
-      "import": "./dist/core/components/index.mjs",
-      "require": "./dist/core/components/index.js"
+      "types": "./dist/core/components.d.ts",
+      "import": "./dist/core/components.mjs",
+      "require": "./dist/core/components.js"
     },
     "./core/responsive": {
-      "types": "./dist/core/responsive/index.d.ts",
-      "import": "./dist/core/responsive/index.mjs",
-      "require": "./dist/core/responsive/index.js"
+      "types": "./dist/core/responsive.d.ts",
+      "import": "./dist/core/responsive.mjs",
+      "require": "./dist/core/responsive.js"
     },
     "./core/styling": {
-      "types": "./dist/core/styling/index.d.ts",
-      "import": "./dist/core/styling/index.mjs",
-      "require": "./dist/core/styling/index.js"
+      "types": "./dist/core/styling.d.ts",
+      "import": "./dist/core/styling.mjs",
+      "require": "./dist/core/styling.js"
     },
     "./core/configuration": {
-      "types": "./dist/core/configuration/index.d.ts",
-      "import": "./dist/core/configuration/index.mjs",
-      "require": "./dist/core/configuration/index.js"
+      "types": "./dist/core/configuration.d.ts",
+      "import": "./dist/core/configuration.mjs",
+      "require": "./dist/core/configuration.js"
     },
     "./core/utils": {
-      "types": "./dist/core/utils/index.d.ts",
-      "import": "./dist/core/utils/index.mjs",
-      "require": "./dist/core/utils/index.js"
+      "types": "./dist/core/utils.d.ts",
+      "import": "./dist/core/utils.mjs",
+      "require": "./dist/core/utils.js"
     },
     "./hooks": {
       "types": "./dist/hooks.d.ts",

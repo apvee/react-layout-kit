@@ -2,7 +2,7 @@
 
 An opinionated, type-safe React layout library that simplifies styling and layout creation without leaving the React component context. Features responsive CSS-in-JS with Box, Grid, Flex, and Stack components.
 
-Built with TypeScript, Emotion CSS, and Radix UI Slot, **@apvee/react-layout-kit** leverages Emotion CSS internally for optimized runtime style generation. This approach enables seamless dynamic styling based entirely on React props with minimal overhead, dramatically simplifying the React developer experience by eliminating the need for separate CSS files, complex CSS-in-JS setup, or verbose styled-components patterns.
+Built with TypeScript and Emotion CSS, **@apvee/react-layout-kit** leverages Emotion CSS internally for optimized runtime style generation along with a custom high-performance Slot implementation for component composition. This approach enables seamless dynamic styling based entirely on React props with minimal overhead, dramatically simplifying the React developer experience by eliminating the need for separate CSS files, complex CSS-in-JS setup, or verbose styled-components patterns.
 
 ## ✨ Why @apvee/react-layout-kit?
 
@@ -189,7 +189,7 @@ The `Box` component is the foundation of the library. It's a polymorphic compone
 
 | Prop             | Type      | Description                                       |
 | ---------------- | --------- | ------------------------------------------------- |
-| `asChild`        | `boolean` | Render as child element using Radix Slot          |
+| `asChild`        | `boolean` | Render as child element using internal Slot       |
 | `containerWidth` | `number`  | Fixed container width for responsive calculations |
 | `styleReset`     | `boolean` | Apply basic style reset (box-sizing: border-box)  |
 
@@ -1432,7 +1432,7 @@ setupBoxConfiguration(); // Call before rendering
 
 ### Why asChild?
 
-The `asChild` prop allows the Box component to render as any HTML element or React component while preserving all its styling capabilities. This is powered by Radix UI's Slot component.
+The `asChild` prop allows the Box component to render as any HTML element or React component while preserving all its styling capabilities. This is powered by an internal high-performance Slot implementation.
 
 ### Basic asChild Usage
 
@@ -1985,7 +1985,11 @@ npm run build
 npm run build-storybook
 ```
 
-## 📄 License
+## � Complete Documentation
+
+For comprehensive documentation including all features, advanced usage patterns, and implementation details, see [llm-full.txt](./llm-full.txt). This file contains the complete library reference and technical specifications designed to be used together with this README for AI code generation and development assistance.
+
+## �📄 License
 
 MIT License - see LICENSE file for details.
 

@@ -630,7 +630,7 @@ Convenient shorthand properties for common operations:
 ## COMPONENT COMPOSITION SYSTEM
 
 ### Slot Component Architecture
-**@apvee/react-layout-kit** includes a powerful custom Slot implementation that enables seamless component composition through the `asChild` pattern. This implementation is API-compatible with `@radix-ui/react-slot` but optimized for performance and zero external dependencies.
+**@apvee/react-layout-kit** includes a powerful custom Slot implementation that enables seamless component composition through the `asChild` pattern. This implementation is fully self-contained and optimized for performance with zero external dependencies.
 
 #### Slot Component
 The foundation of the composition system, enabling prop pass-through to child elements:
@@ -1335,7 +1335,7 @@ import { createStyles } from '@apvee/react-layout-kit/core/styling';
 - csstype: TypeScript CSS property definitions
 
 ### Internal Components
-- Custom Slot implementation: High-performance composition primitive for asChild pattern with advanced prop merging, compatible with @radix-ui/react-slot API but with zero external dependencies
+- Custom Slot implementation: High-performance composition primitive for asChild pattern with advanced prop merging, fully self-contained with zero external dependencies
 
 ### Build System
 - TypeScript with strict configuration

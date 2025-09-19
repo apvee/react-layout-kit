@@ -14,13 +14,13 @@ export default defineConfig({
     'components/Space': 'src/components/Space/index.ts',
     'components/Stack': 'src/components/Stack/index.ts',
     'components/Group': 'src/components/Group/index.ts',
-    types: 'src/types/index.ts',
     'core/responsive': 'src/core/responsive/index.ts',
     'core/styling': 'src/core/styling/index.ts',
     'core/components': 'src/core/components/index.ts',
     'core/configuration': 'src/core/configuration/index.ts',
     'core/utils': 'src/core/utils/index.ts',
-    hooks: 'src/hooks/index.ts'
+    'types': 'src/types/index.ts',
+    'hooks': 'src/hooks/index.ts'
   },
   outDir: 'dist',
   format: ['cjs', 'esm'],
