@@ -4,6 +4,7 @@ import { useElementWidth } from '@/hooks/useElementWidth';
 import useMergedRef from '@react-hook/merged-ref';
 import * as React from 'react';
 import type { SpaceProps } from './Space.types';
+import { Box } from '../Box';
 
 /**
  * A component that adds horizontal or vertical spacing using the theme's spacing scale.
@@ -128,13 +129,11 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
     }
 
     return (
-      <div
+      <Box
         ref={mergedRef}
-        style={{
-          ...(resolvedWidth !== undefined && { width: resolvedWidth }),
-          ...(resolvedHeight !== undefined && { height: resolvedHeight }),
-          flexShrink: 0, // Prevent the spacer from shrinking in flex containers
-        }}
+        $width={resolvedWidth || undefined}
+        $height={resolvedHeight || undefined}
+        $flexShrink={0} // Prevent the spacer from shrinking in flex containers
       />
     );
   }
