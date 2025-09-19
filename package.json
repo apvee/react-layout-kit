@@ -156,6 +156,14 @@
     "responsive",
     "ui"
   ],
+  "homepage": "https://github.com/apvee/react-layout-kit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apvee/react-layout-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/apvee/react-layout-kit/issues"
+  },
   "author": "Apvee Solutions",
   "license": "MIT"
 }
