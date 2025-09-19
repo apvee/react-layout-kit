@@ -4,7 +4,7 @@ An opinionated, type-safe React layout library that simplifies styling and layou
 
 Built with TypeScript and Emotion CSS, **@apvee/react-layout-kit** leverages Emotion CSS internally for optimized runtime style generation along with a custom high-performance Slot implementation for component composition. This approach enables seamless dynamic styling based entirely on React props with minimal overhead, dramatically simplifying the React developer experience by eliminating the need for separate CSS files, complex CSS-in-JS setup, or verbose styled-components patterns.
 
-## ✨ Why @apvee/react-layout-kit?
+## Why @apvee/react-layout-kit?
 
 **@apvee/react-layout-kit** solves common pain points in modern React development:
 
@@ -84,7 +84,7 @@ function StyledButton() {
 }
 ```
 
-## 🏗️ Architecture & Structure
+## Architecture & Structure
 
 **@apvee/react-layout-kit** follows a modular architecture for optimal developer experience and bundle optimization:
 
@@ -142,7 +142,7 @@ function StyledButton() {
 - **⚡ Performance**: Granular imports enable better build optimization
 - **🎯 Type-safe**: Dedicated type exports for enhanced TypeScript experience
 
-## 📦 Core Components & Features
+## Core Components & Features
 
 ### Complete Component Library
 
@@ -292,7 +292,7 @@ Every CSS property is available with a `$` prefix, providing full type safety an
 </Box>
 ```
 
-## � Layout Components In Detail
+## Layout Components In Detail
 
 ### The Flex Component
 
@@ -847,7 +847,7 @@ The `AreaGrid` component provides CSS Grid layouts using named grid areas for se
 </AreaGrid>
 ```
 
-## 📱 Responsive Values System
+## Responsive Values System
 
 ### What are Responsive Values?
 
@@ -933,7 +933,7 @@ function MainContent() {
 }
 ```
 
-## ⚡ Short-Style Props
+## Short-Style Props
 
 ### Why Short Props?
 
@@ -1040,7 +1040,7 @@ When both dollar props and short props define the same CSS property, dollar prop
 </Box>
 ```
 
-## 🎛️ Container Width Measurement
+## Container Width Measurement
 
 ### The useContainerWidth Hook
 
@@ -1114,7 +1114,7 @@ For performance optimization or when you know the container width, you can provi
 </Box>
 ```
 
-## 🎨 CSS Class Utilities
+## CSS Class Utilities
 
 ### mergeClasses Function
 
@@ -1428,7 +1428,7 @@ import { setupBoxConfiguration } from "./app/setup";
 setupBoxConfiguration(); // Call before rendering
 ```
 
-## 🔄 Component Composition with asChild
+## Component Composition with asChild
 
 ### Why asChild?
 
@@ -1529,7 +1529,7 @@ function InteractiveCard() {
 }
 ```
 
-## 📚 Complete Examples
+## Complete Examples
 
 ### Responsive Card Component
 
@@ -1660,7 +1660,7 @@ function App() {
 }
 ```
 
-## 🔧 TypeScript Integration
+## TypeScript Integration
 
 ### Type Exports
 
@@ -1765,7 +1765,7 @@ const responsiveFontSize = createResponsiveValue("14px", "16px", "18px");
 </Box>;
 ```
 
-## ⚡ Performance & Optimization
+## Performance & Optimization
 
 ### Built-in Optimizations
 
@@ -1853,7 +1853,7 @@ import Box from "@apvee/react-layout-kit/Box";
 - **Optimized dependencies**: Shared utilities are deduplicated across components
 - **Framework-agnostic**: Works with Webpack, Vite, Rollup, and other modern bundlers
 
-## 🌐 Server-Side Rendering (SSR)
+## Server-Side Rendering (SSR)
 
 ### SSR Compatibility
 
@@ -1910,7 +1910,7 @@ export default function App({ Component, pageProps }) {
 }
 ```
 
-## 🔍 Migration & Compatibility
+## Migration & Compatibility
 
 ### From Styled-Components
 
@@ -1955,7 +1955,7 @@ const StyledBox = styled.div`
 - **React** ≥ 17.0.0
 - **TypeScript** ≥ 4.0 (recommended for best experience)
 
-## 🛠️ Development & Building
+## Development & Building
 
 ### Development Setup
 
@@ -1985,11 +1985,11 @@ npm run build
 npm run build-storybook
 ```
 
-## � Complete Documentation
+## Complete Documentation
 
 For comprehensive documentation including all features, advanced usage patterns, and implementation details, see [llm-full.txt](./llm-full.txt). This file contains the complete library reference and technical specifications designed to be used together with this README for AI code generation and development assistance.
 
-## �📄 License
+## License
 
 MIT License - see LICENSE file for details.
 
