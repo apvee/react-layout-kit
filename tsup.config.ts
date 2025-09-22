@@ -14,6 +14,7 @@ export default defineConfig({
     'components/Space': 'src/components/Space/index.ts',
     'components/Stack': 'src/components/Stack/index.ts',
     'components/Group': 'src/components/Group/index.ts',
+    'components/ScrollArea': 'src/components/ScrollArea/index.ts',
     'core/responsive': 'src/core/responsive/index.ts',
     'core/styling': 'src/core/styling/index.ts',
     'core/components': 'src/core/components/index.ts',

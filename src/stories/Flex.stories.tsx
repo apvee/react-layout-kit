@@ -237,7 +237,7 @@ export const ColumnLayout: Story = {
   render: () => (
     <Flex 
       direction="column" 
-      gap="l"
+      gap="lg"
       className={createStyles({
         backgroundColor: "#fafafa",
         border: "1px solid #f0f0f0",
@@ -291,7 +291,7 @@ export const ResponsiveFlex: Story = {
       direction={{ xs: "column", md: "row" }}
       align={{ xs: "stretch", md: "center" }}
       justify={{ xs: "flex-start", md: "space-between" }}
-      gap={{ xs: "xs", md: "l" }}
+      gap={{ xs: "xs", md: "lg" }}
       wrap="wrap"
       className={createStyles({
         backgroundColor: "#f0f5ff",
@@ -341,7 +341,7 @@ export const ResponsiveFlex: Story = {
     viewport: {
       viewports: {
         mobile: { name: 'Mobile', styles: { width: '320px', height: '568px' } },
-        tablet: { name: 'Tablet', styles: { width: '768px', height: '1024px' } },
+        tablet: { name: 'Tablet', styles: { width: '640px', height: '1024px' } },
         desktop: { name: 'Desktop', styles: { width: '1200px', height: '800px' } },
       },
     },
@@ -444,7 +444,7 @@ export const AdvancedGaps: Story = {
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Uniform Gap</h4>
         <Flex 
           wrap="wrap"
-          gap="l"
+          gap="lg"
           className={createStyles({
             backgroundColor: "#f9f0ff",
             border: "1px solid #d3adf7",
@@ -539,7 +539,7 @@ export const NavigationExample: Story = {
           <a href="#" style={{ color: 'white', textDecoration: 'none' }}>About</a>
           <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Contact</a>
         </Flex>
-        <Flex align="center" gap="l">
+        <Flex align="center" gap="lg">
           <button style={{
             padding: '6px 12px',
             backgroundColor: 'transparent',
@@ -596,7 +596,7 @@ export const CardLayoutExample: Story = {
   render: () => (
     <Flex 
       wrap="wrap" 
-      gap="l"
+      gap="lg"
       justify="flex-start"
       className={createStyles({
         padding: "1rem",
@@ -674,7 +674,7 @@ export const FormLayoutExample: Story = {
     <div style={{ maxWidth: '500px', margin: '0 auto' }}>
       <Flex 
         direction="column" 
-        gap="l"
+        gap="lg"
         className={createStyles({
           backgroundColor: "white",
           border: "1px solid #f0f0f0",
@@ -687,7 +687,7 @@ export const FormLayoutExample: Story = {
           Contact Form
         </h2>
         
-        <Flex gap="l">
+        <Flex gap="lg">
           <Flex.Item flex={1}>
             <label style={{ display: 'block', marginBottom: '0.5rem', color: '#262626', fontWeight: '500' }}>
               First Name
@@ -761,7 +761,7 @@ export const FormLayoutExample: Story = {
           />
         </div>
 
-        <Flex gap="l" justify="flex-end">
+        <Flex gap="lg" justify="flex-end">
           <button style={{
             padding: '12px 24px',
             backgroundColor: 'transparent',

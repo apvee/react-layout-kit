@@ -17,7 +17,7 @@ export type GroupProps = BaseBoxProps & {
    * gap CSS property. Can be a spacing scale key or any valid CSS value.
    * Numbers are converted to rem.
    * Supports responsive values using breakpoint objects.
-   * @default "m"
+   * When undefined, no gap will be applied.
    */
   gap?: ResponsiveValue<SpacingValue>;
 

@@ -140,7 +140,7 @@ export const ResponsiveLayout: Story = {
         md: "200px 1fr",
         lg: "200px 1fr 150px"
       }}
-      gap={{ xs: 'xs', md: 'm', lg: 'l' }}
+      gap={{ xs: 'xs', md: 'md', lg: 'lg' }}
       className={createStyles({minHeight: "400px", backgroundColor: "#f5f5f5", border: "1px solid #ddd"})}
     >
       <AreaGrid.Item 
@@ -242,7 +242,7 @@ export const CardLayout: Story = {
       areas='"featured featured" "card1 card2" "card3 card4"'
       columns="1fr 1fr"
       rows="200px 150px 150px"
-      gap="s"
+      gap="sm"
       className={createStyles({padding: "1rem", backgroundColor: "#f5f5f5"})}
     >
       <AreaGrid.Item 
@@ -283,7 +283,7 @@ export const DashboardLayout: Story = {
       `}
       columns="180px 1fr 1fr 200px"
       rows="60px 1fr 1fr 50px"
-      gap="s"
+      gap="sm"
       className={createStyles({minHeight: "500px", backgroundColor: "#f0f2f5", padding: "1rem"})}
     >
       <AreaGrid.Item 
@@ -359,7 +359,7 @@ export const MagazineLayout: Story = {
       `}
       columns="1fr 1fr 200px"
       rows="250px auto auto"
-      gap="s"
+      gap="sm"
       className={createStyles({padding: "1rem", backgroundColor: "#fafafa"})}
     >
       <AreaGrid.Item 

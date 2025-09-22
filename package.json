@@ -1,6 +1,6 @@
 {
   "name": "@apvee/react-layout-kit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An opinionated, type-safe React layout library that simplifies styling and layout creation without leaving the React component context. Features responsive CSS-in-JS with Box, Grid, Flex, and Stack components.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -82,6 +82,11 @@
       "types": "./dist/components/Space.d.ts",
       "import": "./dist/components/Space.mjs",
       "require": "./dist/components/Space.js"
+    },
+    "./components/ScrollArea": {
+      "types": "./dist/components/ScrollArea.d.ts",
+      "import": "./dist/components/ScrollArea.mjs",
+      "require": "./dist/components/ScrollArea.js"
     },
     "./core/components": {
       "types": "./dist/core/components.d.ts",

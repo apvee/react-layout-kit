@@ -14,7 +14,7 @@ A vertical flex container component for composing elements in a column.
 
 ## Features
 - Vertical flexbox layout (flex-direction: column)
-- Predefined spacing scale for gaps ('xs', 's', 'm', 'l', 'xl', 'xxl')
+- Predefined spacing scale for gaps ('xs', 'sm', 'md', 'lg', 'xl', 'xxl')
 - Cross-axis alignment control with align prop
 - Main-axis justification control with justify prop
 - Responsive values for all flexbox properties using breakpoint objects
@@ -57,6 +57,7 @@ type Story = StoryObj<StackProps>;
 export const BasicStack: Story = {
   render: () => (
     <Stack 
+      gap="md"
       className={createStyles({
         backgroundColor: "#f5f5f5", 
         border: "2px dashed #ccc", 
@@ -126,7 +127,7 @@ export const SpacingScale: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Small Gap (s)</h4>
         <Stack 
-          gap="s"
+          gap="sm"
           className={createStyles({
             backgroundColor: "#f6ffed", 
             border: "1px solid #b7eb8f", 
@@ -141,9 +142,9 @@ export const SpacingScale: Story = {
       </div>
 
       <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Medium Gap (m) - Default</h4>
+        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Medium Gap (md)</h4>
         <Stack 
-          gap="m"
+          gap="md"
           className={createStyles({
             backgroundColor: "#e6f7ff", 
             border: "1px solid #91d5ff", 
@@ -160,7 +161,7 @@ export const SpacingScale: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Large Gap (l)</h4>
         <Stack 
-          gap="l"
+          gap="lg"
           className={createStyles({
             backgroundColor: "#f9f0ff", 
             border: "1px solid #d3adf7", 
@@ -374,7 +375,7 @@ export const JustifyContent: Story = {
 export const FormLayout: Story = {
   render: () => (
     <Stack 
-      gap="m" 
+      gap="md" 
       align="stretch"
       className={createStyles({
         backgroundColor: "white", 
@@ -501,7 +502,7 @@ export const FormLayout: Story = {
 export const CardStack: Story = {
   render: () => (
     <Stack 
-      gap="l"
+      gap="lg"
       align="center"
       className={createStyles({
         backgroundColor: "#fafafa",
@@ -586,7 +587,7 @@ export const CardStack: Story = {
 export const ResponsiveBehavior: Story = {
   render: () => (
     <Stack 
-      gap={{ xs: "s", md: "m", lg: "l" }}
+      gap={{ xs: "sm", md: "md", lg: "lg" }}
       align={{ xs: "center", md: "stretch" }}
       justify={{ xs: "center", md: "flex-start" }}
       className={createStyles({
@@ -837,7 +838,7 @@ export const PageLayout: Story = {
         padding: '2rem',
         backgroundColor: 'white'
       }}>
-        <Stack gap="l">
+        <Stack gap="lg">
           <h2 style={{ margin: 0, color: '#262626' }}>Main Content Area</h2>
           <p style={{ margin: 0, color: '#595959', lineHeight: 1.6 }}>
             This is the main content area of the page. It grows to fill the available space 

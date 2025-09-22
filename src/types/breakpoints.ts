@@ -22,6 +22,7 @@ export interface BreakpointDefs {
   md: number;
   lg: number;
   xl: number;
+  xxl: number;
 }
 
 /**

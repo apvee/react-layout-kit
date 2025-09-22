@@ -1,8 +1,8 @@
 # @apvee/react-layout-kit
 
-An opinionated, type-safe React layout library that simplifies styling and layout creation without leaving the React component context. Features responsive CSS-in-JS with Box, Grid, Flex, and Stack components.
+An opinionated, type-safe React layout library that simplifies styling and layout creation without leaving the React component context. Features responsive CSS-in-JS with Box, Grid, Flex, Stack components and more.
 
-Built with TypeScript and Emotion CSS, **@apvee/react-layout-kit** leverages Emotion CSS internally for optimized runtime style generation along with a custom high-performance Slot implementation for component composition. This approach enables seamless dynamic styling based entirely on React props with minimal overhead, dramatically simplifying the React developer experience by eliminating the need for separate CSS files, complex CSS-in-JS setup, or verbose styled-components patterns.
+Built with TypeScript and Emotion CSS, **@apvee/react-layout-kit** leverages Emotion CSS internally for optimized runtime style generation along with a custom high-performance Slot implementation for component composition. This approach enables seamless **dynamic styling based entirely on React props with minimal overhead**, dramatically simplifying the React developer experience by eliminating the need for separate CSS files, complex CSS-in-JS setup, or verbose styled-components patterns.
 
 ## Why @apvee/react-layout-kit?
 
@@ -101,7 +101,8 @@ function StyledButton() {
 │   ├── Group/          # Horizontal grouping
 │   ├── Space/          # Spacing utilities
 │   ├── AspectRatio/    # Aspect ratio maintenance
-│   └── AreaGrid/       # Named grid areas
+│   ├── AreaGrid/       # Named grid areas
+│   └── ScrollArea/     # Scrollable containers
 ├── core/               # Core utilities
 │   ├── styling/        # CSS generation utilities
 │   ├── responsive/     # Responsive value resolution
@@ -128,6 +129,7 @@ function StyledButton() {
 | `@apvee/react-layout-kit/components/Center` | Center component and types |
 | `@apvee/react-layout-kit/components/AspectRatio` | AspectRatio component and types |
 | `@apvee/react-layout-kit/components/AreaGrid` | AreaGrid component and types |
+| `@apvee/react-layout-kit/components/ScrollArea` | ScrollArea component and types |
 | `@apvee/react-layout-kit/components/Space` | Space component and types |
 | `@apvee/react-layout-kit/core/styling` | CSS utilities and generators |
 | `@apvee/react-layout-kit/core/responsive` | Responsive value utilities |
@@ -164,6 +166,7 @@ function StyledButton() {
 - **`AspectRatio`** - Maintains consistent aspect ratios for media content
 - **`Group`** - Horizontal grouping with gap and overflow handling
 - **`Space`** - Invisible spacing utility for consistent whitespace
+- **`ScrollArea`** - Scrollable container with custom scrollbar styling and virtualization support
 
 #### Component Composition
 
@@ -190,7 +193,7 @@ The `Box` component is the foundation of the library. It's a polymorphic compone
 | Prop             | Type      | Description                                       |
 | ---------------- | --------- | ------------------------------------------------- |
 | `asChild`        | `boolean` | Render as child element using internal Slot       |
-| `containerWidth` | `number`  | Fixed container width for responsive calculations |
+| `containerWidth` | `number`  | Programmatic container width for responsive calculations - use with useContainerWidth hook or when you have a parent container width to provide |
 | `styleReset`     | `boolean` | Apply basic style reset (box-sizing: border-box)  |
 
 #### Box Short Props - Margin
@@ -359,36 +362,45 @@ The `Flex` component provides comprehensive flexbox layout capabilities with res
 
 ### The Stack Component
 
-The `Stack` component creates vertical or horizontal stacking layouts with consistent spacing and alignment.
+The `Stack` component creates vertical stacking layouts with consistent spacing and alignment using CSS flexbox with `flex-direction: column`.
 
 #### Key Features
 
-- **Vertical/Horizontal Stacking**: Simple direction control
-- **Consistent Spacing**: Automatic gap management between items
-- **Responsive Alignment**: All properties support responsive values
+- **Vertical Stacking**: Optimized for vertical layouts like forms, content sections, and card lists
+- **Consistent Spacing**: Automatic gap management between stacked items
+- **Cross-axis Alignment**: Control horizontal alignment of items within the stack
+- **Responsive Properties**: All properties support responsive values
 - **Semantic HTML**: Works with any child elements
 
 #### Stack Props
 
 | Prop      | Type                              | Description                      |
 | --------- | --------------------------------- | -------------------------------- |
-| `align`   | `ResponsiveValue<AlignItems>`     | Cross-axis alignment of elements |
-| `justify` | `ResponsiveValue<JustifyContent>` | Main-axis alignment of elements  |
-| `gap`     | `ResponsiveValue<SpacingValue>`   | Space between elements           |
+| `align`   | `ResponsiveValue<AlignItems>`     | Cross-axis (horizontal) alignment of elements |
+| `justify` | `ResponsiveValue<JustifyContent>` | Main-axis (vertical) alignment of elements  |
+| `gap`     | `ResponsiveValue<SpacingValue>`   | Space between stacked elements           |
 
 #### Stack Examples
 
 ```tsx
-// Vertical stack (default)
-<Stack gap="m" align="center">
+// Basic vertical stack with consistent spacing
+<Stack gap="md" align="center">
   <h1>Title</h1>
   <p>Description</p>
   <button>Action</button>
 </Stack>
 
-// Responsive stack with dynamic spacing
+// Form layout with vertical stacking
+<Stack gap="md" align="stretch">
+  <input type="text" placeholder="Name" />
+  <input type="email" placeholder="Email" />
+  <textarea placeholder="Message" />
+  <button type="submit">Submit</button>
+</Stack>
+
+// Responsive vertical stack with dynamic spacing
 <Stack
-  gap={{ xs: "s", md: "l" }}
+  gap={{ xs: "sm", md: "lg" }}
   align={{ xs: "stretch", md: "center" }}
 >
   <div>Stack Item 1</div>
@@ -425,7 +437,7 @@ The `Container` component centers content horizontally and controls maximum widt
 </Container>
 
 // Responsive container sizes
-<Container size={{ xs: 320, sm: 480, md: 768, lg: 1024, xl: 1200 }}>
+<Container size={{ xs: 320, sm: 480, md: 640, lg: 1024, xl: 1366 }}>
   <div>Responsive container content</div>
 </Container>
 
@@ -658,12 +670,113 @@ The `Space` component provides invisible spacing utility for consistent whitespa
 </div>
 
 // Responsive spacing
-// Responsive spacing
 <div>
   <div>Content Block 1</div>
   <Space h={{ xs: "m", md: "xl" }} />
   <div>Content Block 2</div>
 </div>
+```
+
+### The ScrollArea Component
+
+The `ScrollArea` component provides custom scrollbars with native scrolling performance and responsive design capabilities.
+
+#### Key Features
+
+- **Native Performance**: Uses native scrolling with custom overlay scrollbars
+- **Responsive Sizing**: Scrollbar size adapts to different screen sizes  
+- **Multiple Visibility Modes**: hover, always, or scroll-based visibility
+- **RTL Support**: Full right-to-left language support
+- **Customizable Styling**: Custom colors, sizes, and border radius
+- **Accessible**: Minimum touch targets and keyboard navigation
+
+#### ScrollArea Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `asChild` | `boolean` | Render as child element using Slot pattern |
+| `size` | `ResponsiveValue<'small' \| 'medium' \| 'large'>` | Scrollbar thickness (default: 'small') |
+| `radius` | `'none' \| 'small' \| 'medium' \| 'large' \| 'full'` | Border radius (default: 'small') |
+| `scrollbars` | `'vertical' \| 'horizontal' \| 'both'` | Which scrollbars to show (default: 'both') |
+| `type` | `'hover' \| 'always' \| 'scroll'` | Visibility behavior (default: 'hover') |
+| `scrollHideDelay` | `number` | Hide delay in ms (default: 600) |
+| `dir` | `'ltr' \| 'rtl'` | Text direction (default: 'ltr') |
+| `trackColor` | `string` | Scrollbar track background color |
+| `thumbColor` | `string` | Scrollbar thumb color |
+| `thumbHoverColor` | `string` | Thumb color on hover |
+| `thumbActiveColor` | `string` | Thumb color when pressed |
+
+#### ScrollArea Examples
+
+```tsx
+// Basic scrollable content
+<ScrollArea style={{ height: 300, width: 400 }}>
+  <div style={{ height: 1000 }}>
+    Very long content that will scroll...
+    {Array.from({ length: 100 }, (_, i) => (
+      <div key={i}>Item {i + 1}</div>
+    ))}
+  </div>
+</ScrollArea>
+
+// Responsive scrollbar size
+<ScrollArea 
+  size={{ xs: 'small', md: 'medium', lg: 'large' }}
+  type="always"
+>
+  <div style={{ height: 500, width: 800 }}>
+    Content with responsive scrollbars
+  </div>
+</ScrollArea>
+
+// Custom styling
+<ScrollArea
+  thumbColor="rgba(0, 123, 255, 0.5)"
+  thumbHoverColor="rgba(0, 123, 255, 0.8)"
+  trackColor="rgba(0, 0, 0, 0.1)"
+  radius="large"
+  type="hover"
+  scrollHideDelay={300}
+>
+  <div style={{ height: 400 }}>
+    Styled scrollable content
+  </div>
+</ScrollArea>
+
+// Horizontal-only scrolling
+<ScrollArea scrollbars="horizontal" style={{ width: 300 }}>
+  <div style={{ width: 800, whiteSpace: 'nowrap' }}>
+    Wide content that scrolls horizontally...
+  </div>
+</ScrollArea>
+
+// Composition with asChild
+<ScrollArea asChild>
+  <section className="custom-scrollable-section">
+    <div style={{ height: 600 }}>
+      Scrollable section content
+    </div>
+  </section>
+</ScrollArea>
+
+// With useContainerWidth for responsive behavior
+function ResponsiveScrollArea() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerWidth = useContainerWidth(containerRef);
+  
+  return (
+    <div ref={containerRef} style={{ width: '100%' }}>
+      <ScrollArea 
+        size={{ xs: 'small', md: 'medium' }}
+        containerWidth={containerWidth}
+      >
+        <div style={{ height: 500 }}>
+          Container-aware scrollable content
+        </div>
+      </ScrollArea>
+    </div>
+  );
+}
 ```
 
 ### The Slot Component
@@ -866,9 +979,9 @@ The library automatically measures container width and applies the appropriate v
   $padding={{
     xs: 8, // 0px and up
     sm: 12, // 480px and up
-    md: 16, // 768px and up
+    md: 16, // 640px and up
     lg: 24, // 1024px and up
-    xl: 32, // 1280px and up
+    xl: 32, // 1366px and up
   }}
   $fontSize={{
     xs: 14,
@@ -1089,7 +1202,7 @@ Container-aware responsive design is more powerful than viewport-based media que
 
 ```tsx
 // Traditional CSS media queries - responds to viewport
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .card { padding: 8px; }
 }
 
@@ -1101,17 +1214,51 @@ Container-aware responsive design is more powerful than viewport-based media que
 
 This enables true component-level responsive design, where the same component can behave differently in different contexts.
 
-### Fixed Container Width
+### Programmatic Container Width
 
-For performance optimization or when you know the container width, you can provide it directly:
+The `containerWidth` prop allows you to provide container width programmatically rather than relying on automatic measurement. This is useful when:
+
+1. **Using the useContainerWidth hook** to measure a parent container
+2. **You have programmatic access** to a parent container's dimensions  
+3. **Performance optimization** when you know the container width
+
+#### Using with useContainerWidth Hook
 
 ```tsx
-<Box
-  containerWidth={750} // Skip measurement, use fixed width
-  $padding={{ xs: 8, md: 16, lg: 24 }}
->
-  Fixed width responsive behavior
-</Box>
+function ParentWithChild() {
+  const parentRef = React.useRef<HTMLDivElement>(null);
+  const parentWidth = useContainerWidth(parentRef);
+
+  return (
+    <div ref={parentRef} style={{ width: '60%' }}>
+      <Box
+        containerWidth={parentWidth} // Use measured parent width
+        $padding={{ xs: 8, md: 16, lg: 24 }}
+        $fontSize={{ xs: 14, md: 16, lg: 18 }}
+      >
+        Child responds to parent container size
+      </Box>
+    </div>
+  );
+}
+```
+
+#### Programmatic Width from Context
+
+```tsx
+function DynamicLayout({ sidebarOpen }) {
+  // Calculate available width based on sidebar state
+  const availableWidth = sidebarOpen ? window.innerWidth - 300 : window.innerWidth;
+  
+  return (
+    <Box
+      containerWidth={availableWidth}
+      $padding={{ xs: 8, md: 16, lg: 24 }}
+    >
+      Layout adapts to available space
+    </Box>
+  );
+}
 ```
 
 ## CSS Class Utilities
@@ -1210,9 +1357,10 @@ The library comes with sensible default breakpoints:
 const defaultBreakpoints = {
   xs: 0, // Mobile first
   sm: 480, // Small mobile
-  md: 768, // Tablet
+  md: 640, // Tablet
   lg: 1024, // Desktop
-  xl: 1280, // Large desktop
+  xl: 1366, // Large desktop
+  xxl: 1920, // Extra large desktop
 };
 ```
 
@@ -1224,11 +1372,12 @@ The library includes a default spacing scale:
 const defaultSpacing = {
   none: 0,
   xs: 4, // 0.25rem equivalent
-  s: 8, // 0.5rem equivalent
-  m: 16, // 1rem equivalent
-  l: 24, // 1.5rem equivalent
-  xl: 32, // 2rem equivalent
-  xxl: 40, // 2.5rem equivalent
+  sm: 8, // 0.5rem equivalent
+  md: 12, // 0.75rem equivalent
+  lg: 16, // 1rem equivalent
+  xl: 20, // 1.25rem equivalent
+  xxl: 24, // 1.5rem equivalent
+  xxxl: 32, // 2rem equivalent
 };
 ```
 
@@ -1270,11 +1419,11 @@ configureBox({
     mobile: 360, // Custom mobile breakpoint
     sm: 480,
     tablet: 600, // Custom tablet breakpoint
-    md: 768,
+    md: 640,
     lg: 1024,
-    xl: 1280,
-    "2xl": 1440, // Custom large desktop
-    "3xl": 1920, // Custom extra large
+    xl: 1366,
+    xxl: 1920,
+    "3xl": 2560, // Custom extra large
   },
 });
 ```
@@ -1332,18 +1481,16 @@ configureBox({
   spacing: {
     // Keep defaults and add custom ones
     "0": 0,
+    none: 0,
     xxs: 2, // 0.125rem
-    "1": 4,
     xs: 4,
-    "2": 8,
-    s: 8,
-    m: 16,
-    "4": 16,
-    l: 24,
-    xl: 32,
-    "8": 32,
-    xxl: 40,
-    xxxl: 64, // 4rem
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 20,
+    xxl: 24,
+    xxxl: 32, // 2rem
+    "4xl": 48, // 3rem
   },
 });
 ```
@@ -1399,25 +1546,21 @@ export function setupBoxConfiguration() {
   configureBox({
     breakpoints: {
       xs: 0,
-      sm: 576, // Bootstrap-like
-      md: 768,
-      lg: 992,
-      xl: 1200,
-      xxl: 1400,
+      sm: 480,
+      md: 640,
+      lg: 1024,
+      xl: 1366,
+      xxl: 1920,
     },
     spacing: {
-      0: 0,
-      1: "0.25rem", // 4px
-      2: "0.5rem", // 8px
-      3: "0.75rem", // 12px
-      4: "1rem", // 16px
-      5: "1.25rem", // 20px
-      6: "1.5rem", // 24px
-      8: "2rem", // 32px
-      10: "2.5rem", // 40px
-      12: "3rem", // 48px
-      16: "4rem", // 64px
-      20: "5rem", // 80px
+      none: 0,
+      xs: 4,
+      sm: 8,
+      md: 12,
+      lg: 16,
+      xl: 20,
+      xxl: 24,
+      xxxl: 32,
     },
   });
 }
@@ -1604,7 +1747,7 @@ import { Container, Stack, SimpleGrid, Flex } from '@apvee/react-layout-kit';
 function ResponsiveContainer({ children, ...props }) {
   return (
     <Container
-      size={{ xs: 320, md: 768, lg: 1200 }}
+      size={{ xs: 320, md: 640, lg: 1200 }}
       {...props}
     >
       {children}
@@ -1613,7 +1756,7 @@ function ResponsiveContainer({ children, ...props }) {
 }
 
 // Flexible Grid
-function ResponsiveGrid({ columns = { xs: 1, sm: 2, md: 3, lg: 4 }, gap = 'm', children, ...props }) {
+function ResponsiveGrid({ columns = { xs: 1, sm: 2, md: 3, lg: 4 }, gap = 'md', children, ...props }) {
   return (
     <SimpleGrid
       cols={columns}
@@ -1626,7 +1769,7 @@ function ResponsiveGrid({ columns = { xs: 1, sm: 2, md: 3, lg: 4 }, gap = 'm', c
 }
 
 // Stack component
-function VStack({ align, justify, gap = 'm', children, ...props }) {
+function VStack({ align, justify, gap = 'md', children, ...props }) {
   return (
     <Stack
       align={align}
@@ -1866,11 +2009,17 @@ The library is fully SSR-compatible with automatic fallbacks:
 ### SSR Best Practices
 
 ```tsx
-// For critical above-the-fold content, provide containerWidth
+// For critical above-the-fold content, use useContainerWidth with fallback
 function HeroSection() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const measuredWidth = useContainerWidth(containerRef);
+  // Use measured width, fallback to desktop width for SSR
+  const containerWidth = measuredWidth || 1200;
+  
   return (
     <Box
-      containerWidth={1200} // Assume desktop width for SSR
+      ref={containerRef}
+      containerWidth={containerWidth}
       $padding={{ xs: "m", md: "l", lg: "xl" }}
       $fontSize={{ xs: 24, md: 32, lg: 40 }}
     >
@@ -1897,11 +2046,11 @@ import { configureBox } from "@apvee/react-layout-kit";
 configureBox({
   breakpoints: {
     xs: 0,
-    sm: 640,
-    md: 768,
+    sm: 480,
+    md: 640,
     lg: 1024,
-    xl: 1280,
-    "2xl": 1536,
+    xl: 1366,
+    xxl: 1920,
   },
 });
 

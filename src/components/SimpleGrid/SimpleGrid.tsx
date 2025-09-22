@@ -16,8 +16,8 @@ import type { SimpleGridProps } from './SimpleGrid.types';
  * 
  * **Grid Properties:**
  * - `cols`: Number of columns (default: 1)
- * - `spacing`: Gap between columns (default: "m" = 16px)
- * - `verticalSpacing`: Gap between rows (default: same as spacing)
+ * - `spacing`: Gap between columns (spacing scale key or CSS value, optional)
+ * - `verticalSpacing`: Gap between rows (spacing scale key or CSS value, optional, fallback to spacing value)
  * 
  * **Responsive Behavior:**
  * - All properties support responsive values for different layouts at different breakpoints
@@ -63,7 +63,7 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
   function SimpleGrid(props, forwardedRef) {
     const {
       cols = 1,
-      spacing = "m",
+      spacing,
       verticalSpacing,
       containerWidth,
       children,
@@ -93,7 +93,11 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
     }, [cols, currentWidth, activeBreakpoints]);
 
     const resolvedSpacing = React.useMemo(() => {
-      const spacingValue = resolveResponsiveValue(spacing, currentWidth, activeBreakpoints) ?? "m";
+      if (spacing === undefined) return undefined;
+      
+      const spacingValue = resolveResponsiveValue(spacing, currentWidth, activeBreakpoints);
+      if (spacingValue === undefined) return undefined;
+      
       return resolveSpacing(spacingValue);
     }, [spacing, currentWidth, activeBreakpoints]);
 
@@ -102,8 +106,10 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
       const verticalSpacingValue = verticalSpacing 
         ? resolveResponsiveValue(verticalSpacing, currentWidth, activeBreakpoints)
         : resolveResponsiveValue(spacing, currentWidth, activeBreakpoints);
-      const finalVerticalSpacing = verticalSpacingValue ?? "m";
-      return resolveSpacing(finalVerticalSpacing);
+      
+      if (verticalSpacingValue === undefined) return undefined;
+      
+      return resolveSpacing(verticalSpacingValue);
     }, [verticalSpacing, spacing, currentWidth, activeBreakpoints]);
 
     // Generate grid template columns based on number of columns

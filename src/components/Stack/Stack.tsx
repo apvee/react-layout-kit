@@ -15,13 +15,13 @@ import type { StackProps } from './Stack.types';
  * 
  * **Stack Properties:**
  * - `align`: Controls align-items (cross-axis alignment, default: "stretch")
- * - `gap`: Controls gap between items (default: "m" = 16px)
+ * - `gap`: Controls gap between items (spacing scale key or CSS value, optional)
  * - `justify`: Controls justify-content (main-axis alignment, default: "flex-start")
  * 
  * **Responsive Behavior:**
  * - All properties support responsive values for different layouts at different breakpoints
  * - Container width measurement is used for responsive prop resolution
- * - Gap values can use predefined scale keys ('xs', 's', 'm', 'l', 'xl', 'xxl') or custom CSS values
+ * - Gap values can use predefined scale keys ('xs', 'sm', 'md', 'lg', 'xl', 'xxl') or custom CSS values
  * 
  * @example
  * ```tsx
@@ -77,7 +77,7 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   function Stack(props, forwardedRef) {
     const {
       align = "stretch",
-      gap = "m",
+      gap,
       justify = "flex-start",
       containerWidth,
       children,
@@ -107,7 +107,11 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
     }, [align, currentWidth, activeBreakpoints]);
 
     const resolvedGap = React.useMemo(() => {
-      const gapValue = resolveResponsiveValue(gap, currentWidth, activeBreakpoints) ?? "m";
+      if (gap === undefined) return undefined;
+      
+      const gapValue = resolveResponsiveValue(gap, currentWidth, activeBreakpoints);
+      if (gapValue === undefined) return undefined;
+      
       const resolvedSpacingValue = resolveSpacing(gapValue);
       // Convert number to rem if it's a number
       if (typeof resolvedSpacingValue === 'number') {
