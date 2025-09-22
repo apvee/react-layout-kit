@@ -15,9 +15,7 @@ import {
   RADIUS_TOKENS,
   DEFAULT_COLORS,
 } from './ScrollArea.types';
-import { useScrollMetrics } from './useScrollMetrics';
-import { useScrollbarVisibility } from './useScrollbarVisibility';
-import { useThumbDrag } from './useThumbDrag';
+import { useScrollArea } from './useScrollArea';
 
 /**
  * A flexible scroll area component that provides custom scrollbars with native scrolling behavior.
@@ -97,44 +95,16 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
     const trackSize = SIZE_TOKENS[resolvedSize];
     const borderRadius = RADIUS_TOKENS[radius];
 
-    // Get scroll metrics
+    // Get all scroll area functionality from unified hook
     const {
       scrollMetrics,
       thumbMetrics,
-      dragState,
-      startDrag,
-      updateDrag,
-      endDrag,
-    } = useScrollMetrics(viewportRef, trackSize);
-
-    // Visibility management
-    const {
       visibilityState,
-      handlers: visibilityHandlers,
-    } = useScrollbarVisibility(type, scrollHideDelay, scrollMetrics);
-
-    // Thumb drag handlers
-    const verticalThumbProps = useThumbDrag(
-      verticalThumbRef,
-      'vertical',
-      dragState,
-      startDrag,
-      updateDrag,
-      endDrag,
-      thumbMetrics,
-      dir
-    );
-
-    const horizontalThumbProps = useThumbDrag(
-      horizontalThumbRef,
-      'horizontal',
-      dragState,
-      startDrag,
-      updateDrag,
-      endDrag,
-      thumbMetrics,
-      dir
-    );
+      isDragging,
+      containerHandlers,
+      viewportHandlers,
+      getThumbHandlers,
+    } = useScrollArea(viewportRef, trackSize, type, scrollHideDelay);
 
     // Determine which scrollbars should be shown based on overflow and settings
     const shouldShowX = React.useMemo(() => {
@@ -210,14 +180,12 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
       const thumbSize = isHorizontal ? thumbMetrics.thumbSizeX : thumbMetrics.thumbSizeY;
       const thumbOffset = isHorizontal ? thumbMetrics.thumbOffsetX : thumbMetrics.thumbOffsetY;
       const isRTL = dir === 'rtl';
-      const isDraggingThis = dragState.isDragging && 
-        dragState.dragAxis === (isHorizontal ? 'x' : 'y');
       
       return createStyles({
         position: 'relative',
-        backgroundColor: isDraggingThis ? thumbActiveColor : thumbColor,
+        backgroundColor: thumbColor,
         borderRadius: borderRadius,
-        transition: dragState.isDragging ? 'none' : 'background-color 160ms ease-out',
+        transition: isDragging ? 'none' : 'background-color 160ms ease-out',
         
         // Minimum size for accessibility
         minWidth: isHorizontal ? 44 : trackSize,
@@ -235,7 +203,7 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
         }),
         
         // Hover states (only when not dragging)
-        ...(!dragState.isDragging && {
+        ...(!isDragging && {
           '&:hover': {
             backgroundColor: thumbHoverColor,
           },
@@ -266,13 +234,13 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
         className={mergeClasses(containerStyles, className)}
         style={style}
         dir={dir}
-        {...visibilityHandlers}
+        {...containerHandlers}
       >
         {/* Viewport */}
         <Box
           ref={viewportRef}
           className={viewportStyles}
-          onScroll={visibilityHandlers.onScroll}
+          {...viewportHandlers}
         >
           {children}
         </Box>
@@ -288,7 +256,7 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
               ref={verticalThumbRef}
               className={getThumbStyles('vertical')}
               aria-hidden="true"
-              {...verticalThumbProps}
+              {...getThumbHandlers('vertical', dir)}
             />
           </div>
         )}
@@ -304,7 +272,7 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
               ref={horizontalThumbRef}
               className={getThumbStyles('horizontal')}
               aria-hidden="true"
-              {...horizontalThumbProps}
+              {...getThumbHandlers('horizontal', dir)}
             />
           </div>
         )}
