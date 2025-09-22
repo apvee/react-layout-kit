@@ -141,7 +141,7 @@ export const SpacingScale: Story = {
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Small Gap (s)</h4>
         <Group 
-          gap="s"
+          gap="sm"
           className={createStyles({
             backgroundColor: "#f6ffed", 
             border: "1px solid #b7eb8f", 
@@ -158,7 +158,7 @@ export const SpacingScale: Story = {
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Medium Gap (m) - Default</h4>
         <Group 
-          gap="m"
+          gap="md"
           className={createStyles({
             backgroundColor: "#e6f7ff", 
             border: "1px solid #91d5ff", 
@@ -558,7 +558,7 @@ export const ButtonToolbar: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Action Toolbar</h4>
         <Group 
-          gap="s" 
+          gap="sm" 
           className={createStyles({
             backgroundColor: "white", 
             border: "1px solid #f0f0f0", 

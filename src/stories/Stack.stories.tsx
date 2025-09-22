@@ -14,7 +14,7 @@ A vertical flex container component for composing elements in a column.
 
 ## Features
 - Vertical flexbox layout (flex-direction: column)
-- Predefined spacing scale for gaps ('xs', 's', 'm', 'l', 'xl', 'xxl')
+- Predefined spacing scale for gaps ('xs', 'sm', 'md', 'lg', 'xl', 'xxl')
 - Cross-axis alignment control with align prop
 - Main-axis justification control with justify prop
 - Responsive values for all flexbox properties using breakpoint objects
@@ -126,7 +126,7 @@ export const SpacingScale: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Small Gap (s)</h4>
         <Stack 
-          gap="s"
+          gap="sm"
           className={createStyles({
             backgroundColor: "#f6ffed", 
             border: "1px solid #b7eb8f", 
@@ -143,7 +143,7 @@ export const SpacingScale: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Medium Gap (m) - Default</h4>
         <Stack 
-          gap="m"
+          gap="md"
           className={createStyles({
             backgroundColor: "#e6f7ff", 
             border: "1px solid #91d5ff", 
@@ -374,7 +374,7 @@ export const JustifyContent: Story = {
 export const FormLayout: Story = {
   render: () => (
     <Stack 
-      gap="m" 
+      gap="md" 
       align="stretch"
       className={createStyles({
         backgroundColor: "white", 
@@ -586,7 +586,7 @@ export const CardStack: Story = {
 export const ResponsiveBehavior: Story = {
   render: () => (
     <Stack 
-      gap={{ xs: "s", md: "m", lg: "l" }}
+      gap={{ xs: "sm", md: "md", lg: "lg" }}
       align={{ xs: "center", md: "stretch" }}
       justify={{ xs: "center", md: "flex-start" }}
       className={createStyles({

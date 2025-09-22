@@ -425,7 +425,7 @@ The `Container` component centers content horizontally and controls maximum widt
 </Container>
 
 // Responsive container sizes
-<Container size={{ xs: 320, sm: 480, md: 768, lg: 1024, xl: 1200 }}>
+<Container size={{ xs: 320, sm: 480, md: 640, lg: 1024, xl: 1366 }}>
   <div>Responsive container content</div>
 </Container>
 
@@ -866,9 +866,9 @@ The library automatically measures container width and applies the appropriate v
   $padding={{
     xs: 8, // 0px and up
     sm: 12, // 480px and up
-    md: 16, // 768px and up
+    md: 16, // 640px and up
     lg: 24, // 1024px and up
-    xl: 32, // 1280px and up
+    xl: 32, // 1366px and up
   }}
   $fontSize={{
     xs: 14,
@@ -1089,7 +1089,7 @@ Container-aware responsive design is more powerful than viewport-based media que
 
 ```tsx
 // Traditional CSS media queries - responds to viewport
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .card { padding: 8px; }
 }
 
@@ -1210,9 +1210,10 @@ The library comes with sensible default breakpoints:
 const defaultBreakpoints = {
   xs: 0, // Mobile first
   sm: 480, // Small mobile
-  md: 768, // Tablet
+  md: 640, // Tablet
   lg: 1024, // Desktop
-  xl: 1280, // Large desktop
+  xl: 1366, // Large desktop
+  xxl: 1920, // Extra large desktop
 };
 ```
 
@@ -1224,11 +1225,12 @@ The library includes a default spacing scale:
 const defaultSpacing = {
   none: 0,
   xs: 4, // 0.25rem equivalent
-  s: 8, // 0.5rem equivalent
-  m: 16, // 1rem equivalent
-  l: 24, // 1.5rem equivalent
-  xl: 32, // 2rem equivalent
-  xxl: 40, // 2.5rem equivalent
+  sm: 8, // 0.5rem equivalent
+  md: 12, // 0.75rem equivalent
+  lg: 16, // 1rem equivalent
+  xl: 20, // 1.25rem equivalent
+  xxl: 24, // 1.5rem equivalent
+  xxxl: 32, // 2rem equivalent
 };
 ```
 
@@ -1270,11 +1272,11 @@ configureBox({
     mobile: 360, // Custom mobile breakpoint
     sm: 480,
     tablet: 600, // Custom tablet breakpoint
-    md: 768,
+    md: 640,
     lg: 1024,
-    xl: 1280,
-    "2xl": 1440, // Custom large desktop
-    "3xl": 1920, // Custom extra large
+    xl: 1366,
+    xxl: 1920,
+    "3xl": 2560, // Custom extra large
   },
 });
 ```
@@ -1332,18 +1334,16 @@ configureBox({
   spacing: {
     // Keep defaults and add custom ones
     "0": 0,
+    none: 0,
     xxs: 2, // 0.125rem
-    "1": 4,
     xs: 4,
-    "2": 8,
-    s: 8,
-    m: 16,
-    "4": 16,
-    l: 24,
-    xl: 32,
-    "8": 32,
-    xxl: 40,
-    xxxl: 64, // 4rem
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 20,
+    xxl: 24,
+    xxxl: 32, // 2rem
+    "4xl": 48, // 3rem
   },
 });
 ```
@@ -1399,25 +1399,21 @@ export function setupBoxConfiguration() {
   configureBox({
     breakpoints: {
       xs: 0,
-      sm: 576, // Bootstrap-like
-      md: 768,
-      lg: 992,
-      xl: 1200,
-      xxl: 1400,
+      sm: 480,
+      md: 640,
+      lg: 1024,
+      xl: 1366,
+      xxl: 1920,
     },
     spacing: {
-      0: 0,
-      1: "0.25rem", // 4px
-      2: "0.5rem", // 8px
-      3: "0.75rem", // 12px
-      4: "1rem", // 16px
-      5: "1.25rem", // 20px
-      6: "1.5rem", // 24px
-      8: "2rem", // 32px
-      10: "2.5rem", // 40px
-      12: "3rem", // 48px
-      16: "4rem", // 64px
-      20: "5rem", // 80px
+      none: 0,
+      xs: 4, // 0.25rem
+      sm: 8, // 0.5rem
+      md: 12, // 0.75rem
+      lg: 16, // 1rem
+      xl: 20, // 1.25rem
+      xxl: 24, // 1.5rem
+      xxxl: 32, // 2rem
     },
   });
 }
@@ -1604,7 +1600,7 @@ import { Container, Stack, SimpleGrid, Flex } from '@apvee/react-layout-kit';
 function ResponsiveContainer({ children, ...props }) {
   return (
     <Container
-      size={{ xs: 320, md: 768, lg: 1200 }}
+      size={{ xs: 320, md: 640, lg: 1200 }}
       {...props}
     >
       {children}
@@ -1897,11 +1893,11 @@ import { configureBox } from "@apvee/react-layout-kit";
 configureBox({
   breakpoints: {
     xs: 0,
-    sm: 640,
-    md: 768,
+    sm: 480,
+    md: 640,
     lg: 1024,
-    xl: 1280,
-    "2xl": 1536,
+    xl: 1366,
+    xxl: 1920,
   },
 });
 

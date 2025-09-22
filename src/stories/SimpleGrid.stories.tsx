@@ -15,7 +15,7 @@ A responsive grid component where each item takes equal amount of space.
 ## Features
 - CSS Grid with equal-width items using repeat(cols, 1fr)
 - Responsive column count with breakpoint objects
-- Predefined spacing scale for gaps ('xs', 's', 'm', 'l', 'xl', 'xxl')
+- Predefined spacing scale for gaps ('xs', 'sm', 'md', 'lg', 'xl', 'xxl')
 - Separate horizontal and vertical spacing control
 - Container width measurement for responsive calculations
 - Perfect for card layouts, image galleries, and consistent item grids
@@ -416,8 +416,8 @@ export const ResponsiveGrid: Story = {
   render: () => (
     <SimpleGrid 
       cols={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-      spacing={{ xs: "s", md: "m", lg: "l" }}
-      verticalSpacing={{ xs: "m", md: "s" }}
+      spacing={{ xs: "sm", md: "md", lg: "lg" }}
+      verticalSpacing={{ xs: "md", md: "sm" }}
       className={createStyles({
         backgroundColor: "#f0f5ff", 
         border: "1px solid #91d5ff", 

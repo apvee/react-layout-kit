@@ -15,7 +15,7 @@ A component that adds horizontal or vertical spacing using the theme's spacing s
 ## Features
 - Horizontal spacing with w prop (width)
 - Vertical spacing with h prop (height)
-- Predefined spacing scale ('xs', 's', 'm', 'l', 'xl', 'xxl')
+- Predefined spacing scale ('xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl')
 - Custom CSS values support (rem, px, %)
 - Responsive values using breakpoint objects
 - Container width measurement for responsive calculations
@@ -68,7 +68,7 @@ export const HorizontalSpacing: Story = {
       }}>
         Left Content
       </div>
-      <Space w="l" />
+      <Space w="lg" />
       <div style={{ 
         padding: '1rem', 
         backgroundColor: '#52c41a', 
@@ -83,7 +83,7 @@ export const HorizontalSpacing: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Basic horizontal spacing using Space component with w="l" to separate elements in a flex layout.',
+        story: 'Basic horizontal spacing using Space component with w="lg" to separate elements in a flex layout.',
       },
     },
   },
@@ -108,7 +108,7 @@ export const VerticalSpacing: Story = {
       }}>
         Top Content
       </div>
-      <Space h="l" />
+      <Space h="lg" />
       <div style={{ 
         padding: '1rem', 
         backgroundColor: '#52c41a', 
@@ -124,7 +124,7 @@ export const VerticalSpacing: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Basic vertical spacing using Space component with h="l" to separate elements vertically.',
+        story: 'Basic vertical spacing using Space component with h="lg" to separate elements vertically.',
       },
     },
   },
@@ -137,7 +137,7 @@ export const SpacingSizes: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Horizontal Spacing Sizes</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {['xs', 's', 'm', 'l', 'xl', 'xxl'].map((size) => (
+          {['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].map((size) => (
             <div key={size} style={{
               display: 'flex',
               alignItems: 'center',
@@ -174,7 +174,7 @@ export const SpacingSizes: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Vertical Spacing Sizes</h4>
         <div style={{ display: 'flex', gap: '2rem' }}>
-          {['xs', 's', 'm', 'l', 'xl'].map((size) => (
+          {['xs', 'sm', 'md', 'lg', 'xl'].map((size) => (
             <div key={size} style={{
               display: 'flex',
               flexDirection: 'column',

@@ -88,13 +88,13 @@ export interface AreaGridProps extends BaseBoxProps {
    * @example
    * ```tsx
    * // Using spacing scale
-   * <AreaGrid gap="m">
+   * <AreaGrid gap="md">
    * 
    * // Custom gap
    * <AreaGrid gap="24px">
    * 
    * // Responsive gap
-   * <AreaGrid gap={{ xs: "s", md: "m", lg: "l" }}>
+   * <AreaGrid gap={{ xs: "sm", md: "md", lg: "lg" }}>
    * ```
    */
   gap?: ResponsiveValue<SpacingValue>;

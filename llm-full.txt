@@ -146,10 +146,10 @@ Width-based responsive prop resolution using container queries:
 Global configuration with TypeScript module augmentation support:
 ```typescript
 // Default breakpoints
-{ xs: 0, sm: 480, md: 768, lg: 1024, xl: 1280 }
+{ xs: 0, sm: 480, md: 640, lg: 1024, xl: 1366, xxl: 1920 }
 
 // Default spacing scale  
-{ none: 0, xs: 4, s: 8, m: 16, l: 24, xl: 32, xxl: 40 }
+{ none: 0, xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 }
 
 // Configurable via configureBox() function
 ```
@@ -380,7 +380,7 @@ Horizontal centering with max-width control:
 </Container>
 
 // Responsive container sizes
-<Container size={{ xs: 320, md: 768, lg: 1200 }}>
+<Container size={{ xs: 320, md: 640, lg: 1200 }}>
   <ResponsiveContent />
 </Container>
 
@@ -514,20 +514,23 @@ prop={{ xs: value1, md: value3, xl: value5 }}
 The library provides a consistent spacing scale used across all spacing-related properties:
 
 ```typescript
+```typescript
 // Default spacing scale (configurable)
 {
   none: 0,      // 0px
   xs: 4,        // 4px  
-  s: 8,         // 8px
-  m: 16,        // 16px (default)
-  l: 24,        // 24px
-  xl: 32,       // 32px
-  xxl: 40       // 40px
+  sm: 8,        // 8px
+  md: 12,       // 12px
+  lg: 16,       // 16px (default)
+  xl: 20,       // 20px
+  xxl: 24,      // 24px
+  xxxl: 32      // 32px
 }
 
 // Usage in components
-<Box m="m" p={{ xs: "s", md: "l" }} />
+<Box m="md" p={{ xs: "sm", md: "lg" }} />
 <Stack gap="xl" />
+```
 <SimpleGrid spacing="s" verticalSpacing="m" />
 ```
 
@@ -1282,8 +1285,8 @@ import { createStyles } from '@apvee/react-layout-kit/core/styling';
 ### Basic Layout Construction
 ```typescript
 <Box $display="flex" $gap={16} $padding={{ xs: 8, md: 16 }}>
-  <Container size={{ xs: 320, md: 768, lg: 1200 }}>
-    <Stack gap="l" align="stretch">
+  <Container size={{ xs: 320, md: 640, lg: 1200 }}>
+    <Stack gap="lg" align="stretch">
       <Flex justify="space-between" align="center">
         <Box $fontSize={24} $fontWeight="bold">Title</Box>
         <Group gap="s">
@@ -1373,8 +1376,8 @@ declare module '@apvee/react-layout-kit' {
 import { configureBox } from '@apvee/react-layout-kit';
 
 configureBox({
-  breakpoints: { xs: 0, sm: 480, md: 768, lg: 1024, xl: 1280, '2xl': 1440 },
-  spacing: { xs: '0.25rem', s: '0.5rem', m: '1rem', l: '2rem', xl: '4rem' }
+  breakpoints: { xs: 0, sm: 480, md: 640, lg: 1024, xl: 1366, xxl: 1920 },
+  spacing: { none: 0, xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 }
 });
 ```
 
