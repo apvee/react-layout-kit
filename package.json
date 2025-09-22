@@ -83,6 +83,11 @@
       "import": "./dist/components/Space.mjs",
       "require": "./dist/components/Space.js"
     },
+    "./components/ScrollArea": {
+      "types": "./dist/components/ScrollArea.d.ts",
+      "import": "./dist/components/ScrollArea.mjs",
+      "require": "./dist/components/ScrollArea.js"
+    },
     "./core/components": {
       "types": "./dist/core/components.d.ts",
       "import": "./dist/core/components.mjs",

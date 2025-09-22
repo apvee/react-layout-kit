@@ -34,6 +34,7 @@ export { Center } from '@/components/Center';
 export { AspectRatio } from '@/components/AspectRatio';
 export { Group } from '@/components/Group';
 export { Space } from '@/components/Space';
+export { ScrollArea } from '@/components/ScrollArea';
 
 // ============================================================================
 // COMPONENT TYPES
@@ -54,6 +55,14 @@ export type { CenterProps } from '@/components/Center';
 export type { AspectRatioProps } from '@/components/AspectRatio';
 export type { GroupProps } from '@/components/Group';
 export type { SpaceProps } from '@/components/Space';
+export type {
+  ScrollAreaProps,
+  ScrollAreaSize,
+  ScrollAreaRadius,
+  ScrollAreaScrollbars,
+  ScrollAreaType,
+  ScrollAreaDirection,
+} from '@/components/ScrollArea';
 
 /**
  * Component composition types.
