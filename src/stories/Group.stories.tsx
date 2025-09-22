@@ -14,7 +14,7 @@ A horizontal flex container component for composing elements in a row.
 
 ## Features
 - Horizontal flexbox layout (flex-direction: row)
-- Predefined spacing scale for gaps ('xs', 's', 'm', 'l', 'xl', 'xxl')
+- Predefined spacing scale for gaps ('xs', 'sm', 'md', 'lg', 'xl', 'xxl')
 - Children can grow to fill space equally with grow prop
 - Prevents overflow with max-width calculation (preventGrowOverflow)
 - Responsive values for all flexbox properties using breakpoint objects
@@ -173,9 +173,9 @@ export const SpacingScale: Story = {
       </div>
 
       <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Large Gap (l)</h4>
+        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Large Gap (lg)</h4>
         <Group 
-          gap="l"
+          gap="lg"
           className={createStyles({
             backgroundColor: "#f9f0ff", 
             border: "1px solid #d3adf7", 
@@ -488,7 +488,7 @@ export const PreventGrowOverflow: Story = {
 export const ResponsiveBehavior: Story = {
   render: () => (
     <Group 
-      gap={{ xs: "s", md: "m", lg: "l" }}
+      gap={{ xs: "sm", md: "md", lg: "lg" }}
       align={{ xs: "stretch", md: "center" }}
       justify={{ xs: "center", md: "flex-start" }}
       wrap={{ xs: "wrap", md: "nowrap" }}
@@ -752,9 +752,9 @@ export const CustomGapValues: Story = {
       </div>
 
       <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Large Gap (l)</h4>
+        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Large Gap (lg)</h4>
         <Group 
-          gap="l"
+          gap="lg"
           className={createStyles({
             backgroundColor: "#fff0f6", 
             border: "1px solid #ffadd6", 

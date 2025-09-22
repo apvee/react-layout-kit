@@ -243,7 +243,7 @@ export const CombinedSpacing: Story = {
       }}>
         Origin
       </div>
-      <Space w="xl" h="l" />
+      <Space w="xl" h="lg" />
       <div style={{ 
         width: '80px',
         height: '60px',
@@ -294,7 +294,7 @@ export const ButtonToolbar: Story = {
           }}>
             Save
           </button>
-          <Space w="l" />
+          <Space w="lg" />
           <button style={{
             padding: '0.75rem 1.5rem',
             backgroundColor: 'transparent',
@@ -305,7 +305,7 @@ export const ButtonToolbar: Story = {
           }}>
             Cancel
           </button>
-          <Space w="l" />
+          <Space w="lg" />
           <button style={{
             padding: '0.75rem 1.5rem',
             backgroundColor: '#52c41a',
@@ -341,7 +341,7 @@ export const ButtonToolbar: Story = {
           }}>
             Edit
           </button>
-          <Space w="s" />
+          <Space w="sm" />
           <button style={{
             padding: '0.5rem 1rem',
             backgroundColor: 'transparent',
@@ -353,7 +353,7 @@ export const ButtonToolbar: Story = {
           }}>
             Copy
           </button>
-          <Space w="s" />
+          <Space w="sm" />
           <button style={{
             padding: '0.5rem 1rem',
             backgroundColor: 'transparent',
@@ -430,7 +430,7 @@ export const ContentSections: Story = {
         Article Title
       </h1>
       
-      <Space h="m" />
+      <Space h="md" />
       
       <div style={{ 
         color: '#8c8c8c', 
@@ -445,7 +445,7 @@ export const ContentSections: Story = {
         <span>5 min read</span>
       </div>
       
-      <Space h="l" />
+      <Space h="lg" />
       
       <p style={{ 
         margin: '0', 
@@ -469,7 +469,7 @@ export const ContentSections: Story = {
         First Section
       </h2>
       
-      <Space h="m" />
+      <Space h="md" />
       
       <p style={{ 
         margin: '0', 
@@ -481,7 +481,7 @@ export const ContentSections: Story = {
         quis nostrud exercitation ullamco laboris.
       </p>
       
-      <Space h="l" />
+      <Space h="lg" />
       
       <p style={{ 
         margin: '0', 
@@ -504,7 +504,7 @@ export const ContentSections: Story = {
         Second Section
       </h2>
       
-      <Space h="m" />
+      <Space h="md" />
       
       <p style={{ 
         margin: '0', 
@@ -576,9 +576,9 @@ export const ResponsiveSpacing: Story = {
         }}>
           Responsive Content Block
         </div>
-        
-        <Space h={{ xs: "s", md: "m", lg: "l" }} />
-        
+
+        <Space h={{ xs: "sm", md: "md", lg: "lg" }} />
+
         <div style={{ 
           padding: '1rem 2rem', 
           backgroundColor: '#52c41a', 
@@ -607,9 +607,9 @@ export const ResponsiveSpacing: Story = {
         }}>
           Left
         </div>
-        
-        <Space w={{ xs: "s", md: "l", lg: "xl" }} />
-        
+
+        <Space w={{ xs: "sm", md: "lg", lg: "xl" }} />
+
         <div style={{ 
           padding: '1rem', 
           backgroundColor: '#722ed1', 
@@ -907,7 +907,7 @@ export const CardLayout: Story = {
               {product.name}
             </h4>
             
-            <Space h="s" />
+            <Space h="sm" />
             
             <p style={{ 
               margin: '0', 
@@ -918,7 +918,7 @@ export const CardLayout: Story = {
               Lorem ipsum dolor sit amet consectetur.
             </p>
             
-            <Space h="m" />
+            <Space h="md" />
             
             <div style={{
               display: 'flex',
@@ -932,7 +932,7 @@ export const CardLayout: Story = {
               }}>
                 {product.price}
               </span>
-              <Space w="s" />
+              <Space w="sm" />
               <button style={{
                 padding: '0.5rem 1rem',
                 backgroundColor: product.color,

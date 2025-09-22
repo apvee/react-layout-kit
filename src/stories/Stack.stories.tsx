@@ -160,7 +160,7 @@ export const SpacingScale: Story = {
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Large Gap (l)</h4>
         <Stack 
-          gap="l"
+          gap="lg"
           className={createStyles({
             backgroundColor: "#f9f0ff", 
             border: "1px solid #d3adf7", 
@@ -501,7 +501,7 @@ export const FormLayout: Story = {
 export const CardStack: Story = {
   render: () => (
     <Stack 
-      gap="l"
+      gap="lg"
       align="center"
       className={createStyles({
         backgroundColor: "#fafafa",
@@ -837,7 +837,7 @@ export const PageLayout: Story = {
         padding: '2rem',
         backgroundColor: 'white'
       }}>
-        <Stack gap="l">
+        <Stack gap="lg">
           <h2 style={{ margin: 0, color: '#262626' }}>Main Content Area</h2>
           <p style={{ margin: 0, color: '#595959', lineHeight: 1.6 }}>
             This is the main content area of the page. It grows to fill the available space 

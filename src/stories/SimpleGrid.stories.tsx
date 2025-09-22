@@ -234,7 +234,7 @@ export const SpacingVariations: Story = {
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Medium Spacing (m) - Default</h4>
         <SimpleGrid 
           cols={3}
-          spacing="m"
+          spacing="md"
           className={createStyles({
             backgroundColor: "#e6f7ff", 
             border: "1px solid #91d5ff", 
@@ -325,7 +325,7 @@ export const VerticalSpacing: Story = {
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Same Horizontal and Vertical Spacing</h4>
         <SimpleGrid 
           cols={3}
-          spacing="m"
+          spacing="md"
           className={createStyles({
             backgroundColor: "#e6f7ff", 
             border: "1px solid #91d5ff", 
@@ -351,7 +351,7 @@ export const VerticalSpacing: Story = {
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Large Horizontal, Small Vertical</h4>
         <SimpleGrid 
           cols={3}
-          spacing="l"
+          spacing="lg"
           verticalSpacing="xs"
           className={createStyles({
             backgroundColor: "#f6ffed", 
@@ -379,7 +379,7 @@ export const VerticalSpacing: Story = {
         <SimpleGrid 
           cols={3}
           spacing="xs"
-          verticalSpacing="l"
+          verticalSpacing="lg"
           className={createStyles({
             backgroundColor: "#fff7e6", 
             border: "1px solid #ffd591", 
@@ -460,7 +460,7 @@ export const CardGallery: Story = {
   render: () => (
     <SimpleGrid 
       cols={{ xs: 1, sm: 2, md: 3 }}
-      spacing="l"
+      spacing="lg"
       className={createStyles({
         backgroundColor: "white"
       })}
@@ -540,7 +540,7 @@ export const ImageGallery: Story = {
   render: () => (
     <SimpleGrid 
       cols={{ xs: 2, sm: 3, md: 4, lg: 5 }}
-      spacing="s"
+      spacing="sm"
       className={createStyles({
         backgroundColor: "#fafafa",
         padding: "1rem",
@@ -650,8 +650,8 @@ export const CustomSpacing: Story = {
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Large Horizontal, Medium Vertical</h4>
         <SimpleGrid 
           cols={3}
-          spacing="l"
-          verticalSpacing="m"
+          spacing="lg"
+          verticalSpacing="md"
           className={createStyles({
             backgroundColor: "#f9f0ff", 
             border: "1px solid #d3adf7", 
@@ -677,7 +677,7 @@ export const CustomSpacing: Story = {
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Large Spacing</h4>
         <SimpleGrid 
           cols={4}
-          spacing="l"
+          spacing="lg"
           className={createStyles({
             backgroundColor: "#fff0f6", 
             border: "1px solid #ffadd6", 
@@ -704,7 +704,7 @@ export const CustomSpacing: Story = {
         <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Medium Horizontal, Small Vertical</h4>
         <SimpleGrid 
           cols={3}
-          spacing="m"
+          spacing="md"
           verticalSpacing="xs"
           className={createStyles({
             backgroundColor: "#f0f9ff", 
@@ -746,7 +746,7 @@ export const DashboardLayout: Story = {
       {/* Stats cards */}
       <SimpleGrid 
         cols={{ xs: 1, sm: 2, lg: 4 }}
-        spacing="m"
+        spacing="md"
         className={createStyles({
           marginBottom: "1.5rem"
         })}
@@ -783,7 +783,7 @@ export const DashboardLayout: Story = {
       {/* Charts section */}
       <SimpleGrid 
         cols={{ xs: 1, lg: 2 }}
-        spacing="m"
+        spacing="md"
       >
         <div style={{
           backgroundColor: 'white',

@@ -16,7 +16,7 @@ import type { SimpleGridProps } from './SimpleGrid.types';
  * 
  * **Grid Properties:**
  * - `cols`: Number of columns (default: 1)
- * - `spacing`: Gap between columns (default: "m" = 16px)
+ * - `spacing`: Gap between columns (default: "sm")
  * - `verticalSpacing`: Gap between rows (default: same as spacing)
  * 
  * **Responsive Behavior:**
@@ -63,7 +63,7 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
   function SimpleGrid(props, forwardedRef) {
     const {
       cols = 1,
-      spacing = "m",
+      spacing = "sm",
       verticalSpacing,
       containerWidth,
       children,
@@ -93,7 +93,7 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
     }, [cols, currentWidth, activeBreakpoints]);
 
     const resolvedSpacing = React.useMemo(() => {
-      const spacingValue = resolveResponsiveValue(spacing, currentWidth, activeBreakpoints) ?? "m";
+      const spacingValue = resolveResponsiveValue(spacing, currentWidth, activeBreakpoints) ?? "sm";
       return resolveSpacing(spacingValue);
     }, [spacing, currentWidth, activeBreakpoints]);
 
@@ -102,7 +102,7 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
       const verticalSpacingValue = verticalSpacing 
         ? resolveResponsiveValue(verticalSpacing, currentWidth, activeBreakpoints)
         : resolveResponsiveValue(spacing, currentWidth, activeBreakpoints);
-      const finalVerticalSpacing = verticalSpacingValue ?? "m";
+      const finalVerticalSpacing = verticalSpacingValue ?? "sm";
       return resolveSpacing(finalVerticalSpacing);
     }, [verticalSpacing, spacing, currentWidth, activeBreakpoints]);
 
