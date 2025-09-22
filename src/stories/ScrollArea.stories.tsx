@@ -4,7 +4,7 @@ import { ScrollArea } from '../components/ScrollArea';
 import type { ScrollAreaProps } from '../components/ScrollArea';
 
 const meta: Meta<typeof ScrollArea> = {
-  title: 'Components/ScrollArea',
+  title: 'Components/Layouts/ScrollArea',
   component: ScrollArea,
   parameters: {
     layout: 'centered',

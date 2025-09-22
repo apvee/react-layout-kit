@@ -69,6 +69,7 @@ type Story = StoryObj<GroupProps>;
 export const BasicGroup: Story = {
   render: () => (
     <Group 
+      gap="md"
       className={createStyles({
         backgroundColor: "#f5f5f5", 
         border: "2px dashed #ccc", 

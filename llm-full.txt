@@ -24,7 +24,7 @@ The library follows a modular architecture for optimal developer experience and 
 ├── components/          # All layout components
 │   ├── Box/            # Foundation component
 │   ├── Flex/           # Flexbox layouts
-│   ├── Stack/          # Vertical/horizontal stacking
+│   ├── Stack/          # Vertical stacking layouts
 │   ├── Grid/           # CSS Grid layouts
 │   ├── SimpleGrid/     # Equal-width grids
 │   ├── Container/      # Content containers
@@ -232,25 +232,32 @@ Individual flex item control with properties:
 - `order`: CSS order - Visual order of flex item
 
 **Stack Component:**
-Vertical flexbox container optimized for stacking elements:
+Vertical-only flexbox container optimized for creating vertical layouts using flex-direction: column:
 
 **Properties:**
-- `align`: CSS align-items - Cross-axis alignment (default: "stretch")
-- `gap`: Spacing between stacked items (default: "m", uses spacing scale)
-- `justify`: CSS justify-content - Main-axis alignment (default: "flex-start")
+- `align`: CSS align-items - Cross-axis (horizontal) alignment of stacked items (default: "stretch")
+- `gap`: Spacing between vertically stacked items (default: "md", uses spacing scale)
+- `justify`: CSS justify-content - Main-axis (vertical) alignment of stacked items (default: "flex-start")
 
 **Usage Examples:**
 ```typescript
-// Form layout
-<Stack gap="m" align="stretch">
+// Basic vertical stack for content sections
+<Stack gap="md" align="stretch">
+  <h1>Section Title</h1>
+  <p>Section description</p>
+  <button>Call to Action</button>
+</Stack>
+
+// Form layout with vertical stacking
+<Stack gap="md" align="stretch">
   <input type="text" placeholder="Name" />
   <input type="email" placeholder="Email" />
   <textarea placeholder="Message" />
   <button>Submit</button>
 </Stack>
 
-// Card stack with responsive gaps
-<Stack gap={{ xs: "s", md: "l" }} align="center">
+// Card stack with responsive gaps and centering
+<Stack gap={{ xs: "sm", md: "lg" }} align="center">
   <Card>Card 1</Card>
   <Card>Card 2</Card>
   <Card>Card 3</Card>

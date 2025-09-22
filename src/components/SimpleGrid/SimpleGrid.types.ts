@@ -15,7 +15,7 @@ export type SimpleGridProps = BaseBoxProps & {
   /**
    * Spacing between columns. Can be a spacing scale key or any valid CSS value.
    * Supports responsive values using breakpoint objects.
-   * @default "m"
+   * When undefined, no spacing will be applied.
    */
   spacing?: ResponsiveValue<SpacingValue>;
 
@@ -23,7 +23,7 @@ export type SimpleGridProps = BaseBoxProps & {
    * Spacing between rows. Can be a spacing scale key or any valid CSS value.
    * If not provided, uses the same value as spacing.
    * Supports responsive values using breakpoint objects.
-   * @default "m"
+   * When both spacing and verticalSpacing are undefined, no spacing will be applied.
    */
   verticalSpacing?: ResponsiveValue<SpacingValue>;
 }

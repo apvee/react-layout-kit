@@ -359,36 +359,45 @@ The `Flex` component provides comprehensive flexbox layout capabilities with res
 
 ### The Stack Component
 
-The `Stack` component creates vertical or horizontal stacking layouts with consistent spacing and alignment.
+The `Stack` component creates vertical stacking layouts with consistent spacing and alignment using CSS flexbox with `flex-direction: column`.
 
 #### Key Features
 
-- **Vertical/Horizontal Stacking**: Simple direction control
-- **Consistent Spacing**: Automatic gap management between items
-- **Responsive Alignment**: All properties support responsive values
+- **Vertical Stacking**: Optimized for vertical layouts like forms, content sections, and card lists
+- **Consistent Spacing**: Automatic gap management between stacked items
+- **Cross-axis Alignment**: Control horizontal alignment of items within the stack
+- **Responsive Properties**: All properties support responsive values
 - **Semantic HTML**: Works with any child elements
 
 #### Stack Props
 
 | Prop      | Type                              | Description                      |
 | --------- | --------------------------------- | -------------------------------- |
-| `align`   | `ResponsiveValue<AlignItems>`     | Cross-axis alignment of elements |
-| `justify` | `ResponsiveValue<JustifyContent>` | Main-axis alignment of elements  |
-| `gap`     | `ResponsiveValue<SpacingValue>`   | Space between elements           |
+| `align`   | `ResponsiveValue<AlignItems>`     | Cross-axis (horizontal) alignment of elements |
+| `justify` | `ResponsiveValue<JustifyContent>` | Main-axis (vertical) alignment of elements  |
+| `gap`     | `ResponsiveValue<SpacingValue>`   | Space between stacked elements           |
 
 #### Stack Examples
 
 ```tsx
-// Vertical stack (default)
-<Stack gap="m" align="center">
+// Basic vertical stack with consistent spacing
+<Stack gap="md" align="center">
   <h1>Title</h1>
   <p>Description</p>
   <button>Action</button>
 </Stack>
 
-// Responsive stack with dynamic spacing
+// Form layout with vertical stacking
+<Stack gap="md" align="stretch">
+  <input type="text" placeholder="Name" />
+  <input type="email" placeholder="Email" />
+  <textarea placeholder="Message" />
+  <button type="submit">Submit</button>
+</Stack>
+
+// Responsive vertical stack with dynamic spacing
 <Stack
-  gap={{ xs: "s", md: "l" }}
+  gap={{ xs: "sm", md: "lg" }}
   align={{ xs: "stretch", md: "center" }}
 >
   <div>Stack Item 1</div>
@@ -1407,13 +1416,13 @@ export function setupBoxConfiguration() {
     },
     spacing: {
       none: 0,
-      xs: 4, // 0.25rem
-      sm: 8, // 0.5rem
-      md: 12, // 0.75rem
-      lg: 16, // 1rem
-      xl: 20, // 1.25rem
-      xxl: 24, // 1.5rem
-      xxxl: 32, // 2rem
+      xs: 4,
+      sm: 8,
+      md: 12,
+      lg: 16,
+      xl: 20,
+      xxl: 24,
+      xxxl: 32,
     },
   });
 }
@@ -1609,7 +1618,7 @@ function ResponsiveContainer({ children, ...props }) {
 }
 
 // Flexible Grid
-function ResponsiveGrid({ columns = { xs: 1, sm: 2, md: 3, lg: 4 }, gap = 'm', children, ...props }) {
+function ResponsiveGrid({ columns = { xs: 1, sm: 2, md: 3, lg: 4 }, gap = 'md', children, ...props }) {
   return (
     <SimpleGrid
       cols={columns}
@@ -1622,7 +1631,7 @@ function ResponsiveGrid({ columns = { xs: 1, sm: 2, md: 3, lg: 4 }, gap = 'm', c
 }
 
 // Stack component
-function VStack({ align, justify, gap = 'm', children, ...props }) {
+function VStack({ align, justify, gap = 'md', children, ...props }) {
   return (
     <Stack
       align={align}

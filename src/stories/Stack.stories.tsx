@@ -57,6 +57,7 @@ type Story = StoryObj<StackProps>;
 export const BasicStack: Story = {
   render: () => (
     <Stack 
+      gap="md"
       className={createStyles({
         backgroundColor: "#f5f5f5", 
         border: "2px dashed #ccc", 
@@ -141,7 +142,7 @@ export const SpacingScale: Story = {
       </div>
 
       <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Medium Gap (m) - Default</h4>
+        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Medium Gap (md)</h4>
         <Stack 
           gap="md"
           className={createStyles({

@@ -15,7 +15,7 @@ import type { GroupProps } from './Group.types';
  * 
  * **Group Properties:**
  * - `align`: Controls align-items (cross-axis alignment, default: "center")
- * - `gap`: Controls gap between items (default: "m" = 16px)
+ * - `gap`: Controls gap between items (spacing scale key or CSS value, optional)
  * - `grow`: Whether children should flex-grow (default: false)
  * - `justify`: Controls justify-content (main-axis alignment, default: "flex-start")
  * - `preventGrowOverflow`: Prevents children from overflowing by setting max-width (default: true)
@@ -72,7 +72,7 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
   function Group(props, forwardedRef) {
     const {
       align = "center",
-      gap = "m",
+      gap,
       grow = false,
       justify = "flex-start",
       preventGrowOverflow = true,
@@ -110,7 +110,11 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
     }, [align, currentWidth, activeBreakpoints]);
 
     const resolvedGap = React.useMemo(() => {
-      const gapValue = resolveResponsiveValue(gap, currentWidth, activeBreakpoints) ?? "m";
+      if (gap === undefined) return undefined;
+      
+      const gapValue = resolveResponsiveValue(gap, currentWidth, activeBreakpoints);
+      if (gapValue === undefined) return undefined;
+      
       const resolvedSpacingValue = resolveSpacing(gapValue);
       // Convert number to rem if it's a number
       if (typeof resolvedSpacingValue === 'number') {

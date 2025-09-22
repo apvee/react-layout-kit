@@ -55,6 +55,7 @@ export const BasicGrid: Story = {
   render: () => (
     <SimpleGrid 
       cols={3}
+      spacing="md"
       className={createStyles({
         backgroundColor: "#f5f5f5", 
         border: "2px dashed #ccc", 
