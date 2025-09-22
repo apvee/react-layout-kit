@@ -1,8 +1,8 @@
 # @apvee/react-layout-kit
 
-An opinionated, type-safe React layout library that simplifies styling and layout creation without leaving the React component context. Features responsive CSS-in-JS with Box, Grid, Flex, and Stack components.
+An opinionated, type-safe React layout library that simplifies styling and layout creation without leaving the React component context. Features responsive CSS-in-JS with Box, Grid, Flex, Stack components and more.
 
-Built with TypeScript and Emotion CSS, **@apvee/react-layout-kit** leverages Emotion CSS internally for optimized runtime style generation along with a custom high-performance Slot implementation for component composition. This approach enables seamless dynamic styling based entirely on React props with minimal overhead, dramatically simplifying the React developer experience by eliminating the need for separate CSS files, complex CSS-in-JS setup, or verbose styled-components patterns.
+Built with TypeScript and Emotion CSS, **@apvee/react-layout-kit** leverages Emotion CSS internally for optimized runtime style generation along with a custom high-performance Slot implementation for component composition. This approach enables seamless **dynamic styling based entirely on React props with minimal overhead**, dramatically simplifying the React developer experience by eliminating the need for separate CSS files, complex CSS-in-JS setup, or verbose styled-components patterns.
 
 ## Why @apvee/react-layout-kit?
 
@@ -101,7 +101,8 @@ function StyledButton() {
 │   ├── Group/          # Horizontal grouping
 │   ├── Space/          # Spacing utilities
 │   ├── AspectRatio/    # Aspect ratio maintenance
-│   └── AreaGrid/       # Named grid areas
+│   ├── AreaGrid/       # Named grid areas
+│   └── ScrollArea/     # Scrollable containers
 ├── core/               # Core utilities
 │   ├── styling/        # CSS generation utilities
 │   ├── responsive/     # Responsive value resolution
@@ -128,6 +129,7 @@ function StyledButton() {
 | `@apvee/react-layout-kit/components/Center` | Center component and types |
 | `@apvee/react-layout-kit/components/AspectRatio` | AspectRatio component and types |
 | `@apvee/react-layout-kit/components/AreaGrid` | AreaGrid component and types |
+| `@apvee/react-layout-kit/components/ScrollArea` | ScrollArea component and types |
 | `@apvee/react-layout-kit/components/Space` | Space component and types |
 | `@apvee/react-layout-kit/core/styling` | CSS utilities and generators |
 | `@apvee/react-layout-kit/core/responsive` | Responsive value utilities |
@@ -164,6 +166,7 @@ function StyledButton() {
 - **`AspectRatio`** - Maintains consistent aspect ratios for media content
 - **`Group`** - Horizontal grouping with gap and overflow handling
 - **`Space`** - Invisible spacing utility for consistent whitespace
+- **`ScrollArea`** - Scrollable container with custom scrollbar styling and virtualization support
 
 #### Component Composition
 
@@ -190,7 +193,7 @@ The `Box` component is the foundation of the library. It's a polymorphic compone
 | Prop             | Type      | Description                                       |
 | ---------------- | --------- | ------------------------------------------------- |
 | `asChild`        | `boolean` | Render as child element using internal Slot       |
-| `containerWidth` | `number`  | Fixed container width for responsive calculations |
+| `containerWidth` | `number`  | Programmatic container width for responsive calculations - use with useContainerWidth hook or when you have a parent container width to provide |
 | `styleReset`     | `boolean` | Apply basic style reset (box-sizing: border-box)  |
 
 #### Box Short Props - Margin
@@ -667,12 +670,113 @@ The `Space` component provides invisible spacing utility for consistent whitespa
 </div>
 
 // Responsive spacing
-// Responsive spacing
 <div>
   <div>Content Block 1</div>
   <Space h={{ xs: "m", md: "xl" }} />
   <div>Content Block 2</div>
 </div>
+```
+
+### The ScrollArea Component
+
+The `ScrollArea` component provides custom scrollbars with native scrolling performance and responsive design capabilities.
+
+#### Key Features
+
+- **Native Performance**: Uses native scrolling with custom overlay scrollbars
+- **Responsive Sizing**: Scrollbar size adapts to different screen sizes  
+- **Multiple Visibility Modes**: hover, always, or scroll-based visibility
+- **RTL Support**: Full right-to-left language support
+- **Customizable Styling**: Custom colors, sizes, and border radius
+- **Accessible**: Minimum touch targets and keyboard navigation
+
+#### ScrollArea Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `asChild` | `boolean` | Render as child element using Slot pattern |
+| `size` | `ResponsiveValue<'small' \| 'medium' \| 'large'>` | Scrollbar thickness (default: 'small') |
+| `radius` | `'none' \| 'small' \| 'medium' \| 'large' \| 'full'` | Border radius (default: 'small') |
+| `scrollbars` | `'vertical' \| 'horizontal' \| 'both'` | Which scrollbars to show (default: 'both') |
+| `type` | `'hover' \| 'always' \| 'scroll'` | Visibility behavior (default: 'hover') |
+| `scrollHideDelay` | `number` | Hide delay in ms (default: 600) |
+| `dir` | `'ltr' \| 'rtl'` | Text direction (default: 'ltr') |
+| `trackColor` | `string` | Scrollbar track background color |
+| `thumbColor` | `string` | Scrollbar thumb color |
+| `thumbHoverColor` | `string` | Thumb color on hover |
+| `thumbActiveColor` | `string` | Thumb color when pressed |
+
+#### ScrollArea Examples
+
+```tsx
+// Basic scrollable content
+<ScrollArea style={{ height: 300, width: 400 }}>
+  <div style={{ height: 1000 }}>
+    Very long content that will scroll...
+    {Array.from({ length: 100 }, (_, i) => (
+      <div key={i}>Item {i + 1}</div>
+    ))}
+  </div>
+</ScrollArea>
+
+// Responsive scrollbar size
+<ScrollArea 
+  size={{ xs: 'small', md: 'medium', lg: 'large' }}
+  type="always"
+>
+  <div style={{ height: 500, width: 800 }}>
+    Content with responsive scrollbars
+  </div>
+</ScrollArea>
+
+// Custom styling
+<ScrollArea
+  thumbColor="rgba(0, 123, 255, 0.5)"
+  thumbHoverColor="rgba(0, 123, 255, 0.8)"
+  trackColor="rgba(0, 0, 0, 0.1)"
+  radius="large"
+  type="hover"
+  scrollHideDelay={300}
+>
+  <div style={{ height: 400 }}>
+    Styled scrollable content
+  </div>
+</ScrollArea>
+
+// Horizontal-only scrolling
+<ScrollArea scrollbars="horizontal" style={{ width: 300 }}>
+  <div style={{ width: 800, whiteSpace: 'nowrap' }}>
+    Wide content that scrolls horizontally...
+  </div>
+</ScrollArea>
+
+// Composition with asChild
+<ScrollArea asChild>
+  <section className="custom-scrollable-section">
+    <div style={{ height: 600 }}>
+      Scrollable section content
+    </div>
+  </section>
+</ScrollArea>
+
+// With useContainerWidth for responsive behavior
+function ResponsiveScrollArea() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerWidth = useContainerWidth(containerRef);
+  
+  return (
+    <div ref={containerRef} style={{ width: '100%' }}>
+      <ScrollArea 
+        size={{ xs: 'small', md: 'medium' }}
+        containerWidth={containerWidth}
+      >
+        <div style={{ height: 500 }}>
+          Container-aware scrollable content
+        </div>
+      </ScrollArea>
+    </div>
+  );
+}
 ```
 
 ### The Slot Component
@@ -1110,17 +1214,51 @@ Container-aware responsive design is more powerful than viewport-based media que
 
 This enables true component-level responsive design, where the same component can behave differently in different contexts.
 
-### Fixed Container Width
+### Programmatic Container Width
 
-For performance optimization or when you know the container width, you can provide it directly:
+The `containerWidth` prop allows you to provide container width programmatically rather than relying on automatic measurement. This is useful when:
+
+1. **Using the useContainerWidth hook** to measure a parent container
+2. **You have programmatic access** to a parent container's dimensions  
+3. **Performance optimization** when you know the container width
+
+#### Using with useContainerWidth Hook
 
 ```tsx
-<Box
-  containerWidth={750} // Skip measurement, use fixed width
-  $padding={{ xs: 8, md: 16, lg: 24 }}
->
-  Fixed width responsive behavior
-</Box>
+function ParentWithChild() {
+  const parentRef = React.useRef<HTMLDivElement>(null);
+  const parentWidth = useContainerWidth(parentRef);
+
+  return (
+    <div ref={parentRef} style={{ width: '60%' }}>
+      <Box
+        containerWidth={parentWidth} // Use measured parent width
+        $padding={{ xs: 8, md: 16, lg: 24 }}
+        $fontSize={{ xs: 14, md: 16, lg: 18 }}
+      >
+        Child responds to parent container size
+      </Box>
+    </div>
+  );
+}
+```
+
+#### Programmatic Width from Context
+
+```tsx
+function DynamicLayout({ sidebarOpen }) {
+  // Calculate available width based on sidebar state
+  const availableWidth = sidebarOpen ? window.innerWidth - 300 : window.innerWidth;
+  
+  return (
+    <Box
+      containerWidth={availableWidth}
+      $padding={{ xs: 8, md: 16, lg: 24 }}
+    >
+      Layout adapts to available space
+    </Box>
+  );
+}
 ```
 
 ## CSS Class Utilities
@@ -1871,11 +2009,17 @@ The library is fully SSR-compatible with automatic fallbacks:
 ### SSR Best Practices
 
 ```tsx
-// For critical above-the-fold content, provide containerWidth
+// For critical above-the-fold content, use useContainerWidth with fallback
 function HeroSection() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const measuredWidth = useContainerWidth(containerRef);
+  // Use measured width, fallback to desktop width for SSR
+  const containerWidth = measuredWidth || 1200;
+  
   return (
     <Box
-      containerWidth={1200} // Assume desktop width for SSR
+      ref={containerRef}
+      containerWidth={containerWidth}
       $padding={{ xs: "m", md: "l", lg: "xl" }}
       $fontSize={{ xs: 24, md: 32, lg: 40 }}
     >
