@@ -1,1423 +1,432 @@
-# @apvee/react-layout-kit - Comprehensive Library Documentation
+# @apvee/react-layout-kit - LLM Code Generation Guide
 
-## LIBRARY OVERVIEW
+## Overview
+TypeScript React layout library with responsive CSS-in-JS, built on Emotion CSS. Provides type-safe layout components with responsive props and zero-config styling.
 
-@apvee/react-layout-kit is a TypeScript-first React layout library that provides a comprehensive suite of responsive layout components with CSS-in-JS styling capabilities. Built on Emotion CSS, a custom high-performance Slot implementation, and optimized ResizeObserver patterns, it enables developers to create complex, responsive layouts entirely within React component props without external CSS files.
-
-**Key Characteristics:**
-- Type-safe CSS-in-JS with full TypeScript support and autocompletion
-- True responsive design using JavaScript-driven container width measurements
-- Zero configuration with customizable breakpoints and spacing scales
-- Performance-optimized with debounced ResizeObserver and memoized calculations
-- SSR-compatible with proper hydration handling
-- Composition-friendly with asChild prop pattern using custom Slot implementation
-- Zero external composition dependencies - fully self-contained
-- SharePoint Framework (SPFx) compatible with optimized JSX handling
-
-## MODULAR ARCHITECTURE & IMPORTS
-
-### Package Structure
-The library follows a modular architecture for optimal developer experience and bundle optimization:
-
-```
-@apvee/react-layout-kit/
-├── components/          # All layout components
-│   ├── Box/            # Foundation component
-│   ├── Flex/           # Flexbox layouts
-│   ├── Stack/          # Vertical stacking layouts
-│   ├── Grid/           # CSS Grid layouts
-│   ├── SimpleGrid/     # Equal-width grids
-│   ├── Container/      # Content containers
-│   ├── Center/         # Centering utilities
-│   ├── Group/          # Horizontal grouping
-│   ├── Space/          # Spacing utilities
-│   ├── AspectRatio/    # Aspect ratio maintenance
-│   └── AreaGrid/       # Named grid areas
-├── core/               # Core utilities
-│   ├── styling/        # CSS generation utilities
-│   ├── responsive/     # Responsive value resolution
-│   ├── components/     # Slot system
-│   ├── configuration/  # Global configuration
-│   └── utils/          # General utilities
-├── hooks/              # React hooks
-├── types/              # TypeScript definitions
-└── index               # Main export
+## Installation
+```bash
+npm install @apvee/react-layout-kit
 ```
 
-### Import Patterns
-The library supports flexible import patterns for optimal tree-shaking and developer experience:
+## Import Patterns
+```tsx
+// Main imports (recommended)
+import { Box, Flex, Stack, Grid, Container } from "@apvee/react-layout-kit";
 
-**Barrel Imports (Recommended):**
-```typescript
-// Main barrel export for most use cases
-import { Box, Flex, Stack, Grid } from "@apvee/react-layout-kit";
+// Granular imports (tree-shaking)
+import { Box } from "@apvee/react-layout-kit/components/Box";
+import { Flex } from "@apvee/react-layout-kit/components/Flex";
 
-// Type imports from main barrel
+// Types
 import type { BoxProps, FlexProps } from "@apvee/react-layout-kit";
 ```
 
-**Granular Imports (Optimal Tree-shaking):**
-```typescript
-// Component-specific imports
-import { Box } from "@apvee/react-layout-kit/components/Box";
-import { Flex } from "@apvee/react-layout-kit/components/Flex";
-import { Stack } from "@apvee/react-layout-kit/components/Stack";
+## Core Components
 
-// Type-specific imports
-import type { BoxProps } from "@apvee/react-layout-kit/components/Box";
-import type { FlexProps } from "@apvee/react-layout-kit/components/Flex";
+### Box (Foundation Component)
+The base component with all CSS properties and responsive capabilities.
+
+**Key Props:**
+- `asChild?: boolean` - Render as child element using Slot
+- `containerWidth?: number` - Programmatic container width
+- `styleReset?: boolean` - Apply box-sizing reset
+
+**Short Props (Spacing):**
+```tsx
+// Margin
+m, mt, mb, ml, mr, ms, me, mx, my
+
+// Padding  
+p, pt, pb, pl, pr, ps, pe, px, py
+
+// Size
+w, h, miw, maw, mih, mah
+
+// Position
+top, left, bottom, right
 ```
 
-**Core Utility Imports:**
-```typescript
-// Responsive utilities
-import { resolveResponsiveValue } from "@apvee/react-layout-kit/core/responsive";
-
-// Styling utilities
-import { createStyles } from "@apvee/react-layout-kit/core/styling";
-
-// Configuration
-import { configureBox } from "@apvee/react-layout-kit/core/configuration";
+**Dollar Props (All CSS properties with $ prefix):**
+```tsx
+$display, $position, $flexDirection, $justifyContent, $alignItems
+$margin, $padding, $width, $height, $backgroundColor, $color
+$fontSize, $fontWeight, $border, $borderRadius, $boxShadow
+// ... all CSS properties available
 ```
 
-### Available Module Exports
+**Examples:**
+```tsx
+// Basic usage
+<Box $padding="m" $backgroundColor="blue" $color="white">Content</Box>
 
-| Export Path | Contents |
-|-------------|----------|
-| `@apvee/react-layout-kit` | All components, hooks, and utilities |
-| `@apvee/react-layout-kit/components/Box` | Box component and types |
-| `@apvee/react-layout-kit/components/Flex` | Flex component and types |
-| `@apvee/react-layout-kit/components/Stack` | Stack component and types |
-| `@apvee/react-layout-kit/components/Grid` | Grid component and types |
-| `@apvee/react-layout-kit/components/SimpleGrid` | SimpleGrid component and types |
-| `@apvee/react-layout-kit/components/Group` | Group component and types |
-| `@apvee/react-layout-kit/components/Container` | Container component and types |
-| `@apvee/react-layout-kit/components/Center` | Center component and types |
-| `@apvee/react-layout-kit/components/AspectRatio` | AspectRatio component and types |
-| `@apvee/react-layout-kit/components/AreaGrid` | AreaGrid component and types |
-| `@apvee/react-layout-kit/components/Space` | Space component and types |
-| `@apvee/react-layout-kit/core/styling` | CSS utilities and generators |
-| `@apvee/react-layout-kit/core/responsive` | Responsive value utilities |
-| `@apvee/react-layout-kit/types` | All TypeScript definitions |
+// Responsive values
+<Box 
+  $padding={{ xs: "s", md: "m", lg: "l" }}
+  $display={{ xs: "block", md: "flex" }}
+>
+  Responsive content
+</Box>
 
-### Tree-shaking Benefits
-The modular structure enables excellent tree-shaking:
+// Short props
+<Box p="m" mx="auto" w="200px" h="100px">Content</Box>
 
-**Bundle Size Optimization:**
-- **Granular imports**: Include only components you use (~1-2KB per component)
-- **Automatic dead code elimination**: Unused components are completely excluded
-- **Optimized dependencies**: Shared utilities are deduplicated across components
-- **Framework-agnostic**: Works with Webpack, Vite, Rollup, and other modern bundlers
-
-**Import Strategy Examples:**
-```typescript
-// ✅ Excellent: Import only what you need
-import { Box } from "@apvee/react-layout-kit/components/Box";
-import { Flex } from "@apvee/react-layout-kit/components/Flex";
-// Bundle includes: Box + Flex (~2-3KB gzipped)
-
-// ✅ Good: Barrel import (modern bundlers handle this well)
-import { Box, Flex } from "@apvee/react-layout-kit";
-// Bundle includes: Box + Flex + small barrel overhead
-
-// ❌ Avoid: Full library import when using few components
-import * as LayoutKit from "@apvee/react-layout-kit";
-// Less reliable tree-shaking with some bundlers
+// Component composition
+<Box asChild $padding="m" $backgroundColor="blue">
+  <button onClick={handleClick}>Styled Button</button>
+</Box>
 ```
 
-## CORE ARCHITECTURE
+### Flex Component
+Flexbox container with specialized props and Flex.Item sub-component.
 
-### Type System
-The library centers around a sophisticated responsive value system:
-- `ResponsiveValue<T>`: Core type allowing either a single value or breakpoint object mapping
-- `BreakpointKey`: Configurable breakpoint keys (xs, sm, md, lg, xl by default)
-- `SpacingValue`: Spacing scale keys or raw CSS values
-- `DollarCssProps`: All CSS properties with $ prefix for component props
-- `IShortStyleBoxProps`: Convenient shorthand properties (m, p, w, h, etc.)
+**Props:**
+- `align?: ResponsiveValue<AlignItems>` - Cross-axis alignment
+- `justify?: ResponsiveValue<JustifyContent>` - Main-axis alignment  
+- `direction?: ResponsiveValue<FlexDirection>` - Flex direction
+- `wrap?: ResponsiveValue<FlexWrap>` - Wrapping behavior
+- `gap?: ResponsiveValue<SpacingValue>` - Space between items
+- `rowGap?, columnGap?` - Specific gap control
 
-### Responsive Resolution System
-Width-based responsive prop resolution using container queries:
-- Automatic ResizeObserver-based width measurement for each component
-- Manual width specification via `containerWidth` prop
-- Mobile-first breakpoint resolution (smallest to largest)
-- Debounced updates (16ms default) for 60fps performance
+**Flex.Item Props:**
+- `flex?, grow?, shrink?, basis?` - Flex properties
+- `alignSelf?, order?` - Individual item control
 
-### Configuration System
-Global configuration with TypeScript module augmentation support:
-```typescript
-// Default breakpoints
-{ xs: 0, sm: 480, md: 640, lg: 1024, xl: 1366, xxl: 1920 }
+**Examples:**
+```tsx
+// Basic flex container
+<Flex align="center" justify="space-between" gap="m">
+  <div>Item 1</div>
+  <div>Item 2</div>
+</Flex>
 
-// Default spacing scale  
-{ none: 0, xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 }
-
-// Configurable via configureBox() function
-```
-
-## COMPONENT ARCHITECTURE
-
-### Base Component: Box
-Foundation component providing core layout functionality:
-
-**Core Properties:**
-- `asChild`: Boolean - Renders as child element using internal Slot implementation for composition
-- `containerWidth`: Number - Fixed container width for responsive calculations
-- `styleReset`: Boolean - Applies box-sizing: border-box reset (default: false)
-
-**CSS Properties ($ prefix):**
-All CSS properties available with $ prefix for reactive styling:
-- `$display`, `$position`, `$top`, `$left`, `$right`, `$bottom`
-- `$width`, `$height`, `$minWidth`, `$maxWidth`, `$minHeight`, `$maxHeight`
-- `$margin`, `$padding`, `$border`, `$borderRadius`
-- `$backgroundColor`, `$color`, `$fontSize`, `$fontWeight`
-- `$flexDirection`, `$justifyContent`, `$alignItems`, `$gap`
-- `$gridTemplateColumns`, `$gridTemplateRows`, `$gridArea`
-- All CSS properties supported with full TypeScript autocompletion
-
-**Short Properties:**
-Convenient shorthand for common styling operations:
-- Margin: `m` (all), `mt`, `mb`, `ml`, `mr`, `mx` (horizontal), `my` (vertical), `ms`, `me`
-- Padding: `p` (all), `pt`, `pb`, `pl`, `pr`, `px` (horizontal), `py` (vertical), `ps`, `pe`
-- Size: `w` (width), `h` (height), `miw` (min-width), `maw` (max-width), `mih` (min-height), `mah` (max-height)
-- Position: `top`, `left`, `bottom`, `right`
-
-**Responsive Values:**
-All properties support responsive objects with breakpoint keys:
-```typescript
-// Single value
-<Box $padding={16} />
-
-// Responsive object
-<Box $padding={{ xs: 8, md: 16, lg: 24 }} />
-
-// Mixed short and $ props
-<Box m="s" $backgroundColor={{ xs: "blue", md: "red" }} />
-```
-
-### Layout Components
-
-**Flex Component:**
-Comprehensive flexbox container with all flex properties:
-
-**Container Properties:**
-- `align`: CSS align-items - Controls cross-axis alignment (stretch, flex-start, flex-end, center, baseline)
-- `justify`: CSS justify-content - Controls main-axis alignment (flex-start, flex-end, center, space-between, space-around, space-evenly)
-- `direction`: CSS flex-direction - Controls flex direction (row, row-reverse, column, column-reverse)
-- `wrap`: CSS flex-wrap - Controls wrapping behavior (nowrap, wrap, wrap-reverse)
-- `gap`: Gap between all flex items (uses spacing scale or CSS values)
-- `rowGap`: Gap between rows in wrapped flex containers
-- `columnGap`: Gap between columns in wrapped flex containers
-
-**Responsive Example:**
-```typescript
+// Responsive flex
 <Flex 
   direction={{ xs: "column", md: "row" }}
-  align={{ xs: "stretch", md: "center" }}
-  justify={{ xs: "flex-start", md: "space-between" }}
-  gap={{ xs: "s", md: "m", lg: "l" }}
+  gap={{ xs: "s", md: "l" }}
 >
-  <div>Responsive Item 1</div>
-  <div>Responsive Item 2</div>
-  <div>Responsive Item 3</div>
+  <Flex.Item flex={1}>Grows</Flex.Item>
+  <Flex.Item grow={2}>Grows 2x</Flex.Item>
 </Flex>
 ```
 
-**Flex.Item Subcomponent:**
-Individual flex item control with properties:
-- `flex`: CSS flex shorthand (e.g., "1", "0 0 auto", "none")
-- `grow`: CSS flex-grow (0, 1, 2, etc.)
-- `shrink`: CSS flex-shrink (0, 1, etc.)
-- `basis`: CSS flex-basis ("auto", "100px", "50%", etc.)
-- `alignSelf`: CSS align-self - Override container's align-items for this item
-- `order`: CSS order - Visual order of flex item
+### Stack Component
+Vertical stacking with consistent spacing.
 
-**Stack Component:**
-Vertical-only flexbox container optimized for creating vertical layouts using flex-direction: column:
+**Props:**
+- `align?: ResponsiveValue<AlignItems>` - Horizontal alignment
+- `justify?: ResponsiveValue<JustifyContent>` - Vertical alignment
+- `gap?: ResponsiveValue<SpacingValue>` - Space between items
 
-**Properties:**
-- `align`: CSS align-items - Cross-axis (horizontal) alignment of stacked items (default: "stretch")
-- `gap`: Spacing between vertically stacked items (default: "md", uses spacing scale)
-- `justify`: CSS justify-content - Main-axis (vertical) alignment of stacked items (default: "flex-start")
-
-**Usage Examples:**
-```typescript
-// Basic vertical stack for content sections
-<Stack gap="md" align="stretch">
-  <h1>Section Title</h1>
-  <p>Section description</p>
-  <button>Call to Action</button>
-</Stack>
-
-// Form layout with vertical stacking
-<Stack gap="md" align="stretch">
-  <input type="text" placeholder="Name" />
-  <input type="email" placeholder="Email" />
-  <textarea placeholder="Message" />
-  <button>Submit</button>
-</Stack>
-
-// Card stack with responsive gaps and centering
-<Stack gap={{ xs: "sm", md: "lg" }} align="center">
-  <Card>Card 1</Card>
-  <Card>Card 2</Card>
-  <Card>Card 3</Card>
+**Examples:**
+```tsx
+<Stack gap="md" align="center">
+  <h1>Title</h1>
+  <p>Content</p>
+  <button>Action</button>
 </Stack>
 ```
 
-**Grid Component:**
-CSS Grid container with configurable columns, gutters, and alignment:
+### Grid Component
+CSS Grid with responsive columns and Grid.Col sub-component.
 
-**Container Properties:**
-- `columns`: Number of columns in the grid (default: 12)
-- `gutter`: Gap between grid items (default: "1rem", uses CSS values or spacing scale)
-- `align`: CSS align-items - Cross-axis alignment (default: "stretch")
-- `justify`: CSS justify-content - Main-axis alignment (default: "flex-start")
-- `grow`: Boolean - If true, columns in last row expand to fill space (default: false)
-- `overflow`: CSS overflow property (default: "visible")
+**Props:**
+- `columns?: ResponsiveValue<number>` - Number of columns
+- `gutter?: ResponsiveValue<SpacingValue>` - Space between items
+- `align?, justify?` - Grid alignment
 
-**Grid.Col Subcomponent Properties:**
-- `span`: Number of columns this element spans (default: 12)
-- `offset`: Number of columns to skip before this element
-- `order`: CSS order for reordering columns
+**Grid.Col Props:**
+- `span?: ResponsiveValue<number>` - Columns to span
+- `offset?: ResponsiveValue<number>` - Column offset
 
-**Advanced Grid Example:**
-```typescript
-<Grid columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} gutter={{ xs: "s", md: "m" }}>
-  <Grid.Col span={{ xs: 1, md: 2 }} offset={{ md: 1 }}>
-    <Card>Responsive spanning column</Card>
-  </Grid.Col>
-  <Grid.Col span={1} order={{ xs: 2, md: 1 }}>
-    <Card>Reordered column</Card>
-  </Grid.Col>
-  <Grid.Col span={{ xs: 1, sm: 2, lg: 1 }}>
-    <Card>Complex responsive span</Card>
-  </Grid.Col>
+**Examples:**
+```tsx
+<Grid columns={{ xs: 1, md: 3 }} gutter="m">
+  <Grid.Col span={{ xs: 1, md: 2 }}>Wide item</Grid.Col>
+  <Grid.Col>Regular item</Grid.Col>
 </Grid>
 ```
 
-**SimpleGrid Component:**
-Equal-width grid using repeat(cols, 1fr) pattern:
+### SimpleGrid Component
+Equal-width grid layout.
 
-**Properties:**
-- `cols`: Number of columns (default: 1)
-- `spacing`: Gap between columns (default: "m", uses spacing scale)
-- `verticalSpacing`: Gap between rows (defaults to spacing value)
+**Props:**
+- `cols?: ResponsiveValue<number>` - Number of columns
+- `spacing?: ResponsiveValue<SpacingValue>` - Gap between items
+- `minChildWidth?: ResponsiveValue<number>` - Min child width
 
-**Responsive Grid Example:**
-```typescript
-<SimpleGrid 
-  cols={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-  spacing={{ xs: "s", md: "m", lg: "l" }}
-  verticalSpacing={{ xs: "m", md: "s" }}
->
-  {products.map(product => (
-    <ProductCard key={product.id} {...product} />
-  ))}
+**Examples:**
+```tsx
+<SimpleGrid cols={{ xs: 1, sm: 2, md: 3 }} spacing="m">
+  <div>Card 1</div>
+  <div>Card 2</div>
+  <div>Card 3</div>
 </SimpleGrid>
 ```
 
-**AreaGrid Component:**
-Named grid areas using grid-template-areas for semantic layouts:
+### Container Component
+Content wrapper with max-width and centering.
 
-**Container Properties:**
-- `areas`: CSS grid-template-areas - Defines named grid areas using quoted strings
-- `rows`: CSS grid-template-rows - Defines row sizes ("auto", "1fr", "100px", etc.)
-- `columns`: CSS grid-template-columns - Defines column sizes ("1fr", "200px", "minmax(100px, 1fr)", etc.)
-- `gap`: Gap between grid items (uses spacing scale)
-- `justifyItems`: CSS justify-items - Horizontal alignment within areas (default: "stretch")
-- `alignItems`: CSS align-items - Vertical alignment within areas (default: "stretch")
-- `justifyContent`: CSS justify-content - Grid distribution horizontally (default: "stretch")
-- `alignContent`: CSS align-content - Grid distribution vertically (default: "stretch")
+**Props:**
+- `size?: ResponsiveValue<number>` - Max width in pixels
+- `fluid?: ResponsiveValue<boolean>` - Full width mode
 
-**AreaGrid.Item Properties:**
-- `area`: Named grid area assignment (must match areas definition)
-- `justifySelf`: CSS justify-self - Override horizontal alignment for this item
-- `alignSelf`: CSS align-self - Override vertical alignment for this item
-
-**Complex Layout Example:**
-```typescript
-<AreaGrid
-  areas={{
-    xs: '"header" "main" "sidebar" "footer"',
-    md: '"header header" "sidebar main" "footer footer"',
-    lg: '"header header header" "sidebar main aside" "footer footer footer"'
-  }}
-  rows={{
-    xs: "auto auto auto auto",
-    md: "auto 1fr auto",
-    lg: "auto 1fr auto"
-  }}
-  columns={{
-    xs: "1fr",
-    md: "200px 1fr",
-    lg: "200px 1fr 150px"
-  }}
-  gap={{ xs: "s", md: "m", lg: "l" }}
->
-  <AreaGrid.Item area="header">
-    <Header />
-  </AreaGrid.Item>
-  <AreaGrid.Item area="sidebar">
-    <Sidebar />
-  </AreaGrid.Item>
-  <AreaGrid.Item area="main">
-    <MainContent />
-  </AreaGrid.Item>
-  <AreaGrid.Item area={{ lg: "aside" }} justifySelf="end">
-    <AsidePanel />
-  </AreaGrid.Item>
-  <AreaGrid.Item area="footer">
-    <Footer />
-  </AreaGrid.Item>
-</AreaGrid>
-```
-
-**Container Component:**
-Horizontal centering with max-width control:
-
-**Properties:**
-- `size`: Maximum width of the container (default: 1200)
-- `fluid`: Boolean - Use full width ignoring size prop (default: false)
-
-**Usage Examples:**
-```typescript
-// Standard page container
-<Container size={1200}>
-  <PageContent />
-</Container>
-
-// Responsive container sizes
-<Container size={{ xs: 320, md: 640, lg: 1200 }}>
-  <ResponsiveContent />
-</Container>
-
-// Fluid container for full-width sections
-<Container fluid={{ xs: true, md: false }}>
-  <HeroSection />
+**Examples:**
+```tsx
+<Container size={{ xs: 320, md: 1200 }}>
+  <div>Centered content</div>
 </Container>
 ```
 
-**Center Component:**
-Flexbox-based centering (both horizontal and vertical):
+### Other Components
 
-**Properties:**
-- `inline`: Boolean - Use inline-flex instead of flex (default: false)
-
-**Usage Examples:**
-```typescript
-// Center a button
-<Center style={{ height: '200px' }}>
-  <button>Perfectly Centered</button>
-</Center>
-
-// Responsive inline behavior
-<Center inline={{ xs: true, md: false }}>
-  <Icon /> <span>Inline on mobile</span>
+**Center:** Perfect centering utility
+```tsx
+<Center $height="200px">
+  <button>Centered Button</button>
 </Center>
 ```
 
-**Group Component:**
-Horizontal flex container for button groups and toolbars:
+**AspectRatio:** Maintain aspect ratios
+```tsx
+<AspectRatio ratio={16/9}>
+  <iframe src="video.jpg" />
+</AspectRatio>
+```
 
-**Properties:**
-- `align`: CSS align-items (default: "center")
-- `gap`: Gap between items (default: "m")
-- `grow`: Boolean - Children have flex-grow: 1 (default: false)
-- `justify`: CSS justify-content (default: "flex-start")
-- `preventGrowOverflow`: Boolean - Prevent children overflow with max-width (default: true)
-- `wrap`: CSS flex-wrap (default: "wrap")
-
-**Advanced Group Example:**
-```typescript
-<Group 
-  gap={{ xs: "s", md: "m" }}
-  grow={{ xs: true, md: false }}
-  justify="space-between"
-  wrap="nowrap"
->
-  <button>Primary Action</button>
-  <button>Secondary Action</button>
-  <button>Tertiary Action</button>
+**Group:** Horizontal flex layouts
+```tsx
+<Group gap="s" wrap="nowrap">
+  <button>Save</button>
+  <button>Cancel</button>
 </Group>
 ```
 
-**AspectRatio Component:**
-Maintains consistent width/height ratios:
-
-**Properties:**
-- `ratio`: Aspect ratio as width/height (default: 1)
-
-**Media Examples:**
-```typescript
-// Video container
-<AspectRatio ratio={16 / 9}>
-  <video src="video.mp4" style={{ width: '100%', height: '100%' }} />
-</AspectRatio>
-
-// Responsive aspect ratios
-<AspectRatio ratio={{ xs: 1, sm: 4/3, md: 16/9 }}>
-  <img src="hero.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-</AspectRatio>
-
-// Square thumbnails
-<AspectRatio ratio={1}>
-  <div style={{ 
-    width: '100%', 
-    height: '100%', 
-    background: 'linear-gradient(45deg, #f0f0f0, #e0e0e0)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }}>
-    Square Content
-  </div>
-</AspectRatio>
-```
-
-**Space Component:**
-Dedicated spacing component using width/height properties:
-
-**Properties:**
-- `w`: Horizontal spacing (width)
-- `h`: Vertical spacing (height)
-
-**Spacing Examples:**
-```typescript
-// Horizontal spacing in flex layouts
-<Flex>
-  <button>Left</button>
-  <Space w="m" />
-  <button>Right</button>
-</Flex>
-
-// Vertical spacing in stacks
+**Space:** Invisible spacing utility
+```tsx
 <div>
-  <h2>Section Title</h2>
-  <Space h={{ xs: "s", md: "l" }} />
-  <p>Section content with responsive spacing</p>
+  <h1>Section 1</h1>
+  <Space h="xl" />
+  <p>Section 2</p>
 </div>
-
-// Both dimensions for spacer blocks
-<Space w="xl" h="m" />
 ```
 
-## COMPREHENSIVE PROPERTY REFERENCE
-
-### Responsive Value Syntax
-All layout components support responsive values using breakpoint objects:
-
-```typescript
-// Single value
-prop={value}
-
-// Responsive object with breakpoint keys
-prop={{ xs: value1, sm: value2, md: value3, lg: value4, xl: value5 }}
-
-// Partial responsive (missing breakpoints inherit from smaller ones)
-prop={{ xs: value1, md: value3, xl: value5 }}
+**ScrollArea:** Custom scrollbars
+```tsx
+<ScrollArea size="medium" type="hover" style={{ height: 300 }}>
+  <div style={{ height: 1000 }}>Long content</div>
+</ScrollArea>
 ```
 
-### Spacing Scale Reference
-The library provides a consistent spacing scale used across all spacing-related properties:
+**AreaGrid:** Named grid areas
+```tsx
+<AreaGrid
+  areas='"header header" "sidebar main" "footer footer"'
+  columns="200px 1fr"
+  rows="auto 1fr auto"
+  gap="m"
+>
+  <AreaGrid.Item area="header">Header</AreaGrid.Item>
+  <AreaGrid.Item area="sidebar">Sidebar</AreaGrid.Item>
+  <AreaGrid.Item area="main">Main</AreaGrid.Item>
+  <AreaGrid.Item area="footer">Footer</AreaGrid.Item>
+</AreaGrid>
+```
 
-```typescript
-```typescript
-// Default spacing scale (configurable)
+## Responsive System
+
+### Responsive Values
+```tsx
+type ResponsiveValue<T> = T | Partial<Record<BreakpointKey, T>>;
+```
+
+### Default Breakpoints
+```tsx
 {
-  none: 0,      // 0px
-  xs: 4,        // 4px  
-  sm: 8,        // 8px
-  md: 12,       // 12px
-  lg: 16,       // 16px (default)
-  xl: 20,       // 20px
-  xxl: 24,      // 24px
-  xxxl: 32      // 32px
+  xs: 0,    // Mobile first
+  sm: 576,  // Small devices
+  md: 768,  // Medium devices  
+  lg: 992,  // Large devices
+  xl: 1200, // Extra large
+  xxl: 1920 // Extra extra large
 }
-
-// Usage in components
-<Box m="md" p={{ xs: "sm", md: "lg" }} />
-<Stack gap="xl" />
-```
-<SimpleGrid spacing="s" verticalSpacing="m" />
 ```
 
-### CSS Property Mapping ($ prefix)
-All CSS properties are available with $ prefix for type-safe styling:
+### Default Spacing Scale
+```tsx
+{
+  none: 0,   // 0
+  xs: 4,     // 0.25rem
+  s: 8,      // 0.5rem
+  m: 16,     // 1rem (default)
+  l: 24,     // 1.5rem
+  xl: 32,    // 2rem
+  xxl: 48,   // 3rem
+  xxxl: 64   // 4rem
+}
+```
 
-**Layout Properties:**
-- `$display`: CSS display property
-- `$position`: CSS position property  
-- `$top`, `$right`, `$bottom`, `$left`: CSS position values
-- `$zIndex`: CSS z-index property
+### Container Width Hook
+```tsx
+import { useContainerWidth } from "@apvee/react-layout-kit";
 
-**Box Model Properties:**
-- `$width`, `$height`: CSS width/height
-- `$minWidth`, `$maxWidth`, `$minHeight`, `$maxHeight`: CSS size constraints
-- `$margin`, `$marginTop`, `$marginRight`, `$marginBottom`, `$marginLeft`: CSS margin
-- `$padding`, `$paddingTop`, `$paddingRight`, `$paddingBottom`, `$paddingLeft`: CSS padding
-
-**Visual Properties:**
-- `$backgroundColor`, `$color`: CSS background/text colors
-- `$border`, `$borderWidth`, `$borderStyle`, `$borderColor`: CSS border
-- `$borderRadius`: CSS border radius
-- `$boxShadow`: CSS box shadow
-- `$opacity`: CSS opacity
-
-**Typography Properties:**
-- `$fontSize`, `$fontWeight`, `$fontFamily`: CSS font properties
-- `$lineHeight`, `$letterSpacing`: CSS text spacing
-- `$textAlign`, `$textDecoration`: CSS text alignment/decoration
-
-**Flexbox Properties:**
-- `$flexDirection`, `$flexWrap`: CSS flex container properties
-- `$justifyContent`, `$alignItems`, `$alignContent`: CSS flex alignment
-- `$gap`, `$rowGap`, `$columnGap`: CSS gap properties
-- `$flex`, `$flexGrow`, `$flexShrink`, `$flexBasis`: CSS flex item properties
-
-**Grid Properties:**
-- `$gridTemplateColumns`, `$gridTemplateRows`: CSS grid template
-- `$gridTemplateAreas`: CSS grid areas
-- `$gridArea`, `$gridColumn`, `$gridRow`: CSS grid item placement
-- `$justifyItems`, `$alignItems`: CSS grid alignment
-- `$justifySelf`, `$alignSelf`: CSS grid item alignment
-
-### Short Property Reference
-Convenient shorthand properties for common operations:
-
-**Margin Shortcuts:**
-- `m`: margin (all sides)
-- `mt`, `mb`: margin-top, margin-bottom  
-- `ml`, `mr`: margin-left, margin-right
-- `mx`: margin-left + margin-right
-- `my`: margin-top + margin-bottom
-- `ms`, `me`: margin-inline-start, margin-inline-end
-
-**Padding Shortcuts:**  
-- `p`: padding (all sides)
-- `pt`, `pb`: padding-top, padding-bottom
-- `pl`, `pr`: padding-left, padding-right  
-- `px`: padding-left + padding-right
-- `py`: padding-top + padding-bottom
-- `ps`, `pe`: padding-inline-start, padding-inline-end
-
-**Size Shortcuts:**
-- `w`: width
-- `h`: height
-- `miw`: min-width
-- `maw`: max-width
-- `mih`: min-height  
-- `mah`: max-height
-
-**Position Shortcuts:**
-- `top`, `left`, `bottom`, `right`: CSS position values
-
-### Component-Specific Properties
-
-**Flexbox-specific (Flex, Stack, Group):**
-- `align`: align-items CSS property
-- `justify`: justify-content CSS property  
-- `direction`: flex-direction CSS property (Flex only)
-- `wrap`: flex-wrap CSS property
-- `gap`: gap between flex items
-- `grow`: flex-grow behavior (Group only)
-
-**Grid-specific (Grid, SimpleGrid, AreaGrid):**
-- `columns`: Number of columns or grid-template-columns
-- `rows`: grid-template-rows (AreaGrid only)
-- `areas`: grid-template-areas (AreaGrid only)
-- `gutter`/`spacing`: Gap between grid items
-- `span`: grid column span (Grid.Col only)
-- `offset`: grid column offset (Grid.Col only)
-
-**Container-specific:**
-- `size`: max-width value
-- `fluid`: full-width override boolean
-
-**Media-specific:**
-- `ratio`: aspect ratio as width/height number (AspectRatio)
-- `inline`: inline-flex mode boolean (Center)
-
-## COMPONENT COMPOSITION SYSTEM
-
-### Slot Component Architecture
-**@apvee/react-layout-kit** includes a powerful custom Slot implementation that enables seamless component composition through the `asChild` pattern. This implementation is fully self-contained and optimized for performance with zero external dependencies.
-
-#### Slot Component
-The foundation of the composition system, enabling prop pass-through to child elements:
-
-**Core Functionality:**
-- **Transparent Composition**: Renders as the child element while passing through props
-- **Advanced Prop Merging**: Intelligent merging of event handlers, className, style, and refs
-- **Performance Optimized**: Custom implementation with zero external dependencies
-- **SPFx Compatible**: No JSX runtime issues, works in SharePoint Framework environments
-- **Type-Safe**: Full TypeScript support with accurate prop inference
-
-**Props:**
-- `children`: React.ReactNode - Child element to receive slot props
-
-**Prop Merging Behavior:**
-- Event handlers: Both original and slot handlers execute (original first)
-- className: Concatenated with space separation (slot + child)
-- style: Objects merged with child styles taking precedence for conflicts
-- refs: Composed using callback refs to call all ref functions
-- Other props: Child props take precedence over slot props
-
-#### Slottable Component
-Marker component for advanced composition scenarios:
-
-**Usage:**
-- Marks specific children as slottable within complex component trees
-- Enables selective prop application in nested structures
-- Facilitates advanced composition patterns
-
-**Props:**
-- `children`: React.ReactNode - Content to be marked as slottable
-
-#### useSlot Hook
-Programmatic slot detection and manipulation:
-
-**Returns:**
-- `ref`: React.RefCallback<HTMLElement> - Ref callback for slot detection
-- `slotRef`: HTMLElement | null - Current slot element reference
-- `isSlot`: boolean - Whether the element is a Slot component
-
-**Usage Examples:**
-
-```typescript
-// Basic slot composition
-<Slot onClick={handleClick} className="slot-class">
-  <button className="btn-class">Click me</button>
-</Slot>
-// Result: <button onClick={handleClick} className="slot-class btn-class">Click me</button>
-
-// Box asChild pattern
-<Box asChild $padding="m" $backgroundColor="blue">
-  <button>Styled with Box props</button>
-</Box>
-
-// Advanced event handler composition
-<Slot 
-  onClick={(e) => console.log('Slot handler', e)}
-  onFocus={(e) => console.log('Slot focus', e)}
->
-  <CustomButton 
-    onClick={(e) => console.log('Child handler', e)}
-    onFocus={(e) => console.log('Child focus', e)}
-  >
-    Both handlers execute
-  </CustomButton>
-</Slot>
-
-// Style and className merging
-<Slot 
-  className="outer-class"
-  style={{ margin: '10px', color: 'blue' }}
->
-  <div 
-    className="inner-class"
-    style={{ padding: '5px', color: 'red' }}
-  >
-    Merged: className="outer-class inner-class"
-    Merged: style={{ margin: '10px', padding: '5px', color: 'red' }}
-  </div>
-</Slot>
-
-// Complex composition with Slottable
-<Slot onClick={handleOuterClick}>
-  <div className="wrapper">
-    <Slottable>
-      <button onClick={handleInnerClick}>
-        Complex nested composition
-      </button>
-    </Slottable>
-  </div>
-</Slot>
-
-// Programmatic slot detection
-function SlotAwareComponent({ element }) {
-  const { ref, slotRef, isSlot } = useSlot(element);
+function ResponsiveComponent() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerWidth = useContainerWidth(containerRef);
   
   return (
-    <div ref={ref}>
-      <p>Is Slot: {isSlot}</p>
-      {slotRef && <p>Element: {slotRef.tagName}</p>}
+    <div ref={containerRef}>
+      <Box 
+        containerWidth={containerWidth}
+        $padding={{ xs: "s", md: "m" }}
+      >
+        Container-aware responsive content
+      </Box>
     </div>
   );
 }
 ```
 
-**Advanced Composition Patterns:**
+## Component Composition with Slot
 
-```typescript
-// Polymorphic component with slot
-function Button({ asChild, variant, ...props }) {
-  const Component = asChild ? Slot : 'button';
-  const className = `btn btn-${variant}`;
-  
-  return (
-    <Component className={className} {...props} />
-  );
-}
+### asChild Pattern
+```tsx
+// Render Box as different elements
+<Box asChild $padding="m" $backgroundColor="blue">
+  <button onClick={handleClick}>Styled Button</button>
+</Box>
 
-// Usage
-<Button asChild variant="primary" onClick={handleClick}>
-  <Link href="/path">Button styled as Link</Link>
-</Button>
-
-// Conditional slot rendering
-function ConditionalSlot({ condition, children, ...slotProps }) {
-  if (condition) {
-    return <Slot {...slotProps}>{children}</Slot>;
-  }
-  return <div {...slotProps}>{children}</div>;
-}
-
-// Higher-order slot composition
-function withSlotProps(Component) {
-  return React.forwardRef(({ asChild, ...props }, ref) => {
-    if (asChild) {
-      return <Slot ref={ref} {...props} />;
-    }
-    return <Component ref={ref} {...props} />;
-  });
-}
+<Box asChild $display="inline-block" $textDecoration="none">
+  <a href="/about">Styled Link</a>
+</Box>
 ```
 
-**Technical Implementation Details:**
-- Ref composition using callback refs for compatibility with all ref types
-- Event handler composition preserving execution order and preventDefault behavior
-- Style object deep merging with precedence rules
-- className string concatenation with automatic space handling
-- Compatible with React 17+ JSX transform and legacy JSX patterns
-- Optimized for SharePoint Framework (SPFx) compatibility
-- Zero runtime dependencies beyond React core
+### Slot Component
+```tsx
+import { Slot } from "@apvee/react-layout-kit";
 
-## PRACTICAL CONTROL EXAMPLES
+<Slot onClick={handleClick} className="custom-class">
+  <button className="btn">Merged props</button>
+</Slot>
+```
 
-### Example 1: Responsive Dashboard Layout
-```typescript
-// Option 1: Barrel imports (recommended for most cases)
-import { AreaGrid, Container, Flex, Stack, SimpleGrid, Box } from '@apvee/react-layout-kit';
+## Common Patterns
 
-// Option 2: Granular imports (optimal tree-shaking)
-// import { AreaGrid } from '@apvee/react-layout-kit/components/AreaGrid';
-// import { Container } from '@apvee/react-layout-kit/components/Container';
-// import { Flex } from '@apvee/react-layout-kit/components/Flex';
-// import { Stack } from '@apvee/react-layout-kit/components/Stack';
-// import { SimpleGrid } from '@apvee/react-layout-kit/components/SimpleGrid';
-// import { Box } from '@apvee/react-layout-kit/components/Box';
+### Layout Patterns
+```tsx
+// Page layout
+<Container>
+  <Stack gap="xl">
+    <header>Header content</header>
+    <Flex direction={{ xs: "column", md: "row" }} gap="l">
+      <Box $flex={1}>Main content</Box>
+      <Box w={{ xs: "100%", md: "300px" }}>Sidebar</Box>
+    </Flex>
+    <footer>Footer content</footer>
+  </Stack>
+</Container>
 
-function ResponsiveDashboard() {
-  return (
-    <Container size={{ xs: "100%", lg: 1200 }} fluid={{ xs: true, lg: false }}>
-      <AreaGrid
-        areas={{
-          xs: '"header" "main" "sidebar" "footer"',
-          md: '"header header" "sidebar main" "footer footer"',
-          lg: '"header header header" "sidebar main widgets" "footer footer footer"'
-        }}
-        rows={{
-          xs: "auto 1fr auto auto",
-          md: "auto 1fr auto", 
-          lg: "auto 1fr auto"
-        }}
-        columns={{
-          xs: "1fr",
-          md: "250px 1fr",
-          lg: "250px 1fr 300px"
-        }}
-        gap={{ xs: "s", md: "m", lg: "l" }}
-        $minHeight="100vh"
-      >
-        {/* Header */}
-        <AreaGrid.Item area="header">
-          <Flex 
-            justify="space-between" 
-            align="center"
-            $padding={{ xs: "m", md: "l" }}
-            $backgroundColor="white"
-            $borderBottom="1px solid #e0e0e0"
-          >
-            <Box $fontSize={{ xs: 18, md: 24 }} $fontWeight="bold">Dashboard</Box>
-            <Flex gap="s" align="center">
-              <button>Profile</button>
-              <button>Settings</button>
-            </Flex>
-          </Flex>
-        </AreaGrid.Item>
-
-        {/* Sidebar */}
-        <AreaGrid.Item area="sidebar">
-          <Stack 
-            gap="s" 
-            $padding="m"
-            $backgroundColor="#f5f5f5"
-            $height="100%"
-          >
-            <Box $fontWeight="600" $marginBottom="s">Navigation</Box>
-            <button>Dashboard</button>
-            <button>Analytics</button>
-            <button>Reports</button>
-            <button>Settings</button>
-          </Stack>
-        </AreaGrid.Item>
-
-        {/* Main Content */}
-        <AreaGrid.Item area="main">
-          <Stack gap={{ xs: "m", lg: "l" }} $padding="m">
-            <Box $fontSize={20} $fontWeight="600">Analytics Overview</Box>
-            
-            <SimpleGrid 
-              cols={{ xs: 1, sm: 2, lg: 3 }}
-              spacing="m"
-            >
-              <MetricCard title="Users" value="1,234" change="+12%" />
-              <MetricCard title="Revenue" value="$45,678" change="+8%" />
-              <MetricCard title="Sessions" value="9,876" change="+15%" />
-            </SimpleGrid>
-
-            <Box $backgroundColor="white" $padding="l" $borderRadius={8}>
-              <ChartComponent />
-            </Box>
-          </Stack>
-        </AreaGrid.Item>
-
-        {/* Widgets (Desktop only) */}
-        <AreaGrid.Item area={{ lg: "widgets" }}>
-          <Stack gap="m" $padding="m">
-            <WidgetCard title="Recent Activity" />
-            <WidgetCard title="Quick Actions" />
-            <WidgetCard title="Notifications" />
-          </Stack>
-        </AreaGrid.Item>
-
-        {/* Footer */}
-        <AreaGrid.Item area="footer">
-          <Flex 
-            justify="center" 
-            align="center"
-            $padding="m"
-            $backgroundColor="#f8f9fa"
-            $borderTop="1px solid #e0e0e0"
-          >
-            <Box $fontSize={14} $color="#666">© 2025 Dashboard App</Box>
-          </Flex>
-        </AreaGrid.Item>
-      </AreaGrid>
-    </Container>
-  );
-}
-
-function MetricCard({ title, value, change }) {
-  return (
-    <Box 
-      $backgroundColor="white"
-      $padding="l"
-      $borderRadius={8}
-      $boxShadow="0 2px 4px rgba(0,0,0,0.1)"
-    >
+// Card grid
+<SimpleGrid cols={{ xs: 1, sm: 2, lg: 3 }} spacing="m">
+  {items.map(item => (
+    <Box key={item.id} $padding="m" $border="1px solid #ddd" $borderRadius={8}>
       <Stack gap="s">
-        <Box $fontSize={14} $color="#666">{title}</Box>
-        <Box $fontSize={24} $fontWeight="bold">{value}</Box>
-        <Box $fontSize={12} $color="green">{change}</Box>
+        <h3>{item.title}</h3>
+        <p>{item.description}</p>
       </Stack>
     </Box>
-  );
-}
+  ))}
+</SimpleGrid>
+
+// Form layout
+<Stack gap="m" align="stretch">
+  <Box>
+    <label>Name</label>
+    <input type="text" />
+  </Box>
+  <Box>
+    <label>Email</label>
+    <input type="email" />
+  </Box>
+  <Flex justify="flex-end" gap="s">
+    <button type="button">Cancel</button>
+    <button type="submit">Submit</button>
+  </Flex>
+</Stack>
 ```
 
-### Example 2: Responsive Image Gallery with Controls
-```typescript
-// Option 1: Barrel imports
-import { Container, SimpleGrid, AspectRatio, Flex, Group, Center, Box } from '@apvee/react-layout-kit';
-
-// Option 2: Granular imports for optimal bundle size
-// import { Container } from '@apvee/react-layout-kit/components/Container';
-// import { SimpleGrid } from '@apvee/react-layout-kit/components/SimpleGrid';
-// import { AspectRatio } from '@apvee/react-layout-kit/components/AspectRatio';
-// import { Flex } from '@apvee/react-layout-kit/components/Flex';
-// import { Group } from '@apvee/react-layout-kit/components/Group';
-// import { Center } from '@apvee/react-layout-kit/components/Center';
-// import { Box } from '@apvee/react-layout-kit/components/Box';
-
-function ImageGallery({ images, filters, onFilterChange }) {
-  return (
-    <Container size={{ xs: "100%", md: 800, lg: 1200 }}>
-      <Stack gap="xl" $padding={{ xs: "m", md: "l" }}>
-        {/* Header with controls */}
-        <Flex 
-          direction={{ xs: "column", md: "row" }}
-          justify="space-between"
-          align={{ xs: "stretch", md: "center" }}
-          gap="m"
-        >
-          <Box $fontSize={{ xs: 24, md: 32 }} $fontWeight="bold">
-            Image Gallery
-          </Box>
-          
-          <Group gap="s" justify={{ xs: "stretch", md: "flex-end" }}>
-            <select onChange={onFilterChange} value={filters.category}>
-              <option value="all">All Categories</option>
-              <option value="nature">Nature</option>
-              <option value="urban">Urban</option>
-              <option value="portrait">Portrait</option>
-            </select>
-            <button>Grid View</button>
-            <button>List View</button>
-          </Group>
-        </Flex>
-
-        {/* Responsive image grid */}
-        <SimpleGrid
-          cols={{ 
-            xs: 1, 
-            sm: 2, 
-            md: 3, 
-            lg: 4,
-            xl: 5 
-          }}
-          spacing={{ xs: "s", sm: "m", lg: "l" }}
-          verticalSpacing={{ xs: "m", md: "l" }}
-        >
-          {images.map(image => (
-            <ImageCard key={image.id} image={image} />
-          ))}
-        </SimpleGrid>
-
-        {/* Load more button */}
-        <Center>
-          <button 
-            style={{ 
-              padding: '12px 24px',
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px'
-            }}
-          >
-            Load More Images
-          </button>
-        </Center>
-      </Stack>
-    </Container>
-  );
+### Custom Components
+```tsx
+// Custom Card component
+interface CardProps extends BoxProps {
+  variant?: "primary" | "secondary";
+  elevation?: "low" | "high";
 }
 
-function ImageCard({ image }) {
+function Card({ variant = "primary", elevation = "low", children, ...props }: CardProps) {
+  const variantStyles = {
+    primary: { $backgroundColor: "white", $color: "black" },
+    secondary: { $backgroundColor: "#f5f5f5", $color: "#666" }
+  };
+  
+  const elevationStyles = {
+    low: { $boxShadow: "0 2px 4px rgba(0,0,0,0.1)" },
+    high: { $boxShadow: "0 8px 16px rgba(0,0,0,0.15)" }
+  };
+  
   return (
     <Box
-      $backgroundColor="white"
+      $padding="m"
       $borderRadius={8}
-      $overflow="hidden"
-      $boxShadow="0 2px 8px rgba(0,0,0,0.1)"
-      $transition="transform 0.2s"
-      $cursor="pointer"
-      style={{
-        ':hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.15)'
-        }
-      }}
+      {...variantStyles[variant]}
+      {...elevationStyles[elevation]}
+      {...props}
     >
-      <AspectRatio ratio={4/3}>
-        <img 
-          src={image.url} 
-          alt={image.title}
-          style={{ 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover' 
-          }}
-        />
-      </AspectRatio>
-      
-      <Stack gap="s" $padding="m">
-        <Box $fontSize={16} $fontWeight="600" $lineHeight={1.2}>
-          {image.title}
-        </Box>
-        <Box $fontSize={14} $color="#666">
-          {image.description}
-        </Box>
-        <Flex justify="space-between" align="center">
-          <Box $fontSize={12} $color="#999">
-            {image.date}
-          </Box>
-          <Group gap="xs">
-            <button>❤️</button>
-            <button>💾</button>
-            <button>📤</button>
-          </Group>
-        </Flex>
-      </Stack>
+      {children}
     </Box>
   );
 }
 ```
 
-### Example 3: Complex Form Layout with Validation
-```typescript
-// Option 1: Barrel imports
-import { Container, Stack, Flex, Grid, Group, Box } from '@apvee/react-layout-kit';
+## TypeScript Integration
 
-// Option 2: Granular imports (best for large applications)
-// import { Container } from '@apvee/react-layout-kit/components/Container';
-// import { Stack } from '@apvee/react-layout-kit/components/Stack';
-// import { Flex } from '@apvee/react-layout-kit/components/Flex';
-// import { Grid } from '@apvee/react-layout-kit/components/Grid';
-// import { Group } from '@apvee/react-layout-kit/components/Group';
-// import { Box } from '@apvee/react-layout-kit/components/Box';
+### Component Props
+```tsx
+import type { BoxProps, FlexProps, StackProps } from "@apvee/react-layout-kit";
 
-function RegistrationForm() {
-  return (
-    <Container size={600}>
-      <Box 
-        $backgroundColor="white"
-        $padding={{ xs: "m", md: "xl" }}
-        $borderRadius={12}
-        $boxShadow="0 8px 32px rgba(0,0,0,0.1)"
-        $margin={{ xs: "m", md: "xl" }}
-      >
-        <Stack gap="l">
-          {/* Form header */}
-          <Stack gap="s" align="center">
-            <Box $fontSize={28} $fontWeight="bold" $color="#333">
-              Create Account
-            </Box>
-            <Box $fontSize={16} $color="#666" $textAlign="center">
-              Join us to get started with your journey
-            </Box>
-          </Stack>
-
-          {/* Form fields */}
-          <Stack gap="m">
-            {/* Name fields */}
-            <Grid columns={{ xs: 1, sm: 2 }} gutter="m">
-              <FormField 
-                label="First Name" 
-                type="text" 
-                placeholder="Enter your first name"
-                required
-              />
-              <FormField 
-                label="Last Name" 
-                type="text" 
-                placeholder="Enter your last name"
-                required
-              />
-            </Grid>
-
-            {/* Email and phone */}
-            <FormField 
-              label="Email Address" 
-              type="email" 
-              placeholder="Enter your email"
-              required
-            />
-            
-            <Grid columns={{ xs: 1, sm: 2 }} gutter="m">
-              <FormField 
-                label="Phone Number" 
-                type="tel" 
-                placeholder="+1 (555) 123-4567"
-              />
-              <FormField 
-                label="Date of Birth" 
-                type="date"
-                required
-              />
-            </Grid>
-
-            {/* Address */}
-            <FormField 
-              label="Address" 
-              type="text" 
-              placeholder="Street address"
-              required
-            />
-
-            <Grid columns={{ xs: 1, sm: 2, md: 3 }} gutter="m">
-              <FormField 
-                label="City" 
-                type="text" 
-                placeholder="City"
-                required
-              />
-              <FormField 
-                label="State" 
-                type="text" 
-                placeholder="State"
-                required
-              />
-              <FormField 
-                label="ZIP Code" 
-                type="text" 
-                placeholder="12345"
-                required
-              />
-            </Grid>
-
-            {/* Password */}
-            <Grid columns={{ xs: 1, sm: 2 }} gutter="m">
-              <FormField 
-                label="Password" 
-                type="password" 
-                placeholder="Create a password"
-                required
-              />
-              <FormField 
-                label="Confirm Password" 
-                type="password" 
-                placeholder="Confirm your password"
-                required
-              />
-            </Grid>
-
-            {/* Preferences */}
-            <Stack gap="s">
-              <Box $fontSize={16} $fontWeight="600">Preferences</Box>
-              <Flex direction="column" gap="s">
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <input type="checkbox" />
-                  <span>Email notifications</span>
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <input type="checkbox" />
-                  <span>SMS notifications</span>
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <input type="checkbox" />
-                  <span>Marketing communications</span>
-                </label>
-              </Flex>
-            </Stack>
-          </Stack>
-
-          {/* Form actions */}
-          <Stack gap="m">
-            <Group gap="m" justify="space-between">
-              <button 
-                type="button"
-                style={{
-                  padding: '12px 24px',
-                  backgroundColor: 'transparent',
-                  border: '1px solid #ddd',
-                  borderRadius: '6px',
-                  cursor: 'pointer'
-                }}
-              >
-                Cancel
-              </button>
-              <button 
-                type="submit"
-                style={{
-                  padding: '12px 24px',
-                  backgroundColor: '#007bff',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer'
-                }}
-              >
-                Create Account
-              </button>
-            </Group>
-
-            <Box $fontSize={14} $color="#666" $textAlign="center">
-              Already have an account? <a href="/login">Sign in</a>
-            </Box>
-          </Stack>
-        </Stack>
-      </Box>
-    </Container>
-  );
-}
-
-function FormField({ label, type, placeholder, required }) {
-  return (
-    <Stack gap="xs">
-      <Box $fontSize={14} $fontWeight="600" $color="#333">
-        {label} {required && <span style={{ color: 'red' }}>*</span>}
-      </Box>
-      <input
-        type={type}
-        placeholder={placeholder}
-        required={required}
-        style={{
-          padding: '12px',
-          border: '1px solid #ddd',
-          borderRadius: '6px',
-          fontSize: '16px',
-          outline: 'none',
-          transition: 'border-color 0.2s'
-        }}
-      />
-    </Stack>
-  );
+interface CustomComponentProps extends BoxProps {
+  variant?: string;
+  size?: "small" | "large";
 }
 ```
 
-## USAGE PATTERNS
+### Responsive Types
+```tsx
+import type { ResponsiveValue, SpacingValue } from "@apvee/react-layout-kit";
 
-### Import Strategy Selection
-
-**Choose your import pattern based on project needs:**
-
-```typescript
-// 🚀 Barrel Imports (Recommended for most projects)
-import { Box, Flex, Stack, Grid } from '@apvee/react-layout-kit';
-// Benefits: Clean syntax, good for prototyping and medium-sized apps
-// Trade-off: Slightly larger bundle with modern bundlers
-
-// 🎯 Granular Imports (Optimal for large applications)
-import { Box } from '@apvee/react-layout-kit/components/Box';
-import { Flex } from '@apvee/react-layout-kit/components/Flex';
-// Benefits: Maximum tree-shaking, smallest possible bundles
-// Trade-off: More verbose import statements
-
-// 📦 Mixed Strategy (Best of both worlds)
-import { Box, Flex } from '@apvee/react-layout-kit'; // Common components
-import { AreaGrid } from '@apvee/react-layout-kit/components/AreaGrid'; // Specialized components
-
-// 🔧 Utility Imports (When using core functions)
-import { resolveResponsiveValue } from '@apvee/react-layout-kit/core/responsive';
-import { createStyles } from '@apvee/react-layout-kit/core/styling';
+const responsivePadding: ResponsiveValue<SpacingValue> = { xs: "s", md: "m" };
 ```
 
-**Bundle Size Guidelines:**
-- Small project (< 10 components): Use barrel imports
-- Medium project (10-50 components): Use mixed strategy  
-- Large project (50+ components): Use granular imports
-- Library/component library: Always use granular imports
+## Best Practices
 
-### Basic Layout Construction
-```typescript
-<Box $display="flex" $gap={16} $padding={{ xs: 8, md: 16 }}>
-  <Container size={{ xs: 320, md: 640, lg: 1200 }}>
-    <Stack gap="lg" align="stretch">
-      <Flex justify="space-between" align="center">
-        <Box $fontSize={24} $fontWeight="bold">Title</Box>
-        <Group gap="s">
-          <button>Action 1</button>
-          <button>Action 2</button>
-        </Group>
-      </Flex>
-      <SimpleGrid cols={{ xs: 1, sm: 2, md: 3 }} spacing="m">
-        {items.map(item => <Card key={item.id} {...item} />)}
-      </SimpleGrid>
-    </Stack>
-  </Container>
-</Box>
+1. **Use responsive values for container-aware design**
+2. **Prefer short props for spacing (p, m, etc.)**
+3. **Use dollar props for full CSS control**
+4. **Leverage asChild for component composition**
+5. **Use Stack for vertical layouts, Flex for complex layouts**
+6. **Container + SimpleGrid for page layouts**
+7. **Custom components should extend BoxProps**
+8. **Use useContainerWidth for dynamic responsive behavior**
+
+## CSS Utilities
+
+### Class Merging
+```tsx
+import { mergeClasses, createStyles } from "@apvee/react-layout-kit";
+
+const customClass = createStyles({ color: "red" });
+const combinedClass = mergeClasses("base-class", customClass, conditionalClass);
+
+<Box className={combinedClass}>Styled content</Box>
 ```
 
-### Complex Grid Layouts
-```typescript
-<AreaGrid
-  areas={{
-    xs: '"header" "main" "sidebar" "footer"',
-    md: '"header header" "sidebar main" "footer footer"'
-  }}
-  rows={{ xs: "auto auto auto auto", md: "auto 1fr auto" }}
-  columns={{ xs: "1fr", md: "200px 1fr" }}
-  gap={{ xs: "s", md: "m" }}
->
-  <AreaGrid.Item area="header">Header Content</AreaGrid.Item>
-  <AreaGrid.Item area="sidebar">Sidebar Content</AreaGrid.Item>
-  <AreaGrid.Item area="main">Main Content</AreaGrid.Item>
-  <AreaGrid.Item area="footer">Footer Content</AreaGrid.Item>
-</AreaGrid>
-```
-
-### Component Composition
-```typescript
-<Box asChild $borderRadius={8} $backgroundColor="blue" $padding="m">
-  <button onClick={handleClick}>
-    Styled Button with Box props
-  </button>
-</Box>
-```
-
-## TECHNICAL IMPLEMENTATION
-
-### Dependencies
-- React >=17.0.0 (peer dependency)
-- @emotion/css: CSS-in-JS runtime for style generation
-- @react-hook/merged-ref: Reference merging utility
-- csstype: TypeScript CSS property definitions
-
-### Internal Components
-- Custom Slot implementation: High-performance composition primitive for asChild pattern with advanced prop merging, fully self-contained with zero external dependencies
-
-### Build System
-- TypeScript with strict configuration
-- tsup for bundling with ESM/CJS dual output
-- Modular component exports for optimal tree-shaking
-- Granular entry points for each component and utility
-- Declaration files for full type support
-- Package.json exports mapping for clean import paths
-- Support for both barrel imports and granular component imports
-
-### Development Tools
-- Storybook for component documentation and testing
-- Comprehensive story coverage for all components
-- TypeScript type checking and validation
-
-## EXTENSIBILITY
-
-### TypeScript Module Augmentation
-```typescript
-declare module '@apvee/react-layout-kit' {
-  interface BreakpointDefs {
-    tablet: number;
-    '2xl': number;
-  }
-  
-  interface SpacingDefs {
-    xxs: string;
-    xxxl: string;
-  }
-}
-```
-
-### Runtime Configuration
-```typescript
-import { configureBox } from '@apvee/react-layout-kit';
-
-configureBox({
-  breakpoints: { xs: 0, sm: 480, md: 640, lg: 1024, xl: 1366, xxl: 1920 },
-  spacing: { none: 0, xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 }
-});
-```
-
-## PERFORMANCE CHARACTERISTICS
-
-- Emotion CSS runtime optimization with style deduplication
-- Debounced ResizeObserver updates (16ms default, configurable)
-- Memoized responsive value resolution and style generation
-- Efficient prop separation and processing
-- SSR-compatible with hydration safety
-- Modular architecture enabling excellent tree-shaking
-- Granular component imports for optimal bundle sizes (~1-2KB per component)
-- Automatic dead code elimination with modern bundlers
-- Optimized dependency sharing across components
-- Zero runtime CSS parsing (all styles generated at component render)
-- Framework-agnostic bundler compatibility (Webpack, Vite, Rollup, etc.)
-
-## USE CASES
-
-Primary use cases include:
-- Responsive web applications requiring complex layouts
-- Design systems needing consistent spacing and responsive behavior
-- React applications seeking to eliminate CSS files for layout concerns
-- Teams requiring type-safe styling with IDE autocompletion  
-- Projects needing semantic grid layouts with named areas
-- Applications requiring precise responsive control based on container sizes rather than viewport
-- Component libraries requiring advanced composition patterns with the asChild prop
-- SharePoint Framework (SPFx) projects needing layout components without JSX runtime conflicts
-- Teams building polymorphic components with seamless prop forwarding
-- Applications requiring zero-dependency component composition solutions
-- Large-scale applications needing optimal bundle sizes through tree-shaking
-- Micro-frontend architectures requiring modular component imports
-- Performance-critical applications where every KB matters
-- Teams wanting flexible import strategies (barrel vs granular imports)
-
-The library excels in scenarios requiring sophisticated responsive behavior, type safety, maintainable layout code within React component hierarchies, and advanced component composition patterns, while providing the performance characteristics and compatibility needed for production applications across various React environments including modern web apps and enterprise SharePoint solutions. The modular architecture ensures optimal bundle sizes and developer experience regardless of project scale or import strategy.
+This guide provides all the essential information needed for LLM-based code generation with @apvee/react-layout-kit.
