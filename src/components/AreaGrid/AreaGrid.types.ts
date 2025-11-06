@@ -1,5 +1,6 @@
 import type { BaseBoxProps } from '@/components/Box';
 import type { ResponsiveValue, SpacingValue } from '@/types';
+import * as React from 'react';
 import * as CSS from 'csstype';
 
 /**
@@ -8,7 +9,12 @@ import * as CSS from 'csstype';
  * Extends BaseBoxProps to inherit all Box styling capabilities while adding
  * CSS Grid area-specific properties for named grid layout management.
  */
-export interface AreaGridProps extends BaseBoxProps {
+export type AreaGridProps = BaseBoxProps & {
+  /**
+   * Child elements - typically AreaGrid.Item components.
+   */
+  children?: React.ReactNode;
+
   /**
    * grid-template-areas CSS property. Defines named grid areas.
    * Each row should be defined as a quoted string within the overall string.
@@ -186,7 +192,12 @@ export interface AreaGridProps extends BaseBoxProps {
  * Extends BaseBoxProps to inherit all Box styling capabilities while adding
  * CSS Grid item-specific properties for area assignment and alignment.
  */
-export interface AreaGridItemProps extends BaseBoxProps {
+export type AreaGridItemProps = BaseBoxProps & {
+  /**
+   * Child elements to render within this grid item.
+   */
+  children?: React.ReactNode;
+
   /**
    * grid-area CSS property. Assigns the item to a named grid area.
    * Supports responsive values using breakpoint objects.

@@ -10,7 +10,7 @@ import type { ResponsiveValue } from '@/types';
  * **Important:** Only accepts a single React element as children. Multiple children,
  * strings, numbers, or fragments are not supported and will cause runtime/TypeScript errors.
  */
-export interface AspectRatioProps extends Omit<BaseBoxProps, 'children'> {
+export type AspectRatioProps = Omit<BaseBoxProps, 'children'> & {
   /**
    * Single child element that will fill the aspect ratio container.
    * The child will automatically receive width: '100%' and height: '100%' styles.

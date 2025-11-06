@@ -44,7 +44,7 @@ type Story = StoryObj<CenterProps>;
 // Basic centering example
 export const BasicCentering: Story = {
   render: () => (
-    <Center 
+    <Center
       className={createStyles({
         minHeight: "200px",
         backgroundColor: "#f5f5f5",
