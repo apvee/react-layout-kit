@@ -2,6 +2,8 @@ import { Breakpoints, Spacing } from "@/types";
 
 /**
  * Default breakpoint configuration.
+ * 
+ * @internal
  */
 export const DEFAULT_BREAKPOINTS: Breakpoints = {
   xs: 0,
@@ -14,6 +16,8 @@ export const DEFAULT_BREAKPOINTS: Breakpoints = {
 
 /**
  * Default spacing scale configuration.
+ * 
+ * @internal
  */
 export const DEFAULT_SPACING: Spacing = {
   none: 0,

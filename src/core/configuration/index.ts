@@ -3,11 +3,15 @@ import { DEFAULT_BREAKPOINTS, DEFAULT_SPACING } from './defaults';
 
 /**
  * Global module state for breakpoint configuration.
+ * 
+ * @internal
  */
 export let globalBreakpoints: Breakpoints = { ...DEFAULT_BREAKPOINTS };
 
 /**
  * Global module state for spacing scale configuration.
+ * 
+ * @internal
  */
 export let globalSpacing: Spacing = { ...DEFAULT_SPACING };
 

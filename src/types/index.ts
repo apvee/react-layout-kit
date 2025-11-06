@@ -35,11 +35,7 @@ export type {
   ShortPropKey
 } from './short-props';
 
-export {
-  SHORT_PROP_TO_CSS_MAPPING,
-  SPACING_SHORT_PROPS,
-  CSS_SHORT_PROPS,
-  isShortProp,
-  isSpacingShortProp,
-  isCssShortProp
-} from './short-props';
+// Note: SHORT_PROP_TO_CSS_MAPPING, SPACING_SHORT_PROPS, CSS_SHORT_PROPS,
+// isShortProp, isSpacingShortProp, isCssShortProp are internal APIs
+// and not exported from this barrel file. They are marked as @internal
+// in their source file and should only be used within the library.

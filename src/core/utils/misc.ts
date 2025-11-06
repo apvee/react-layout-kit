@@ -6,6 +6,8 @@
  * @param delay - Delay in milliseconds
  * @returns Debounced function
  * 
+ * @internal
+ * 
  * @example
  * ```ts
  * const debouncedCallback = debounce((value) => setValue(value), 16);

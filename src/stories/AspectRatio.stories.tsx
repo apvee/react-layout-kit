@@ -19,6 +19,13 @@ A component that maintains a constant aspect ratio between width and height.
 - Perfect for images, videos, maps, and other media
 - Container width measurement for responsive calculations
 - Absolute positioning for content overlay
+- **Automatically applies width: '100%' and height: '100%' to child elements**
+- **Accepts only a single React element as children**
+
+## Usage Notes
+- No need to manually specify width: '100%' and height: '100%' on child elements
+- Multiple children must be wrapped in a single container element
+- String, number, or fragment children will cause TypeScript/runtime errors
         `,
             },
         },
@@ -51,8 +58,6 @@ export const BasicUsage: Story = {
             <AspectRatio ratio={16 / 9} w="300px">
                 <div
                     style={{
-                        width: '100%',
-                        height: '100%',
                         backgroundColor: '#1976d2',
                         display: 'flex',
                         alignItems: 'center',
@@ -71,8 +76,6 @@ export const BasicUsage: Story = {
             <AspectRatio ratio={1} w="200px">
                 <div
                     style={{
-                        width: '100%',
-                        height: '100%',
                         backgroundColor: '#4caf50',
                         display: 'flex',
                         alignItems: 'center',
@@ -91,8 +94,6 @@ export const BasicUsage: Story = {
             <AspectRatio ratio={4 / 3} w="250px">
                 <div
                     style={{
-                        width: '100%',
-                        height: '100%',
                         backgroundColor: '#ff9800',
                         display: 'flex',
                         alignItems: 'center',
@@ -112,7 +113,7 @@ export const BasicUsage: Story = {
     parameters: {
         docs: {
             description: {
-                story: 'Basic aspect ratio examples: 16:9 for videos, 1:1 for squares, and 4:3 for photos.',
+                story: 'Basic aspect ratio examples showing automatic width/height application. Notice how child elements no longer need explicit width: 100% and height: 100% styles.',
             },
         },
     },
@@ -127,8 +128,6 @@ export const ImageExample: Story = {
                     src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop"
                     alt="Landscape"
                     style={{
-                        width: '100%',
-                        height: '100%',
                         objectFit: 'cover',
                         borderRadius: '4px',
                         border: '1px solid #ddd',
@@ -141,8 +140,6 @@ export const ImageExample: Story = {
                     src="https://images.unsplash.com/photo-1494790108755-2616c353b4b7?w=400&h=400&fit=crop&crop=face"
                     alt="Portrait"
                     style={{
-                        width: '100%',
-                        height: '100%',
                         objectFit: 'cover',
                         borderRadius: '4px',
                         border: '1px solid #ddd',
@@ -155,8 +152,6 @@ export const ImageExample: Story = {
                     src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=450&fit=crop"
                     alt="Nature"
                     style={{
-                        width: '100%',
-                        height: '100%',
                         objectFit: 'cover',
                         borderRadius: '4px',
                         border: '1px solid #ddd',
@@ -168,7 +163,7 @@ export const ImageExample: Story = {
     parameters: {
         docs: {
             description: {
-                story: 'Images with different aspect ratios using object-fit: cover to maintain proportions.',
+                story: 'Images with different aspect ratios using object-fit: cover. Width and height are automatically applied by AspectRatio.',
             },
         },
     },
@@ -180,8 +175,6 @@ export const VideoExample: Story = {
         <AspectRatio ratio={16 / 9} w="500px">
             <div
                 style={{
-                    width: '100%',
-                    height: '100%',
                     backgroundColor: '#000',
                     display: 'flex',
                     alignItems: 'center',
@@ -217,8 +210,6 @@ export const IframeExample: Story = {
         <AspectRatio ratio={16 / 9} w="600px">
             <div
                 style={{
-                    width: '100%',
-                    height: '100%',
                     backgroundColor: '#f5f5f5',
                     border: '2px dashed #ccc',
                     borderRadius: '4px',
@@ -261,8 +252,6 @@ export const ResponsiveRatio: Story = {
             >
                 <div
                     style={{
-                        width: '100%',
-                        height: '100%',
                         backgroundColor: '#9c27b0',
                         display: 'flex',
                         alignItems: 'center',

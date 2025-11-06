@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-// Utility per combinare refs
+/**
+ * Utility per combinare refs.
+ * 
+ * @internal
+ */
 function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCallback<T> {
   return (node: T) => {
     refs.forEach((ref) => {
@@ -13,7 +17,11 @@ function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCall
   };
 }
 
-// Utility per combinare event handlers
+/**
+ * Utility per combinare event handlers.
+ * 
+ * @internal
+ */
 function composeEventHandlers<E>(
   originalEventHandler?: (event: E) => void,
   ourEventHandler?: (event: E) => void,
@@ -31,7 +39,11 @@ function composeEventHandlers<E>(
   };
 }
 
-// Utility per combinare className
+/**
+ * Utility per combinare className.
+ * 
+ * @internal
+ */
 function composeClassName(originalClassName?: string, ourClassName?: string): string | undefined {
   if (!originalClassName && !ourClassName) return undefined;
   if (!originalClassName) return ourClassName;
@@ -39,7 +51,11 @@ function composeClassName(originalClassName?: string, ourClassName?: string): st
   return `${originalClassName} ${ourClassName}`;
 }
 
-// Utility per combinare style objects
+/**
+ * Utility per combinare style objects.
+ * 
+ * @internal
+ */
 function composeStyle(
   originalStyle?: React.CSSProperties,
   ourStyle?: React.CSSProperties
@@ -121,11 +137,20 @@ export const Slottable = ({ children }: SlottableProps) => {
 
 Slottable.displayName = 'Slottable';
 
-// Utility functions
+/**
+ * Utility function to check if a child is a Slottable component.
+ * 
+ * @internal
+ */
 function isSlottable(child: React.ReactNode): child is React.ReactElement {
   return React.isValidElement(child) && child.type === Slottable;
 }
 
+/**
+ * Utility function to merge props from slot and child.
+ * 
+ * @internal
+ */
 function mergeProps(slotProps: Record<string, any>, childProps: Record<string, any>) {
   // Tutti i child props hanno la precedenza
   const overrideProps = { ...childProps };

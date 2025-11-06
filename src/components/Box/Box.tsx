@@ -1,5 +1,5 @@
 import type { IShortStyleBoxProps } from '@/types';
-import { isShortProp } from '@/types';
+import { isShortProp } from '@/types/short-props';
 import { generateCombinedClassName } from '@/core/styling';
 import { mergeClasses } from '@/core/styling';
 import { useElementWidth } from '@/hooks/useElementWidth';

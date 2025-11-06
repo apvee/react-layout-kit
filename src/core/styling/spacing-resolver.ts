@@ -11,7 +11,7 @@ import {
     SHORT_PROP_TO_CSS_MAPPING,
     isShortProp,
     isSpacingShortProp
-} from '@/types';
+} from '@/types/short-props';
 import { css, cx } from '@emotion/css';
 
 /**
@@ -28,6 +28,8 @@ const STYLE_RESET = css({
  * @param shortProps - Short-style props object
  * @param width - Current container width for responsive resolution
  * @returns Resolved CSS styles object
+ * 
+ * @internal
  * 
  * @example
  * ```ts
@@ -80,6 +82,8 @@ export function processShortProps(
  * @param width - Current container width for responsive resolution
  * @param styleReset - Whether to include basic style reset
  * @returns Generated CSS class name
+ * 
+ * @internal
  * 
  * @example
  * ```ts

@@ -10,8 +10,11 @@ import type { AspectRatioProps } from './AspectRatio.types';
  * A component that maintains a constant aspect ratio between width and height.
  * Useful for displaying images, videos, maps, or other media with consistent proportions.
  * 
- * Uses the CSS padding-bottom technique to maintain aspect ratio responsively.
- * All styles are applied via Box component props - no inline styles are used.
+ * **Key Features:**
+ * - Automatically applies width: '100%' and height: '100%' to the child element
+ * - Accepts only a single React element as children (enforced at runtime)
+ * - Uses the CSS padding-bottom technique to maintain aspect ratio responsively
+ * - All styles are applied via Box component props - no inline styles are used
  * 
  * **Aspect Ratio Technique:**
  * - Uses padding-bottom percentage to create intrinsic aspect ratio
@@ -26,39 +29,34 @@ import type { AspectRatioProps } from './AspectRatio.types';
  * 
  * @example
  * ```tsx
- * // Basic 16:9 aspect ratio for video content
+ * // Basic 16:9 aspect ratio for video content (width/height applied automatically)
  * <AspectRatio ratio={16 / 9}>
- *   <img src="video-thumbnail.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+ *   <img src="video-thumbnail.jpg" style={{ objectFit: 'cover' }} />
  * </AspectRatio>
  * 
  * // Square aspect ratio (1:1) for profile images
  * <AspectRatio ratio={1}>
- *   <img src="profile.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+ *   <img src="profile.jpg" style={{ objectFit: 'cover' }} />
  * </AspectRatio>
  * 
  * // Classic photo aspect ratio (4:3)
  * <AspectRatio ratio={4 / 3}>
- *   <img src="landscape.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+ *   <img src="landscape.jpg" style={{ objectFit: 'cover' }} />
  * </AspectRatio>
  * 
  * // Responsive aspect ratio (requires containerWidth for proper responsive behavior)
  * <AspectRatio ratio={{ xs: 1, md: 16 / 9 }} containerWidth={400}>
- *   <video style={{ width: '100%', height: '100%' }} controls />
+ *   <video controls />
  * </AspectRatio>
  * 
  * // Without containerWidth, falls back to first valid key (xs: 1 in this case)
  * <AspectRatio ratio={{ xs: 1, md: 4 / 3 }}>
- *   <iframe 
- *     src="https://example.com" 
- *     style={{ width: '100%', height: '100%', border: 'none' }} 
- *   />
+ *   <iframe src="https://example.com" style={{ border: 'none' }} />
  * </AspectRatio>
  * 
  * // Custom width with aspect ratio
  * <AspectRatio ratio={21 / 9} w="500px">
  *   <div style={{ 
- *     width: '100%', 
- *     height: '100%', 
  *     background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
  *     display: 'flex',
  *     alignItems: 'center',
@@ -67,6 +65,14 @@ import type { AspectRatioProps } from './AspectRatio.types';
  *     fontSize: '1.5rem'
  *   }}>
  *     Ultrawide Banner
+ *   </div>
+ * </AspectRatio>
+ * 
+ * // Multiple children need to be wrapped in a single container
+ * <AspectRatio ratio={16 / 9}>
+ *   <div style={{ position: 'relative' }}>
+ *     <img src="background.jpg" style={{ objectFit: 'cover' }} />
+ *     <div style={{ position: 'absolute', top: 10, left: 10 }}>Overlay</div>
  *   </div>
  * </AspectRatio>
  * ```
@@ -80,6 +86,9 @@ export const AspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
       w,
       ...boxProps
     } = props;
+
+    // Ensure only a single ReactElement is provided as children
+    const singleChild = React.Children.only(children);
 
     // Element ref for width measurement
     const elementRef = React.useRef<HTMLDivElement>(null);
@@ -142,6 +151,7 @@ export const AspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
         
         {/* Content container positioned absolutely to fill the aspect ratio container */}
         <Box
+          asChild
           $position="absolute"
           $top={0}
           $left={0}
@@ -150,7 +160,7 @@ export const AspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
           $width="100%"
           $height="100%"
         >
-          {children}
+          {singleChild}
         </Box>
       </Box>
     );
