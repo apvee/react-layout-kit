@@ -1,6 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { FlexProps, Flex, createStyles } from '..';
+import { Flex } from '../components/Flex';
+import type { FlexProps } from '../components/Flex/Flex.types';
 
 const meta: Meta<FlexProps> = {
   title: 'Components/Layouts/Flex',
@@ -10,58 +11,230 @@ const meta: Meta<FlexProps> = {
     docs: {
       description: {
         component: `
-A comprehensive flexbox layout component with full CSS flexbox control.
+A comprehensive flexbox layout component with full CSS flexbox control for composing responsive layouts.
 
-## Features
-- Complete flexbox container properties (align, justify, direction, wrap, gap)
-- Flex.Item sub-component for individual flex item control
-- Responsive values for all flexbox properties using breakpoint objects
-- Advanced gap control with separate row and column gaps
-- Container width measurement for responsive calculations
+## Key Features
+
+- **Full Flexbox Control**: Complete control over flex-direction, align-items, justify-content, flex-wrap, and gaps
+- **Spacing Scale Integration**: Gap, rowGap, and columnGap use predefined spacing scale (xs, sm, md, lg, xl, xxl) or custom CSS values
+- **Bidirectional Layouts**: Supports both row (horizontal) and column (vertical) flex directions
+- **Advanced Gap Control**: Independent control of row and column gaps with rowGap and columnGap
+- **Flex Item Component**: Flex.Item sub-component for precise flex item control (flex, grow, shrink, basis, alignSelf, order)
+- **Responsive Values**: All props support responsive breakpoint objects for adaptive layouts
+- **Container-Aware**: Measures container width for accurate responsive resolution
+- **Performance Optimized**: Memoized calculations for efficient re-renders
+- **Composition Ready**: Extends Box component with all layout props (margin, padding, size, etc.)
+
+## When to Use
+
+- **Navigation Bars**: Horizontal headers with logo, menu, and actions
+- **Button Groups**: Toolbars, action buttons, form controls aligned horizontally
+- **Card Layouts**: Horizontal or vertical card arrangements with flexible spacing
+- **Sidebar Layouts**: Two-column layouts with flexible main content area
+- **Form Rows**: Inline form controls (label + input + button)
+- **Media Objects**: Image/icon alongside content with flexible alignment
+- **App Shells**: Header-Main-Footer layouts with flexible content areas
+- **Responsive Layouts**: Layouts that switch between row and column based on screen size
+- **Flex Item Control**: When you need precise control over individual item flex behavior
+- **Toolbars & Menus**: Horizontal action bars with space-between or space-around distribution
+
+## When NOT to Use
+
+- **Simple Vertical Stacks**: Use Stack component instead (simpler API, direction locked to column)
+- **Simple Horizontal Groups**: Use Group component instead (simpler API, direction locked to row)
+- **Equal-Width Grids**: Use SimpleGrid for automatic equal-width columns
+- **Complex Grid Layouts**: Use Grid or AreaGrid for multi-row/column layouts with precise control
+
+## Flex vs Other Components
+
+### Flex vs Stack
+- **Flex**: Configurable direction (row/column/row-reverse/column-reverse), full flexbox control
+- **Stack**: Direction locked to column, simpler API for vertical layouts only
+
+### Flex vs Group
+- **Flex**: Configurable direction and full flex properties
+- **Group**: Direction locked to row, simpler API for horizontal layouts only
+
+### Flex vs Grid
+- **Flex**: One-dimensional layouts (row OR column), content-based sizing
+- **Grid**: Two-dimensional layouts (rows AND columns), grid template-based sizing
+
+### Flex vs SimpleGrid
+- **Flex**: Flexible content-based layouts, items can have different sizes
+- **SimpleGrid**: Equal-width items in a grid, automatic wrapping
+
+## Direction Explained
+
+Controls the main axis direction for flex items:
+- **row** (default): Items flow left to right horizontally
+- **row-reverse**: Items flow right to left horizontally
+- **column**: Items flow top to bottom vertically
+- **column-reverse**: Items flow bottom to top vertically
+
+## Alignment Explained
+
+### \`align\` (Cross-Axis)
+Controls alignment perpendicular to the main axis:
+- **direction: row** → align controls vertical alignment
+- **direction: column** → align controls horizontal alignment
+
+Options: stretch (default), flex-start, flex-end, center, baseline
+
+### \`justify\` (Main-Axis)
+Controls distribution along the main axis:
+- **direction: row** → justify controls horizontal distribution
+- **direction: column** → justify controls vertical distribution
+
+Options: flex-start (default), flex-end, center, space-between, space-around, space-evenly
+
+## Gap System
+
+Gap uses the same spacing scale as margin and padding:
+- **xs**: 4px - Very tight spacing
+- **sm**: 8px - Tight spacing
+- **md**: 16px - Default comfortable spacing
+- **lg**: 24px - Loose spacing
+- **xl**: 32px - Very loose spacing
+- **xxl**: 48px - Extra loose spacing
+
+### Advanced Gap Control
+- \`gap\`: Sets both row and column gaps
+- \`rowGap\`: Controls gap between rows (overrides gap)
+- \`columnGap\`: Controls gap between columns (overrides gap)
+
+## Flex.Item Component
+
+The Flex.Item sub-component provides precise control over individual flex items:
+
+### Properties
+- **flex**: Shorthand for grow, shrink, and basis (e.g., \`flex={1}\`, \`flex="1 1 auto"\`)
+- **grow**: How much item grows relative to siblings (e.g., \`grow={1}\`, \`grow={2}\`)
+- **shrink**: How much item shrinks when space is limited (e.g., \`shrink={0}\`, \`shrink={1}\`)
+- **basis**: Initial main size before flex growth/shrink (e.g., \`basis="200px"\`, \`basis="auto"\`)
+- **alignSelf**: Override parent align for this item (e.g., \`alignSelf="flex-start"\`)
+- **order**: Visual order of item (e.g., \`order={1}\`, \`order={-1}\`)
+
+## Wrap Behavior
+
+Controls whether items wrap to new lines:
+- **nowrap** (default): All items on one line, may overflow
+- **wrap**: Items wrap to multiple rows/columns as needed
+- **wrap-reverse**: Items wrap in reverse order
+
+## Responsive Patterns
+
+All props support responsive values using breakpoint objects:
+- \`xs\`: 0px - 640px
+- \`sm\`: 640px - 768px
+- \`md\`: 768px - 1024px
+- \`lg\`: 1024px - 1280px
+- \`xl\`: 1280px - 1536px
+- \`xxl\`: 1536px+
+
+## Best Practices
+
+**Do:**
+- ✅ Use Flex for layouts that need full flexbox control
+- ✅ Use direction="row" for horizontal layouts, direction="column" for vertical
+- ✅ Use Flex.Item when you need precise flex item control
+- ✅ Stick to spacing scale (xs, sm, md, lg, xl, xxl) for consistency
+- ✅ Use responsive values to adapt layouts across breakpoints
+- ✅ Use wrap="wrap" for button groups and tag lists that may overflow
+- ✅ Use justify="space-between" for navbars and toolbars
+- ✅ Combine with Box props for margins and padding
+
+**Don't:**
+- ❌ Use Flex when Stack or Group would be simpler
+- ❌ Forget that align and justify swap meaning based on direction
+- ❌ Mix spacing units inconsistently across Flex containers
+- ❌ Nest too many Flex levels (impacts performance)
+- ❌ Use for grid-style layouts (use Grid or SimpleGrid instead)
+- ❌ Overcomplicate with too many responsive breakpoints
+- ❌ Use Flex.Item without understanding flex grow/shrink behavior
         `,
       },
     },
   },
   tags: ['autodocs'],
   argTypes: {
-    // Flex container props
+    // Component-specific props
     align: {
       control: 'select',
       options: ['stretch', 'flex-start', 'flex-end', 'center', 'baseline'],
-      description: 'align-items CSS property - cross-axis alignment',
+      description: 'Cross-axis alignment of items (perpendicular to direction)',
+      table: {
+        category: 'Component',
+        type: { summary: 'ResponsiveValue<CSS.Property.AlignItems>' },
+        defaultValue: { summary: 'stretch' },
+      },
     },
     justify: {
       control: 'select',
       options: ['flex-start', 'flex-end', 'center', 'space-between', 'space-around', 'space-evenly'],
-      description: 'justify-content CSS property - main-axis alignment',
+      description: 'Main-axis distribution of items (along direction)',
+      table: {
+        category: 'Component',
+        type: { summary: 'ResponsiveValue<CSS.Property.JustifyContent>' },
+        defaultValue: { summary: 'flex-start' },
+      },
     },
     direction: {
       control: 'select',
       options: ['row', 'row-reverse', 'column', 'column-reverse'],
-      description: 'flex-direction CSS property',
+      description: 'Main axis direction for flex items',
+      table: {
+        category: 'Component',
+        type: { summary: 'ResponsiveValue<CSS.Property.FlexDirection>' },
+        defaultValue: { summary: 'row' },
+      },
     },
     wrap: {
       control: 'select',
       options: ['nowrap', 'wrap', 'wrap-reverse'],
-      description: 'flex-wrap CSS property',
+      description: 'Whether items wrap to new lines',
+      table: {
+        category: 'Component',
+        type: { summary: 'ResponsiveValue<CSS.Property.FlexWrap>' },
+        defaultValue: { summary: 'nowrap' },
+      },
     },
     gap: {
-      control: 'text',
-      description: 'gap CSS property - space between all flex items',
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'],
+      description: 'Gap between all flex items (both row and column). Use spacing scale keys or custom CSS values',
+      table: {
+        category: 'Component',
+        type: { summary: 'ResponsiveValue<SpacingValue>' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
     rowGap: {
-      control: 'text',
-      description: 'row-gap CSS property - space between rows',
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'],
+      description: 'Gap between rows. Overrides gap for row spacing',
+      table: {
+        category: 'Component',
+        type: { summary: 'ResponsiveValue<SpacingValue>' },
+        defaultValue: { summary: 'undefined (uses gap)' },
+      },
     },
     columnGap: {
-      control: 'text',
-      description: 'column-gap CSS property - space between columns',
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'],
+      description: 'Gap between columns. Overrides gap for column spacing',
+      table: {
+        category: 'Component',
+        type: { summary: 'ResponsiveValue<SpacingValue>' },
+        defaultValue: { summary: 'undefined (uses gap)' },
+      },
     },
-
-    // Core props
     containerWidth: {
       control: 'number',
-      description: 'Fixed container width for responsive calculations',
+      description: 'Container width for responsive calculations. Auto-measured if not provided',
+      table: {
+        category: 'Responsive',
+        type: { summary: 'number' },
+      },
     },
   },
 };
@@ -69,727 +242,195 @@ A comprehensive flexbox layout component with full CSS flexbox control.
 export default meta;
 type Story = StoryObj<FlexProps>;
 
-// Basic flex container
-export const BasicFlex: Story = {
-  render: () => (
-    <Flex 
-      className={createStyles({
-        backgroundColor: "#f5f5f5",
-        border: "2px dashed #ccc",
-        padding: "1rem",
-        borderRadius: "8px"
-      })}
-    >
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#1890ff', 
-        color: 'white', 
-        borderRadius: '4px' 
-      }}>
-        Item 1
-      </div>
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#52c41a', 
-        color: 'white', 
-        borderRadius: '4px' 
-      }}>
-        Item 2
-      </div>
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#fa8c16', 
-        color: 'white', 
-        borderRadius: '4px' 
-      }}>
-        Item 3
-      </div>
-    </Flex>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Basic Flex container with default flex behavior (row direction, no gaps).',
-      },
-    },
+export const Usage: Story = {
+  args: {
+    direction: 'row',
+    align: 'center',
+    justify: 'flex-start',
+    gap: 'md',
   },
-};
-
-// Centered content
-export const CenteredContent: Story = {
-  render: () => (
-    <Flex 
-      align="center" 
-      justify="center"
-      className={createStyles({
-        minHeight: "200px",
-        backgroundColor: "#f0f2f5",
-        border: "1px solid #d9d9d9",
-        borderRadius: "8px"
-      })}
-    >
-      <div style={{ 
-        padding: '1.5rem 2rem', 
-        backgroundColor: '#722ed1', 
-        color: 'white', 
-        borderRadius: '8px',
-        textAlign: 'center',
-        fontWeight: 'bold'
-      }}>
-        Perfectly Centered Content
-      </div>
-    </Flex>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Flex container with content centered both horizontally and vertically.',
-      },
-    },
-  },
-};
-
-// Space distribution
-export const SpaceDistribution: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Space Between</h4>
-        <Flex 
-          justify="space-between"
-          className={createStyles({
-            backgroundColor: "#fff7e6",
-            border: "1px solid #ffd591",
-            padding: "1rem",
-            borderRadius: "6px"
-          })}
-        >
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#fa8c16', color: 'white', borderRadius: '4px' }}>
-            Start
-          </div>
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#fa8c16', color: 'white', borderRadius: '4px' }}>
-            Middle
-          </div>
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#fa8c16', color: 'white', borderRadius: '4px' }}>
-            End
-          </div>
-        </Flex>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Space Around</h4>
-        <Flex 
-          justify="space-around"
-          className={createStyles({
-            backgroundColor: "#f6ffed",
-            border: "1px solid #b7eb8f",
-            padding: "1rem",
-            borderRadius: "6px"
-          })}
-        >
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#52c41a', color: 'white', borderRadius: '4px' }}>
-            Item 1
-          </div>
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#52c41a', color: 'white', borderRadius: '4px' }}>
-            Item 2
-          </div>
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#52c41a', color: 'white', borderRadius: '4px' }}>
-            Item 3
-          </div>
-        </Flex>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Space Evenly</h4>
-        <Flex 
-          justify="space-evenly"
-          className={createStyles({
-            backgroundColor: "#e6f7ff",
-            border: "1px solid #91d5ff",
-            padding: "1rem",
-            borderRadius: "6px"
-          })}
-        >
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#1890ff', color: 'white', borderRadius: '4px' }}>
-            Item A
-          </div>
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#1890ff', color: 'white', borderRadius: '4px' }}>
-            Item B
-          </div>
-          <div style={{ padding: '0.5rem 1rem', backgroundColor: '#1890ff', color: 'white', borderRadius: '4px' }}>
-            Item C
-          </div>
-        </Flex>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Different space distribution options: space-between, space-around, and space-evenly.',
-      },
-    },
-  },
-};
-
-// Column layout with gaps
-export const ColumnLayout: Story = {
-  render: () => (
-    <Flex 
-      direction="column" 
-      gap="lg"
-      className={createStyles({
-        backgroundColor: "#fafafa",
-        border: "1px solid #f0f0f0",
-        padding: "1.5rem",
-        borderRadius: "8px",
-        maxWidth: "400px"
-      })}
-    >
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#eb2f96', 
-        color: 'white', 
-        borderRadius: '6px',
-        textAlign: 'center'
-      }}>
-        Header Section
-      </div>
-      <div style={{ 
-        padding: '2rem 1rem', 
-        backgroundColor: '#f759ab', 
-        color: 'white', 
-        borderRadius: '6px',
-        textAlign: 'center'
-      }}>
-        Main Content Area
-      </div>
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#eb2f96', 
-        color: 'white', 
-        borderRadius: '6px',
-        textAlign: 'center'
-      }}>
-        Footer Section
-      </div>
-    </Flex>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Column layout with consistent gaps between items.',
-      },
-    },
-  },
-};
-
-// Responsive flex behavior
-export const ResponsiveFlex: Story = {
-  render: () => (
-    <Flex 
-      direction={{ xs: "column", md: "row" }}
-      align={{ xs: "stretch", md: "center" }}
-      justify={{ xs: "flex-start", md: "space-between" }}
-      gap={{ xs: "xs", md: "lg" }}
-      wrap="wrap"
-      className={createStyles({
-        backgroundColor: "#f0f5ff",
-        border: "1px solid #91d5ff",
-        padding: "1.5rem",
-        borderRadius: "8px"
-      })}
-    >
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#1890ff', 
-        color: 'white', 
-        borderRadius: '6px',
-        minWidth: '150px',
-        textAlign: 'center'
-      }}>
-        Responsive Item 1
-      </div>
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#40a9ff', 
-        color: 'white', 
-        borderRadius: '6px',
-        minWidth: '150px',
-        textAlign: 'center'
-      }}>
-        Responsive Item 2
-      </div>
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#69c0ff', 
-        color: 'white', 
-        borderRadius: '6px',
-        minWidth: '150px',
-        textAlign: 'center'
-      }}>
-        Responsive Item 3
-      </div>
-    </Flex>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Responsive flex layout that changes direction, alignment, and gaps at different breakpoints.',
-      },
-    },
-    viewport: {
-      viewports: {
-        mobile: { name: 'Mobile', styles: { width: '320px', height: '568px' } },
-        tablet: { name: 'Tablet', styles: { width: '640px', height: '1024px' } },
-        desktop: { name: 'Desktop', styles: { width: '1200px', height: '800px' } },
-      },
-    },
-  },
-};
-
-// Flex items with grow/shrink
-export const FlexItemControls: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Basic Flex Items</h4>
-        <Flex 
-          gap="xs"
-          className={createStyles({
-            backgroundColor: "#fff2e8",
-            border: "1px solid #ffbb96",
-            padding: "1rem",
-            borderRadius: "6px"
-          })}
-        >
-          <Flex.Item flex={1} className={createStyles({ backgroundColor: "#fa541c", color: "white", padding: "1rem", borderRadius: "4px", textAlign: "center" })}>
-            flex: 1
-          </Flex.Item>
-          <Flex.Item flex={2} className={createStyles({ backgroundColor: "#fa8c16", color: "white", padding: "1rem", borderRadius: "4px", textAlign: "center" })}>
-            flex: 2 (grows more)
-          </Flex.Item>
-          <Flex.Item flex={1} className={createStyles({ backgroundColor: "#fa541c", color: "white", padding: "1rem", borderRadius: "4px", textAlign: "center" })}>
-            flex: 1
-          </Flex.Item>
-        </Flex>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Grow and Shrink Control</h4>
-        <Flex 
-          gap="xs"
-          className={createStyles({
-            backgroundColor: "#f6ffed",
-            border: "1px solid #b7eb8f",
-            padding: "1rem",
-            borderRadius: "6px"
-          })}
-        >
-          <Flex.Item grow={0} shrink={0} basis="120px" className={createStyles({ backgroundColor: "#52c41a", color: "white", padding: "1rem", borderRadius: "4px", textAlign: "center" })}>
-            Fixed 120px
-          </Flex.Item>
-          <Flex.Item grow={1} shrink={1} className={createStyles({ backgroundColor: "#73d13d", color: "white", padding: "1rem", borderRadius: "4px", textAlign: "center" })}>
-            Flexible content
-          </Flex.Item>
-          <Flex.Item grow={0} shrink={0} basis="100px" className={createStyles({ backgroundColor: "#52c41a", color: "white", padding: "1rem", borderRadius: "4px", textAlign: "center" })}>
-            Fixed 100px
-          </Flex.Item>
-        </Flex>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Align Self</h4>
-        <Flex 
-          align="flex-start"
-          gap="xs"
-          className={createStyles({
-            backgroundColor: "#e6f7ff",
-            border: "1px solid #91d5ff",
-            padding: "1rem",
-            borderRadius: "6px",
-            minHeight: "120px"
-          })}
-        >
-          <Flex.Item className={createStyles({ backgroundColor: "#1890ff", color: "white", padding: "0.5rem 1rem", borderRadius: "4px" })}>
-            Default
-          </Flex.Item>
-          <Flex.Item alignSelf="center" className={createStyles({ backgroundColor: "#40a9ff", color: "white", padding: "0.5rem 1rem", borderRadius: "4px" })}>
-            Center
-          </Flex.Item>
-          <Flex.Item alignSelf="flex-end" className={createStyles({ backgroundColor: "#69c0ff", color: "white", padding: "0.5rem 1rem", borderRadius: "4px" })}>
-            End
-          </Flex.Item>
-          <Flex.Item alignSelf="stretch" className={createStyles({ backgroundColor: "#91d5ff", color: "white", padding: "0.5rem 1rem", borderRadius: "4px" })}>
-            Stretch
-          </Flex.Item>
-        </Flex>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Flex.Item component demonstrating flex properties: flex shorthand, grow/shrink/basis, and alignSelf.',
-      },
-    },
-  },
-};
-
-// Advanced gap control
-export const AdvancedGaps: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Uniform Gap</h4>
-        <Flex 
-          wrap="wrap"
-          gap="lg"
-          className={createStyles({
-            backgroundColor: "#f9f0ff",
-            border: "1px solid #d3adf7",
-            padding: "1rem",
-            borderRadius: "6px"
-          })}
-        >
-          {Array.from({ length: 6 }, (_, i) => (
-            <div 
-              key={i}
-              style={{ 
-                padding: '0.75rem 1rem', 
-                backgroundColor: '#722ed1', 
-                color: 'white', 
-                borderRadius: '4px',
-                minWidth: '80px',
-                textAlign: 'center'
-              }}
-            >
-              Item {i + 1}
-            </div>
-          ))}
-        </Flex>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>Custom Row and Column Gaps</h4>
-        <Flex 
-          wrap="wrap"
-          rowGap="xxl"
-          columnGap="xs"
-          className={createStyles({
-            backgroundColor: "#fff0f6",
-            border: "1px solid #ffadd6",
-            padding: "1rem",
-            borderRadius: "6px"
-          })}
-        >
-          {Array.from({ length: 8 }, (_, i) => (
-            <div 
-              key={i}
-              style={{ 
-                padding: '0.75rem 1rem', 
-                backgroundColor: '#eb2f96', 
-                color: 'white', 
-                borderRadius: '4px',
-                minWidth: '70px',
-                textAlign: 'center'
-              }}
-            >
-              {i + 1}
-            </div>
-          ))}
-        </Flex>
-        <p style={{ margin: '0.5rem 0 0 0', fontSize: '14px', color: '#8c8c8c' }}>
-          Row gap: 2rem • Column gap: 0.5rem
+  render: (args: FlexProps) => (
+    <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Hero Section */}
+      <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1a1a1a' }}>
+          Flex Component
+        </h1>
+        <p style={{ fontSize: '1.125rem', color: '#666', maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
+          Comprehensive flexbox control for building responsive layouts. Perfect for navbars, button groups, card layouts, and any layout requiring precise flex control.
         </p>
       </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Advanced gap control with uniform gaps and separate row/column gaps.',
-      },
-    },
-  },
-};
 
-// Navigation example
-export const NavigationExample: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {/* Header Navigation */}
-      <Flex 
-        justify="space-between" 
-        align="center"
-        className={createStyles({
-          backgroundColor: "#001529",
-          color: "white",
-          padding: "0 1.5rem",
-          height: "60px",
-          borderRadius: "6px"
-        })}
-      >
-        <div style={{ fontWeight: 'bold', fontSize: '18px' }}>
-          Brand Logo
-        </div>
-        <Flex align="center" gap="xxl">
-          <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Home</a>
-          <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Products</a>
-          <a href="#" style={{ color: 'white', textDecoration: 'none' }}>About</a>
-          <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Contact</a>
-        </Flex>
-        <Flex align="center" gap="lg">
-          <button style={{
-            padding: '6px 12px',
-            backgroundColor: 'transparent',
-            color: 'white',
-            border: '1px solid white',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}>
-            Login
-          </button>
-          <button style={{
-            padding: '6px 12px',
-            backgroundColor: '#1890ff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}>
-            Sign Up
-          </button>
-        </Flex>
-      </Flex>
-
-      {/* Breadcrumb Navigation */}
-      <Flex 
-        align="center" 
-        gap="xs"
-        className={createStyles({
-          backgroundColor: "#fafafa",
-          border: "1px solid #f0f0f0",
-          padding: "0.75rem 1rem",
-          borderRadius: "6px"
-        })}
-      >
-        <span style={{ color: '#1890ff', cursor: 'pointer' }}>Home</span>
-        <span style={{ color: '#8c8c8c' }}>›</span>
-        <span style={{ color: '#1890ff', cursor: 'pointer' }}>Products</span>
-        <span style={{ color: '#8c8c8c' }}>›</span>
-        <span style={{ color: '#262626' }}>Current Page</span>
-      </Flex>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Navigation components built with Flex: header navigation and breadcrumbs.',
-      },
-    },
-  },
-};
-
-// Card layout example
-export const CardLayoutExample: Story = {
-  render: () => (
-    <Flex 
-      wrap="wrap" 
-      gap="lg"
-      justify="flex-start"
-      className={createStyles({
-        padding: "1rem",
-        backgroundColor: "#f5f5f5",
-        borderRadius: "8px"
-      })}
-    >
-      {[
-        { title: 'Product 1', price: '$29.99', color: '#1890ff' },
-        { title: 'Product 2', price: '$39.99', color: '#52c41a' },
-        { title: 'Product 3', price: '$19.99', color: '#fa8c16' },
-        { title: 'Product 4', price: '$49.99', color: '#eb2f96' },
-        { title: 'Product 5', price: '$24.99', color: '#722ed1' },
-        { title: 'Product 6', price: '$34.99', color: '#13c2c2' }
-      ].map((product, index) => (
-        <Flex.Item key={index} basis="200px" grow={0} shrink={0}>
-          <div style={{
-            backgroundColor: 'white',
-            border: '1px solid #f0f0f0',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            height: '100%',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
-          }}>
-            <div style={{
-              width: '100%',
-              height: '120px',
-              backgroundColor: product.color,
-              borderRadius: '6px',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: 'bold'
-            }}>
-              Image
-            </div>
-            <h4 style={{ margin: '0 0 0.5rem 0', color: '#262626' }}>
-              {product.title}
-            </h4>
-            <Flex justify="space-between" align="center">
-              <span style={{ fontSize: '18px', fontWeight: 'bold', color: product.color }}>
-                {product.price}
-              </span>
-              <button style={{
-                padding: '6px 12px',
-                backgroundColor: product.color,
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '12px'
-              }}>
-                Add to Cart
-              </button>
-            </Flex>
-          </div>
-        </Flex.Item>
-      ))}
-    </Flex>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Product card layout using Flex with wrapping and consistent sizing.',
-      },
-    },
-  },
-};
-
-// Form layout example
-export const FormLayoutExample: Story = {
-  render: () => (
-    <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-      <Flex 
-        direction="column" 
-        gap="lg"
-        className={createStyles({
-          backgroundColor: "white",
-          border: "1px solid #f0f0f0",
-          padding: "2rem",
-          borderRadius: "8px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
-        })}
-      >
-        <h2 style={{ margin: 0, color: '#262626', textAlign: 'center' }}>
-          Contact Form
+      {/* Interactive Demo */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+          Interactive Demo
         </h2>
-        
-        <Flex gap="lg">
-          <Flex.Item flex={1}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#262626', fontWeight: '500' }}>
-              First Name
-            </label>
-            <input 
-              type="text" 
-              placeholder="Enter first name"
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '1px solid #d9d9d9',
-                borderRadius: '6px',
-                fontSize: '14px',
-                boxSizing: 'border-box'
-              }}
-            />
-          </Flex.Item>
-          <Flex.Item flex={1}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#262626', fontWeight: '500' }}>
-              Last Name
-            </label>
-            <input 
-              type="text" 
-              placeholder="Enter last name"
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '1px solid #d9d9d9',
-                borderRadius: '6px',
-                fontSize: '14px',
-                boxSizing: 'border-box'
-              }}
-            />
-          </Flex.Item>
-        </Flex>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#262626', fontWeight: '500' }}>
-            Email
-          </label>
-          <input 
-            type="email" 
-            placeholder="Enter your email"
+        <p style={{ fontSize: '0.875rem', color: '#666', marginBottom: '1.5rem' }}>
+          Adjust <strong>direction</strong>, <strong>align</strong>, <strong>justify</strong>, and <strong>gap</strong> to see how Flex adapts.
+        </p>
+        <div style={{
+          padding: '2rem',
+          backgroundColor: '#f8f9fa',
+          borderRadius: '8px',
+        }}>
+          <Flex
+            {...args}
             style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #d9d9d9',
-              borderRadius: '6px',
-              fontSize: '14px',
-              boxSizing: 'border-box'
+              backgroundColor: '#ffffff',
+              padding: '1.5rem',
+              borderRadius: '8px',
+              border: '1px solid #e0e0e0',
+              minHeight: '200px',
             }}
-          />
+          >
+            {Array.from({ length: 4 }, (_, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: '1rem',
+                  backgroundColor: ['#1890ff', '#52c41a', '#fa8c16', '#eb2f96'][i],
+                  color: 'white',
+                  borderRadius: '4px',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                }}
+              >
+                Item {i + 1}
+              </div>
+            ))}
+          </Flex>
+        </div>
+      </div>
+
+      {/* Real-World Examples */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+          Real-World Examples
+        </h2>
+
+        {/* Navigation Bar */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem', color: '#1890ff' }}>
+            🧭 Navigation Bar
+          </h3>
+          <Flex
+            direction="row"
+            justify="space-between"
+            align="center"
+            style={{
+              backgroundColor: '#001529',
+              padding: '1rem 1.5rem',
+              borderRadius: '8px',
+            }}
+          >
+            <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#fff' }}>
+              🚀 MyApp
+            </div>
+            <Flex gap="lg" align="center">
+              <a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: '0.875rem' }}>Home</a>
+              <a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: '0.875rem' }}>Products</a>
+              <a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: '0.875rem' }}>About</a>
+            </Flex>
+            <button style={{ padding: '0.5rem 1rem', backgroundColor: '#1890ff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+              Sign In
+            </button>
+          </Flex>
         </div>
 
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#262626', fontWeight: '500' }}>
-            Message
-          </label>
-          <textarea 
-            rows={4}
-            placeholder="Enter your message"
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #d9d9d9',
-              borderRadius: '6px',
-              fontSize: '14px',
-              resize: 'vertical',
-              boxSizing: 'border-box'
-            }}
-          />
+        {/* Button Group */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem', color: '#52c41a' }}>
+            🎯 Button Group
+          </h3>
+          <Flex gap="sm" wrap="wrap">
+            {['Save', 'Cancel', 'Preview', 'Delete'].map((label) => (
+              <button key={label} style={{ padding: '0.5rem 1rem', backgroundColor: '#1890ff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                {label}
+              </button>
+            ))}
+          </Flex>
         </div>
 
-        <Flex gap="lg" justify="flex-end">
-          <button style={{
-            padding: '12px 24px',
-            backgroundColor: 'transparent',
-            color: '#595959',
-            border: '1px solid #d9d9d9',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}>
-            Cancel
-          </button>
-          <button style={{
-            padding: '12px 24px',
-            backgroundColor: '#1890ff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}>
-            Send Message
-          </button>
-        </Flex>
-      </Flex>
+        {/* Flex.Item Layout */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem', color: '#fa8c16' }}>
+            📐 Flex.Item - Sidebar + Main
+          </h3>
+          <Flex gap="lg" style={{ minHeight: '250px' }}>
+            <Flex.Item shrink={0} basis="250px" style={{ backgroundColor: '#f0f0f0', padding: '1.5rem', borderRadius: '8px' }}>
+              <h4 style={{ margin: '0 0 1rem 0' }}>Sidebar</h4>
+              <div style={{ fontSize: '0.875rem', color: '#666' }}>
+                Fixed width sidebar<br/><code>shrink={'{0}'}</code><br/><code>basis="250px"</code>
+              </div>
+            </Flex.Item>
+            <Flex.Item flex={1} style={{ backgroundColor: '#fff', padding: '1.5rem', borderRadius: '8px', border: '1px solid #e0e0e0' }}>
+              <h4 style={{ margin: '0 0 1rem 0' }}>Main Content</h4>
+              <div style={{ fontSize: '0.875rem', color: '#666' }}>
+                Flexible main content area<br/><code>flex={'{1}'}</code>
+              </div>
+            </Flex.Item>
+          </Flex>
+        </div>
+
+        {/* Responsive */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem', color: '#722ed1' }}>
+            📱 Responsive Layout
+          </h3>
+          <Flex direction={{ xs: 'column', md: 'row' }} gap={{ xs: 'sm', md: 'lg' }}>
+            {['Feature 1', 'Feature 2', 'Feature 3'].map((label, i) => (
+              <div key={i} style={{ flex: 1, backgroundColor: '#f8f9fa', padding: '1.5rem', borderRadius: '8px', border: '1px solid #e0e0e0' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0' }}>{label}</h4>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: '#666' }}>Responsive direction</p>
+              </div>
+            ))}
+          </Flex>
+        </div>
+      </div>
     </div>
   ),
   parameters: {
     docs: {
-      description: {
-        story: 'Complex form layout using Flex for responsive field arrangement and button alignment.',
+      source: {
+        state: 'open',
+        code: `// Basic usage
+<Flex direction="row" gap="md" align="center">
+  <div>Item 1</div>
+  <div>Item 2</div>
+</Flex>
+
+// Navigation bar
+<Flex justify="space-between" align="center">
+  <Logo />
+  <Navigation />
+  <UserMenu />
+</Flex>
+
+// Button group with wrapping
+<Flex gap="sm" wrap="wrap">
+  <button>Save</button>
+  <button>Cancel</button>
+</Flex>
+
+// Two column layout with Flex.Item
+<Flex gap="lg">
+  <Flex.Item shrink={0} basis="250px">
+    <Sidebar />
+  </Flex.Item>
+  <Flex.Item flex={1}>
+    <MainContent />
+  </Flex.Item>
+</Flex>
+
+// Responsive layout
+<Flex 
+  direction={{ xs: "column", md: "row" }}
+  gap={{ xs: "sm", md: "lg" }}
+>
+  <Feature1 />
+  <Feature2 />
+</Flex>`,
       },
     },
   },
