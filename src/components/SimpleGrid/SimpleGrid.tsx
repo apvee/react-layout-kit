@@ -24,6 +24,9 @@ import type { SimpleGridProps } from './SimpleGrid.types';
  * - Container width measurement is used for responsive prop resolution
  * - Spacing values can use predefined scale keys ('xs', 's', 'm', 'l', 'xl', 'xxl') or custom CSS values
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic SimpleGrid with 3 columns

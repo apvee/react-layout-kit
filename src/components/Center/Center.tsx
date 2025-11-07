@@ -22,6 +22,9 @@ import type { CenterProps } from './Center.types';
  * - The `inline` prop supports responsive values for different display modes at different breakpoints
  * - Container width measurement is used for responsive prop resolution
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic centering

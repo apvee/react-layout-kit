@@ -26,6 +26,9 @@ import { useGridResolvers } from './hooks/useGridResolvers';
  * - All grid properties support responsive values for different layouts at different breakpoints
  * - Container width measurement is used for responsive prop resolution
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic grid with default 12 columns

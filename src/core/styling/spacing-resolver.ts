@@ -1,4 +1,4 @@
-import { globalBreakpoints, globalSpacing } from '@/core/configuration';
+import { globalBreakpoints, globalSpacing, getBreakpoints, getSpacing } from '@/core/configuration';
 import { resolveResponsiveValue } from '@/core/responsive';
 import type { 
     IShortStyleBoxProps,
@@ -132,24 +132,6 @@ export function generateCombinedClassName(
         styleReset ? STYLE_RESET : '',
         stylesClass
     );
-}
-
-/**
- * Returns the current global breakpoint configuration.
- * 
- * @returns Current breakpoints object
- */
-export function getBreakpoints(): Breakpoints {
-    return { ...globalBreakpoints };
-}
-
-/**
- * Returns the current global spacing scale configuration.
- * 
- * @returns Current spacing scale object
- */
-export function getSpacing(): Spacing {
-    return { ...globalSpacing };
 }
 
 /**

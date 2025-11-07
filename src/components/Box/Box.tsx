@@ -10,34 +10,40 @@ import type { BoxProps } from './Box.types';
 
 /**
  * A flexible layout component with responsive CSS-in-JS styling capabilities.
+ * The foundational component that all other layout components are built upon.
  * 
- * Features:
- * - All CSS properties available as $-prefixed props (e.g., $display, $padding)
- * - Responsive values using breakpoint objects
- * - Automatic container width measurement or manual specification
- * - asChild prop for composition patterns
- * - TypeScript support with full CSS property typing
+ * **Features:**
+ * - Type-safe CSS-in-JS styling with dollar props ($display, $margin, etc.)
+ * - Short-hand styling props (m, p, w, h, etc.)
+ * - Responsive values for breakpoint-based layouts
+ * - Polymorphic rendering with `asChild` pattern
+ * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
  * 
  * @example
  * ```tsx
- * // Basic usage
- * <Box $display="flex" $gap={8} $padding={16}>
+ * // Basic usage with dollar props
+ * <Box $display="flex" $padding="16px" $margin="8px">
  *   Content
  * </Box>
  * 
+ * // Using short-hand props
+ * <Box m="m" p="l" w="100%">
+ *   Content with spacing scale
+ * </Box>
+ * 
  * // Responsive values
- * <Box $padding={{ xs: 8, md: 16, lg: 24 }} $fontSize={{ sm: 14, lg: 16 }}>
- *   Responsive content
+ * <Box 
+ *   $display={{ xs: "block", md: "flex" }}
+ *   p={{ xs: "s", md: "m", lg: "l" }}
+ * >
+ *   Responsive layout
  * </Box>
  * 
- * // As child (composition)
- * <Box asChild $borderRadius={8} $backgroundColor="blue">
- *   <button onClick={handleClick}>Styled Button</button>
- * </Box>
- * 
- * // With fixed container width
- * <Box containerWidth={500} $padding={{ xs: 8, md: 16 }}>
- *   Fixed width container
+ * // Polymorphic with asChild
+ * <Box asChild $padding="m">
+ *   <button>Renders as button with Box styles</button>
  * </Box>
  * ```
  */

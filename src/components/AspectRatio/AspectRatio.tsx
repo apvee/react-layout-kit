@@ -27,6 +27,9 @@ import type { AspectRatioProps } from './AspectRatio.types';
  * - Without `containerWidth`, the first valid key from a responsive object is used as fallback
  * - For full responsive functionality, always provide `containerWidth` or use container queries
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic 16:9 aspect ratio for video content (width/height applied automatically)

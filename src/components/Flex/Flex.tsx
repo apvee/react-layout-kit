@@ -27,6 +27,9 @@ import { useFlexResolvers } from './hooks/useFlexResolvers';
  * - All flex properties support responsive values for different layouts at different breakpoints
  * - Container width measurement is used for responsive prop resolution
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic flex container

@@ -28,6 +28,9 @@ import { useScrollArea } from './useScrollArea';
  * - Customizable colors and styling
  * - Accessible drag interactions with minimum touch targets
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic usage

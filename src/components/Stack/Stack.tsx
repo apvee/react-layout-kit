@@ -23,6 +23,9 @@ import type { StackProps } from './Stack.types';
  * - Container width measurement is used for responsive prop resolution
  * - Gap values can use predefined scale keys ('xs', 'sm', 'md', 'lg', 'xl', 'xxl') or custom CSS values
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic vertical stack

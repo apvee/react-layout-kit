@@ -30,6 +30,9 @@ import { useAreaGridResolvers } from './hooks/useAreaGridResolvers';
  * - Container width measurement is used for responsive prop resolution
  * - Can completely restructure layout at different screen sizes using responsive areas
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Basic page layout
