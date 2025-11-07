@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2018",
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "jsx": "react"
+  },
+  "include": ["src"],
+  "exclude": [
+    "src/stories",
+    "**/*.stories.tsx",
+    "**/*.stories.ts",
+    "node_modules",
+    "dist",
+    ".storybook"
+  ]
+}
