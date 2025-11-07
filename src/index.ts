@@ -77,7 +77,7 @@ export type { SlotProps, SlottableProps, SlotComponentType, SlottableComponentTy
  * Configuration functions for customizing the global behavior
  * of the layout system, including breakpoints and spacing scales.
  */
-export { configureBox, resetBoxConfig } from '@/core/configuration';
+export { configureBox, resetBoxConfig, getBreakpoints, getSpacing } from '@/core/configuration';
 export type { BoxConfig } from '@/types';
 
 // ============================================================================
@@ -92,10 +92,9 @@ export { resolveResponsiveValue } from '@/core/responsive';
 export type { ResponsiveValue } from '@/types';
 
 /**
- * System configuration access utilities.
- * Use these to ensure custom components follow the same design tokens.
+ * Spacing resolution utility for converting spacing scale keys to CSS values.
  */
-export { getBreakpoints, getSpacing, resolveSpacing } from '@/core/styling';
+export { resolveSpacing } from '@/core/styling';
 export type { BreakpointDefs, Spacing, SpacingValue } from '@/types';
 
 /**

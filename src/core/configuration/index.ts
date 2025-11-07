@@ -66,3 +66,37 @@ export function resetBoxConfig(): void {
   globalBreakpoints = { ...DEFAULT_BREAKPOINTS };
   globalSpacing = { ...DEFAULT_SPACING };
 }
+
+/**
+ * Gets the current breakpoints configuration.
+ * 
+ * @returns Current breakpoints object
+ * 
+ * @example
+ * ```ts
+ * import { getBreakpoints } from '@apvee/react-layout-kit';
+ * 
+ * const breakpoints = getBreakpoints();
+ * console.log(breakpoints.md); // 768
+ * ```
+ */
+export function getBreakpoints(): Breakpoints {
+  return { ...globalBreakpoints };
+}
+
+/**
+ * Gets the current spacing scale configuration.
+ * 
+ * @returns Current spacing object
+ * 
+ * @example
+ * ```ts
+ * import { getSpacing } from '@apvee/react-layout-kit';
+ * 
+ * const spacing = getSpacing();
+ * console.log(spacing.md); // 16
+ * ```
+ */
+export function getSpacing(): Spacing {
+  return { ...globalSpacing };
+}
