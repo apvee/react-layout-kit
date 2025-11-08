@@ -3,22 +3,103 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { BoxProps, Box } from '..';
 
 const meta: Meta<BoxProps> = {
-  title: 'Components/Box',
+  title: 'Components/Foundation/Box',
   component: Box,
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         component: `
-A flexible layout component with responsive CSS-in-JS styling capabilities.
+# Box Component
 
-## Features
-- All CSS properties available as $-prefixed props (e.g., $display, $padding)
-- Short props for common properties (p, m, w, h, etc.)
-- Responsive values using breakpoint objects
-- Automatic container width measurement
-- Composition via asChild prop
+The **Box** component is the foundation of the layout system, providing a flexible and type-safe way to build UIs with responsive CSS-in-JS styling.
+
+## Key Features
+
+- **🎨 All CSS Properties**: Every CSS property is available with a \`$\` prefix (e.g., \`$display\`, \`$padding\`, \`$backgroundColor\`)
+- **📱 Responsive Design**: Use breakpoint objects for container-aware responsive values
+- **⚡ Short Props**: Convenient shorthands for common properties (p, m, w, h, mx, py, etc.)
+- **🔧 Composition Ready**: \`asChild\` prop for seamless component composition using Slot pattern
+- **📏 Auto Measurement**: Automatic container width measurement for responsive calculations
+- **🎯 Type-Safe**: Full TypeScript support with autocompletion for all CSS properties
+- **🚀 Performance**: Memoized computations and Emotion CSS optimization
+
+## Prop Categories
+
+### Core Props
+- \`asChild\`: Render as child element using Slot pattern
+- \`containerWidth\`: Fixed container width for responsive calculations
+- \`styleReset\`: Apply box-sizing: border-box reset
+
+### Dollar Props ($)
+All CSS properties available with \`$\` prefix:
+- Layout: \`$display\`, \`$position\`, \`$flexDirection\`, etc.
+- Spacing: \`$margin\`, \`$padding\`, \`$gap\`, etc.
+- Sizing: \`$width\`, \`$height\`, \`$minWidth\`, \`$maxHeight\`, etc.
+- Visual: \`$backgroundColor\`, \`$border\`, \`$borderRadius\`, \`$boxShadow\`, etc.
+- Typography: \`$fontSize\`, \`$fontWeight\`, \`$lineHeight\`, \`$color\`, etc.
+- Transform: \`$transform\`, \`$rotate\`, \`$scale\`, \`$translate\`, etc.
+
+### Short Props
+Convenient shorthands that use the spacing scale:
+- Margin: \`m\`, \`mt\`, \`mr\`, \`mb\`, \`ml\`, \`mx\`, \`my\`, \`ms\`, \`me\`
+- Padding: \`p\`, \`pt\`, \`pr\`, \`pb\`, \`pl\`, \`px\`, \`py\`, \`ps\`, \`pe\`
+- Size: \`w\`, \`h\`, \`miw\`, \`mih\`, \`maw\`, \`mah\`
+- Position: \`top\`, \`left\`, \`right\`, \`bottom\`
+
+## Responsive Values
+
+Use breakpoint objects for responsive design:
+
+\`\`\`tsx
+<Box
+  $padding={{ xs: 8, md: 16, lg: 24 }}
+  $fontSize={{ xs: 14, md: 16, lg: 18 }}
+  $backgroundColor={{ xs: 'lightblue', md: 'lightgreen' }}
+>
+  Responsive content
+</Box>
+\`\`\`
+
+## Spacing Scale
+
+Short props automatically use the spacing scale:
+- \`none\`: 0
+- \`xs\`: 4px
+- \`sm\`: 8px
+- \`md\`: 12px
+- \`lg\`: 16px
+- \`xl\`: 20px
+- \`xxl\`: 24px
+- \`xxxl\`: 32px
+
+## Examples
+
+\`\`\`tsx
+// Basic styling
+<Box $display="flex" $gap={16} $padding="lg" $backgroundColor="#f0f0f0">
+  Content
+</Box>
+
+// Short props
+<Box p="lg" m="md" w={300} h={200}>
+  Content with short props
+</Box>
+
+// Responsive design
+<Box $padding={{ xs: 8, md: 16, lg: 24 }}>
+  Responsive padding
+</Box>
+
+// Composition with asChild
+<Box asChild $padding="md" $backgroundColor="blue">
+  <button>Styled Button</button>
+</Box>
+\`\`\`
         `,
+      },
+      source: {
+        state: 'open',
       },
     },
   },
@@ -27,135 +108,401 @@ A flexible layout component with responsive CSS-in-JS styling capabilities.
     // Core Box props
     asChild: {
       control: 'boolean',
-      description: 'Render as child element using Radix Slot',
+      description: 'When true, renders as its child element, merging props and refs using Slot pattern. Perfect for styling existing components without wrapper divs.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+        category: 'Core Props',
+      },
     },
     containerWidth: {
-      control: 'number',
-      description: 'Fixed container width for responsive calculations',
+      control: { type: 'number', min: 0, max: 2000, step: 10 },
+      description: 'Fixed container width in pixels for responsive calculations. When provided, disables automatic width measurement. Useful for programmatic control of responsive behavior.',
+      table: {
+        type: { summary: 'number' },
+        defaultValue: { summary: 'undefined' },
+        category: 'Core Props',
+      },
     },
     styleReset: {
       control: 'boolean',
-      description: 'Apply basic style reset (box-sizing: border-box)',
+      description: 'Apply basic style reset (box-sizing: border-box) for consistent box model behavior across browsers.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+        category: 'Core Props',
+      },
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS class names to merge with generated styles. Classes are combined intelligently with Emotion cx.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+        category: 'Core Props',
+      },
     },
 
-    // Margin props (use spacing scale)
+    // Short Props - Margin
     m: {
       control: 'text',
-      description: 'Margin (all sides) - uses spacing scale (xs, s, m, l, xl, etc.)',
+      description: 'Margin (all sides). Accepts spacing scale tokens (none, xs, sm, md, lg, xl, xxl, xxxl) or numbers. Example: "lg" or 16',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        defaultValue: { summary: 'undefined' },
+        category: 'Short Props - Margin',
+      },
     },
     mt: {
       control: 'text',
-      description: 'Margin top - uses spacing scale',
-    },
-    mb: {
-      control: 'text',
-      description: 'Margin bottom - uses spacing scale',
-    },
-    ml: {
-      control: 'text',
-      description: 'Margin left - uses spacing scale',
+      description: 'Margin top. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
     },
     mr: {
       control: 'text',
-      description: 'Margin right - uses spacing scale',
+      description: 'Margin right. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
     },
-    ms: {
+    mb: {
       control: 'text',
-      description: 'Margin inline start (logical property) - uses spacing scale',
+      description: 'Margin bottom. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
     },
-    me: {
+    ml: {
       control: 'text',
-      description: 'Margin inline end (logical property) - uses spacing scale',
+      description: 'Margin left. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
     },
     mx: {
       control: 'text',
-      description: 'Margin inline (left + right) - uses spacing scale',
+      description: 'Margin inline (left + right). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
     },
     my: {
       control: 'text',
-      description: 'Margin block (top + bottom) - uses spacing scale',
+      description: 'Margin block (top + bottom). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
+    },
+    ms: {
+      control: 'text',
+      description: 'Margin inline start (left in LTR, right in RTL). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
+    },
+    me: {
+      control: 'text',
+      description: 'Margin inline end (right in LTR, left in RTL). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Margin',
+      },
     },
 
-    // Padding props (use spacing scale)
+    // Short Props - Padding
     p: {
       control: 'text',
-      description: 'Padding (all sides) - uses spacing scale (xs, s, m, l, xl, etc.)',
+      description: 'Padding (all sides). Accepts spacing scale tokens (none, xs, sm, md, lg, xl, xxl, xxxl) or numbers. Example: "lg" or 16',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        defaultValue: { summary: 'undefined' },
+        category: 'Short Props - Padding',
+      },
     },
     pt: {
       control: 'text',
-      description: 'Padding top - uses spacing scale',
-    },
-    pb: {
-      control: 'text',
-      description: 'Padding bottom - uses spacing scale',
-    },
-    pl: {
-      control: 'text',
-      description: 'Padding left - uses spacing scale',
+      description: 'Padding top. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
     },
     pr: {
       control: 'text',
-      description: 'Padding right - uses spacing scale',
+      description: 'Padding right. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
     },
-    ps: {
+    pb: {
       control: 'text',
-      description: 'Padding inline start (logical property) - uses spacing scale',
+      description: 'Padding bottom. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
     },
-    pe: {
+    pl: {
       control: 'text',
-      description: 'Padding inline end (logical property) - uses spacing scale',
+      description: 'Padding left. Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
     },
     px: {
       control: 'text',
-      description: 'Padding inline (left + right) - uses spacing scale',
+      description: 'Padding inline (left + right). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
     },
     py: {
       control: 'text',
-      description: 'Padding block (top + bottom) - uses spacing scale',
+      description: 'Padding block (top + bottom). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
+    },
+    ps: {
+      control: 'text',
+      description: 'Padding inline start (left in LTR, right in RTL). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
+    },
+    pe: {
+      control: 'text',
+      description: 'Padding inline end (right in LTR, left in RTL). Uses spacing scale.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        category: 'Short Props - Padding',
+      },
     },
 
-    // Size props
+    // Short Props - Size
     w: {
       control: 'text',
-      description: 'Width - accepts CSS values or numbers',
-    },
-    miw: {
-      control: 'text',
-      description: 'Min width - uses spacing scale',
-    },
-    maw: {
-      control: 'text',
-      description: 'Max width - uses spacing scale',
+      description: 'Width. Accepts CSS values (px, %, rem, vw, etc.) or numbers. Example: "300px" or "50%" or 300',
+      table: {
+        type: { summary: 'Width | ResponsiveValue<Width>' },
+        category: 'Short Props - Size',
+      },
     },
     h: {
       control: 'text',
-      description: 'Height - accepts CSS values or numbers',
+      description: 'Height. Accepts CSS values (px, %, rem, vh, etc.) or numbers. Example: "200px" or "100%" or 200',
+      table: {
+        type: { summary: 'Height | ResponsiveValue<Height>' },
+        category: 'Short Props - Size',
+      },
+    },
+    miw: {
+      control: 'text',
+      description: 'Min width. Uses spacing scale or CSS values.',
+      table: {
+        type: { summary: 'MinWidth | ResponsiveValue<MinWidth>' },
+        category: 'Short Props - Size',
+      },
+    },
+    maw: {
+      control: 'text',
+      description: 'Max width. Uses spacing scale or CSS values.',
+      table: {
+        type: { summary: 'MaxWidth | ResponsiveValue<MaxWidth>' },
+        category: 'Short Props - Size',
+      },
     },
     mih: {
       control: 'text',
-      description: 'Min height - uses spacing scale',
+      description: 'Min height. Uses spacing scale or CSS values.',
+      table: {
+        type: { summary: 'MinHeight | ResponsiveValue<MinHeight>' },
+        category: 'Short Props - Size',
+      },
     },
     mah: {
       control: 'text',
-      description: 'Max height - uses spacing scale',
+      description: 'Max height. Uses spacing scale or CSS values.',
+      table: {
+        type: { summary: 'MaxHeight | ResponsiveValue<MaxHeight>' },
+        category: 'Short Props - Size',
+      },
     },
 
-    // Position props (use native CSS values)
+    // Short Props - Position
     top: {
       control: 'text',
-      description: 'Top position - uses CSS values (px, rem, %, etc.)',
+      description: 'Top position. Uses CSS values (px, %, rem, etc.). Requires position prop to be set.',
+      table: {
+        type: { summary: 'Top | ResponsiveValue<Top>' },
+        category: 'Short Props - Position',
+      },
     },
     left: {
       control: 'text',
-      description: 'Left position - uses CSS values (px, rem, %, etc.)',
+      description: 'Left position. Uses CSS values (px, %, rem, etc.). Requires position prop to be set.',
+      table: {
+        type: { summary: 'Left | ResponsiveValue<Left>' },
+        category: 'Short Props - Position',
+      },
     },
     bottom: {
       control: 'text',
-      description: 'Bottom position - uses CSS values (px, rem, %, etc.)',
+      description: 'Bottom position. Uses CSS values (px, %, rem, etc.). Requires position prop to be set.',
+      table: {
+        type: { summary: 'Bottom | ResponsiveValue<Bottom>' },
+        category: 'Short Props - Position',
+      },
     },
     right: {
       control: 'text',
-      description: 'Right position - uses CSS values (px, rem, %, etc.)',
+      description: 'Right position. Uses CSS values (px, %, rem, etc.). Requires position prop to be set.',
+      table: {
+        type: { summary: 'Right | ResponsiveValue<Right>' },
+        category: 'Short Props - Position',
+      },
+    },
+
+    // Dollar Props - Note: These are dynamically typed, so we document the most common ones
+    $display: {
+      control: 'text',
+      description: 'CSS display property. Example: "flex", "grid", "block", "inline-block", "none"',
+      table: {
+        type: { summary: 'Display | ResponsiveValue<Display>' },
+        category: 'Dollar Props - Layout',
+      },
+    },
+    $position: {
+      control: 'select',
+      options: ['static', 'relative', 'absolute', 'fixed', 'sticky'],
+      description: 'CSS position property.',
+      table: {
+        type: { summary: 'Position | ResponsiveValue<Position>' },
+        category: 'Dollar Props - Layout',
+      },
+    },
+    $flexDirection: {
+      control: 'select',
+      options: ['row', 'row-reverse', 'column', 'column-reverse'],
+      description: 'CSS flex-direction property.',
+      table: {
+        type: { summary: 'FlexDirection | ResponsiveValue<FlexDirection>' },
+        category: 'Dollar Props - Layout',
+      },
+    },
+    $alignItems: {
+      control: 'select',
+      options: ['flex-start', 'center', 'flex-end', 'stretch', 'baseline'],
+      description: 'CSS align-items property.',
+      table: {
+        type: { summary: 'AlignItems | ResponsiveValue<AlignItems>' },
+        category: 'Dollar Props - Layout',
+      },
+    },
+    $justifyContent: {
+      control: 'select',
+      options: ['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly'],
+      description: 'CSS justify-content property.',
+      table: {
+        type: { summary: 'JustifyContent | ResponsiveValue<JustifyContent>' },
+        category: 'Dollar Props - Layout',
+      },
+    },
+    $gap: {
+      control: { type: 'number', min: 0, max: 100 },
+      description: 'CSS gap property (for flex and grid). Accepts numbers (pixels) or CSS values.',
+      table: {
+        type: { summary: 'Gap | ResponsiveValue<Gap>' },
+        category: 'Dollar Props - Layout',
+      },
+    },
+    $backgroundColor: {
+      control: 'color',
+      description: 'CSS background-color property. Accepts any valid CSS color value.',
+      table: {
+        type: { summary: 'BackgroundColor | ResponsiveValue<BackgroundColor>' },
+        category: 'Dollar Props - Visual',
+      },
+    },
+    $color: {
+      control: 'color',
+      description: 'CSS color property for text. Accepts any valid CSS color value.',
+      table: {
+        type: { summary: 'Color | ResponsiveValue<Color>' },
+        category: 'Dollar Props - Visual',
+      },
+    },
+    $border: {
+      control: 'text',
+      description: 'CSS border property. Example: "1px solid #ccc"',
+      table: {
+        type: { summary: 'Border | ResponsiveValue<Border>' },
+        category: 'Dollar Props - Visual',
+      },
+    },
+    $borderRadius: {
+      control: { type: 'number', min: 0, max: 50 },
+      description: 'CSS border-radius property. Accepts numbers (pixels) or CSS values.',
+      table: {
+        type: { summary: 'BorderRadius | ResponsiveValue<BorderRadius>' },
+        category: 'Dollar Props - Visual',
+      },
+    },
+    $boxShadow: {
+      control: 'text',
+      description: 'CSS box-shadow property. Example: "0 2px 8px rgba(0,0,0,0.1)"',
+      table: {
+        type: { summary: 'BoxShadow | ResponsiveValue<BoxShadow>' },
+        category: 'Dollar Props - Visual',
+      },
+    },
+    $fontSize: {
+      control: { type: 'number', min: 8, max: 72 },
+      description: 'CSS font-size property. Accepts numbers (pixels) or CSS values.',
+      table: {
+        type: { summary: 'FontSize | ResponsiveValue<FontSize>' },
+        category: 'Dollar Props - Typography',
+      },
+    },
+    $fontWeight: {
+      control: 'select',
+      options: ['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
+      description: 'CSS font-weight property.',
+      table: {
+        type: { summary: 'FontWeight | ResponsiveValue<FontWeight>' },
+        category: 'Dollar Props - Typography',
+      },
+    },
+    $lineHeight: {
+      control: { type: 'number', min: 1, max: 3, step: 0.1 },
+      description: 'CSS line-height property. Accepts numbers or CSS values.',
+      table: {
+        type: { summary: 'LineHeight | ResponsiveValue<LineHeight>' },
+        category: 'Dollar Props - Typography',
+      },
+    },
+    $textAlign: {
+      control: 'select',
+      options: ['left', 'center', 'right', 'justify'],
+      description: 'CSS text-align property.',
+      table: {
+        type: { summary: 'TextAlign | ResponsiveValue<TextAlign>' },
+        category: 'Dollar Props - Typography',
+      },
     },
   },
 };
@@ -163,330 +510,131 @@ A flexible layout component with responsive CSS-in-JS styling capabilities.
 export default meta;
 type Story = StoryObj<BoxProps>;
 
-// Basic usage with dollar props
-export const BasicStyling: Story = {
+/**
+ * ## Interactive Usage Example
+ * 
+ * This story demonstrates the full capabilities of the Box component with interactive controls.
+ * 
+ * ### What You Can Do:
+ * - **Adjust spacing** using short props (p, m, px, py)
+ * - **Change colors** for background and text
+ * - **Modify layout** with flexbox properties
+ * - **Set dimensions** with width and height
+ * - **Apply visual styling** like borders and shadows
+ * - **Experiment with typography** settings
+ * 
+ * ### Try These Patterns:
+ * 
+ * **Card Layout:**
+ * ```tsx
+ * <Box
+ *   p="lg"
+ *   $backgroundColor="#ffffff"
+ *   $border="1px solid #e0e0e0"
+ *   $borderRadius={8}
+ *   $boxShadow="0 2px 8px rgba(0,0,0,0.1)"
+ * >
+ *   Card content
+ * </Box>
+ * ```
+ * 
+ * **Flexbox Container:**
+ * ```tsx
+ * <Box
+ *   $display="flex"
+ *   $gap={16}
+ *   $alignItems="center"
+ *   $justifyContent="space-between"
+ * >
+ *   Flex items
+ * </Box>
+ * ```
+ * 
+ * **Responsive Design:**
+ * ```tsx
+ * <Box
+ *   $padding={{ xs: 8, md: 16, lg: 24 }}
+ *   $fontSize={{ xs: 14, md: 16, lg: 18 }}
+ * >
+ *   Responsive content
+ * </Box>
+ * ```
+ * 
+ * **Component Composition:**
+ * ```tsx
+ * <Box asChild $padding="md" $backgroundColor="blue">
+ *   <button>Styled Button</button>
+ * </Box>
+ * ```
+ */
+export const Usage: Story = {
   args: {
+    // Content
+    children: 'Box Component - Foundation of the Layout System',
+    
+    // Core props
+    asChild: false,
+    styleReset: false,
+    
+    // Short props - Padding
+    p: 'lg',
+    
+    // Short props - Margin
+    m: 'md',
+    
+    // Short props - Size
+    w: 400,
+    
+    // Dollar props - Layout
     $display: 'flex',
     $alignItems: 'center',
     $justifyContent: 'center',
-    $padding: 16,
-    $backgroundColor: '#f0f0f0',
-    $border: '1px solid #ccc',
+    
+    // Dollar props - Visual
+    $backgroundColor: '#f5f5f5',
+    $color: '#333333',
+    $border: '1px solid #e0e0e0',
     $borderRadius: 8,
-    $minHeight: 100,
-    children: 'Basic Box with dollar props',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Basic Box usage with CSS properties as $-prefixed props.',
-      },
-    },
-  },
-};
-
-// Short props for spacing and sizing
-export const ShortProps: Story = {
-  args: {
-    p: 4, // padding
-    m: 2, // margin
-    w: 200, // width
-    h: 150, // height
-    $backgroundColor: '#e3f2fd',
-    $border: '2px solid #2196f3',
-    $borderRadius: 4,
-    $display: 'flex',
-    $alignItems: 'center',
-    $justifyContent: 'center',
-    children: 'Short props example',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Using short props for common styling: p (padding), m (margin), w (width), h (height).',
-      },
-    },
-  },
-};
-
-// Responsive values
-export const ResponsiveValues: Story = {
-  args: {
-    $padding: { xs: 8, md: 16, lg: 24 },
-    $fontSize: { xs: '14px', md: '16px', lg: '18px' },
-    $backgroundColor: { xs: '#ffebee', md: '#e8f5e8', lg: '#e3f2fd' },
+    $boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    
+    // Dollar props - Typography
+    $fontSize: 16,
+    $fontWeight: '500',
     $textAlign: 'center',
-    $border: '1px solid #ddd',
-    $borderRadius: 8,
-    $minHeight: 100,
-    children: 'Resize the viewport to see responsive changes',
+    $lineHeight: 1.5,
+    
+    // Dollar props - Spacing
+    $minHeight: 120,
   },
   parameters: {
     docs: {
       description: {
-        story: 'Responsive values that change based on viewport size. Try resizing the browser window.',
-      },
-    },
-    viewport: {
-      viewports: {
-        mobile: { name: 'Mobile', styles: { width: '320px', height: '568px' } },
-        tablet: { name: 'Tablet', styles: { width: '768px', height: '1024px' } },
-        desktop: { name: 'Desktop', styles: { width: '1200px', height: '800px' } },
-      },
-    },
-  },
-};
+        story: `
+This interactive story showcases the Box component with realistic default values. 
+Use the **Controls** panel below to experiment with different props and see how they affect the component.
 
-// Flexbox layout example
-export const FlexboxLayout: Story = {
-  render: () => (
-    <Box $display="flex" $gap={16} $padding={16} $backgroundColor="#f5f5f5">
-      <Box 
-        $flex={1} 
-        $padding={16} 
-        $backgroundColor="#fff" 
-        $border="1px solid #ddd"
-        $borderRadius={4}
-      >
-        Flex item 1
-      </Box>
-      <Box 
-        $flex={2} 
-        $padding={16} 
-        $backgroundColor="#fff" 
-        $border="1px solid #ddd"
-        $borderRadius={4}
-      >
-        Flex item 2 (flex: 2)
-      </Box>
-      <Box 
-        $flex={1} 
-        $padding={16} 
-        $backgroundColor="#fff" 
-        $border="1px solid #ddd"
-        $borderRadius={4}
-      >
-        Flex item 3
-      </Box>
-    </Box>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Using Box for flexbox layouts with gap and flex properties.',
-      },
-    },
-  },
-};
+**Key Features Demonstrated:**
+- Short props for spacing (p, m) using the spacing scale
+- Dollar props for all CSS properties
+- Visual styling with colors, borders, and shadows
+- Flexbox layout capabilities
+- Typography controls
 
-// AsChild composition pattern
-export const AsChildComposition: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-      <Box 
-        asChild 
-        $padding={12} 
-        $backgroundColor="#4caf50" 
-        $color="white" 
-        $borderRadius={4}
-        $border="none"
-        $cursor="pointer"
-        $transition="all 0.2s"
-      >
-        <button onClick={() => alert('Button clicked!')}>
-          Styled Button via asChild
-        </button>
-      </Box>
-      
-      <Box 
-        asChild 
-        $color="#1976d2" 
-        $textDecoration="none"
-        $padding={8}
-        $border="1px solid #1976d2"
-        $borderRadius={4}
-      >
-        <a href="#" onClick={(e) => e.preventDefault()}>
-          Styled Link via asChild
-        </a>
-      </Box>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Using asChild to apply Box styling to other components like buttons and links.',
+**Tips:**
+- Try changing \`$display\` to "grid" or "block"
+- Experiment with spacing values: "xs", "sm", "md", "lg", "xl", "xxl", "xxxl"
+- Toggle \`asChild\` to see composition in action (requires child element in your implementation)
+- Adjust \`containerWidth\` to test responsive behavior
+        `,
       },
-    },
-  },
-};
-
-// Grid layout example
-export const GridLayout: Story = {
-  render: () => (
-    <Box 
-      $display="grid" 
-      $gridTemplateColumns="repeat(auto-fit, minmax(150px, 1fr))"
-      $gap={16}
-      $padding={16}
-      $backgroundColor="#f5f5f5"
-    >
-      {Array.from({ length: 6 }, (_, i) => (
-        <Box 
-          key={i}
-          $padding={16}
-          $backgroundColor="#fff"
-          $border="1px solid #ddd"
-          $borderRadius={4}
-          $textAlign="center"
-          $minHeight={80}
-          $display="flex"
-          $alignItems="center"
-          $justifyContent="center"
-        >
-          Grid item {i + 1}
-        </Box>
-      ))}
-    </Box>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Using Box for CSS Grid layouts with responsive columns.',
-      },
-    },
-  },
-};
-
-// Position and z-index example
-export const PositionExample: Story = {
-  render: () => (
-    <Box 
-      $position="relative" 
-      $width={300} 
-      $height={200} 
-      $backgroundColor="#f0f0f0"
-      $border="1px solid #ccc"
-      $borderRadius={8}
-    >
-      <Box 
-        $position="absolute"
-        $top={10}
-        $left={10}
-        $padding={8}
-        $backgroundColor="#ff5722"
-        $color="white"
-        $borderRadius={4}
-        $zIndex={2}
-      >
-        Positioned element
-      </Box>
-      <Box 
-        $position="absolute"
-        $bottom={10}
-        $right={10}
-        $padding={8}
-        $backgroundColor="#2196f3"
-        $color="white"
-        $borderRadius={4}
-        $zIndex={1}
-      >
-        Another positioned element
-      </Box>
-      <Box 
-        $position="absolute"
-        $top="50%"
-        $left="50%"
-        $transform="translate(-50%, -50%)"
-        $padding={12}
-        $backgroundColor="rgba(76, 175, 80, 0.9)"
-        $color="white"
-        $borderRadius={4}
-        $textAlign="center"
-      >
-        Centered element
-      </Box>
-    </Box>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstrating absolute positioning, z-index, and transform properties.',
-      },
-    },
-  },
-};
-
-// Typography and text styling
-export const TypographyExample: Story = {
-  render: () => (
-    <Box $maxWidth={400} $margin="0 auto" $padding={16}>
-      <Box 
-        $fontSize={24}
-        $fontWeight="bold"
-        $marginBottom={16}
-        $color="#333"
-        $textAlign="center"
-      >
-        Typography Example
-      </Box>
-      <Box 
-        $fontSize={16}
-        $lineHeight={1.6}
-        $color="#666"
-        $marginBottom={12}
-      >
-        This paragraph demonstrates text styling with Box component. 
-        You can control font size, line height, color, and spacing.
-      </Box>
-      <Box 
-        $fontSize={14}
-        $fontStyle="italic"
-        $color="#999"
-        $textAlign="right"
-      >
-        — Styled with Box component
-      </Box>
-    </Box>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Using Box for typography and text styling.',
-      },
-    },
-  },
-};
-
-// Style reset example
-export const StyleResetExample: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '16px' }}>
-      <Box 
-        $padding={16}
-        $backgroundColor="#fff3e0"
-        $border="1px solid #ff9800"
-        $borderRadius={4}
-      >
-        <div>Without styleReset</div>
-        <div>Default box-sizing behavior</div>
-      </Box>
-      <Box 
-        styleReset
-        $padding={16}
-        $backgroundColor="#e8f5e8"
-        $border="1px solid #4caf50"
-        $borderRadius={4}
-      >
-        <div>With styleReset</div>
-        <div>box-sizing: border-box applied</div>
-      </Box>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison between Box with and without styleReset prop.',
+      source: {
+        state: 'open',
+        transform: (code: string) => {
+          // Clean up the code display for better readability
+          return code
+            .replace(/children:\s*"[^"]*"/g, 'children="Your content here"')
+            .replace(/\n\s*\n/g, '\n');
+        },
       },
     },
   },

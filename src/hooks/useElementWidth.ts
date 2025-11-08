@@ -3,14 +3,31 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { debounce } from '@/core/utils';
 
 /**
- * Internal hook that measures element width using ResizeObserver.
+ * Hook that measures element width using ResizeObserver.
  * SSR-safe with optional disable functionality and debounced updates for performance.
+ * 
+ * This is the core implementation hook. For a more semantic alias, see useContainerWidth.
+ * Both hooks provide identical functionality - choose based on your naming preference.
  * 
  * @param elementRef - Ref to the element to measure
  * @param options - Configuration options
  * @param options.disabled - Whether to disable width measurement
  * @param options.debounceMs - Debounce delay in milliseconds (default: 16ms for 60fps)
  * @returns Current width of the element in pixels, or 0 if not measurable
+ * 
+ * @example
+ * ```tsx
+ * function ResponsiveCard() {
+ *   const ref = React.useRef<HTMLDivElement>(null);
+ *   const width = useElementWidth(ref, { debounceMs: 32 });
+ *   
+ *   return (
+ *     <div ref={ref}>
+ *       Element width: {width}px
+ *     </div>
+ *   );
+ * }
+ * ```
  */
 export function useElementWidth<T extends Element>(
   elementRef: React.RefObject<T>,

@@ -7,7 +7,7 @@ import type { ResponsiveValue } from '@/types';
  * Extends BaseBoxProps to inherit all Box styling capabilities while adding
  * container-specific properties for layout control and responsive behavior.
  */
-export interface ContainerProps extends BaseBoxProps {
+export type ContainerProps = BaseBoxProps & {
   /**
    * Maximum width of the container in pixels.
    * Supports responsive values using breakpoint objects.

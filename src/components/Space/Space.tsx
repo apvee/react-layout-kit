@@ -22,6 +22,9 @@ import { Box } from '../Box';
  * - Container width measurement is used for responsive prop resolution
  * - Spacing values can use predefined scale keys ('none', 'xs', 's', 'm', 'l', 'xl', 'xxl') or custom CSS values
  * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
+ * 
  * @example
  * ```tsx
  * // Horizontal spacing

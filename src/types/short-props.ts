@@ -79,6 +79,8 @@ export interface IShortStyleBoxProps {
 
 /**
  * Mapping from short prop names to their corresponding CSS property names.
+ * 
+ * @internal
  */
 export const SHORT_PROP_TO_CSS_MAPPING = {
   // Margin props
@@ -125,6 +127,8 @@ export type ShortPropKey = keyof IShortStyleBoxProps;
 
 /**
  * Set of short props that use the spacing scale for value resolution.
+ * 
+ * @internal
  */
 export const SPACING_SHORT_PROPS = new Set<ShortPropKey>([
   'm', 'mt', 'mb', 'ml', 'mr', 'ms', 'me', 'mx', 'my',
@@ -133,6 +137,8 @@ export const SPACING_SHORT_PROPS = new Set<ShortPropKey>([
 
 /**
  * Set of short props that use native CSS values (no spacing scale resolution).
+ * 
+ * @internal
  */
 export const CSS_SHORT_PROPS = new Set<ShortPropKey>([
   'top', 'left', 'bottom', 'right', 'w', 'miw', 'maw', 'h', 'mih', 'mah'
@@ -140,6 +146,8 @@ export const CSS_SHORT_PROPS = new Set<ShortPropKey>([
 
 /**
  * Type guard to check if a prop key is a short prop.
+ * 
+ * @internal
  */
 export function isShortProp(key: string): key is ShortPropKey {
   return key in SHORT_PROP_TO_CSS_MAPPING;
@@ -147,6 +155,8 @@ export function isShortProp(key: string): key is ShortPropKey {
 
 /**
  * Type guard to check if a short prop uses the spacing scale.
+ * 
+ * @internal
  */
 export function isSpacingShortProp(key: ShortPropKey): boolean {
   return SPACING_SHORT_PROPS.has(key);
@@ -154,6 +164,8 @@ export function isSpacingShortProp(key: ShortPropKey): boolean {
 
 /**
  * Type guard to check if a short prop uses native CSS values.
+ * 
+ * @internal
  */
 export function isCssShortProp(key: ShortPropKey): boolean {
   return CSS_SHORT_PROPS.has(key);

@@ -1,10 +1,11 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
-import { getBreakpoints } from '@/core/styling';
-import { useElementWidth } from '@/hooks/useElementWidth';
+import { resolveSpacing } from '@/core/styling';
 import useMergedRef from '@react-hook/merged-ref';
 import * as React from 'react';
-import type { GridProps, GridColProps } from './Grid.types';
+import type { GridProps } from './Grid.types';
+import { GridCol } from './GridCol';
+import { useGridResolvers } from './hooks/useGridResolvers';
 
 /**
  * A component that creates a CSS Grid layout with comprehensive grid control.
@@ -24,6 +25,9 @@ import type { GridProps, GridColProps } from './Grid.types';
  * **Responsive Behavior:**
  * - All grid properties support responsive values for different layouts at different breakpoints
  * - Container width measurement is used for responsive prop resolution
+ * 
+ * @param props - Component props including layout, styling, and responsive options
+ * @returns A React element with applied layout styles
  * 
  * @example
  * ```tsx
@@ -81,16 +85,11 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
     // Use useMergedRef for proper ref management
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
-    // Get container width - use prop value or measure element
-    const measuredWidth = useElementWidth(elementRef, {
-      disabled: containerWidth !== undefined
+    // Get resolution utilities
+    const { currentWidth, activeBreakpoints } = useGridResolvers({
+      elementRef,
+      containerWidth
     });
-    const currentWidth = containerWidth ?? measuredWidth;
-
-    // Get breakpoints configuration
-    const activeBreakpoints = React.useMemo(() => {
-      return getBreakpoints();
-    }, []);
 
     // Resolve responsive values based on current container width
     const resolvedAlign = React.useMemo(() => {
@@ -106,7 +105,12 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
     }, [grow, currentWidth, activeBreakpoints]);
 
     const resolvedGutter = React.useMemo(() => {
-      return resolveResponsiveValue(gutter, currentWidth, activeBreakpoints) ?? "1rem";
+      const rawValue = resolveResponsiveValue(gutter, currentWidth, activeBreakpoints) ?? "1rem";
+      // Resolve spacing scale values (xs, sm, md, etc.) to actual CSS values
+      // If it's already a CSS string (like "1rem" or "20px"), resolveSpacing will pass it through
+      return typeof rawValue === 'string' || typeof rawValue === 'number' 
+        ? resolveSpacing(rawValue as any)
+        : rawValue;
     }, [gutter, currentWidth, activeBreakpoints]);
 
     const resolvedJustify = React.useMemo(() => {
@@ -142,131 +146,14 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
 
 Grid.displayName = 'Grid';
 
-/**
- * A component that provides grid column properties for children of a Grid container.
- * Perfect for controlling individual grid item behavior with responsive support.
- * 
- * Uses CSS Grid item properties with full responsive support.
- * All styles are applied via Box component props - no inline styles are used.
- * 
- * **Grid Column Properties:**
- * - `span`: Controls how many columns this item spans (default: 12)
- * - `offset`: Controls how many columns to skip before this item
- * - `order`: Controls visual order of grid items
- * 
- * **Responsive Behavior:**
- * - All grid column properties support responsive values for different layouts at different breakpoints
- * - Container width measurement is used for responsive prop resolution
- * 
- * @example
- * ```tsx
- * // Basic grid columns
- * <Grid>
- *   <Grid.Col span={6}>Half width</Grid.Col>
- *   <Grid.Col span={6}>Half width</Grid.Col>
- * </Grid>
- * 
- * // With offset and order
- * <Grid>
- *   <Grid.Col span={4} offset={2} order={2}>Second item (visually)</Grid.Col>
- *   <Grid.Col span={4} order={1}>First item (visually)</Grid.Col>
- * </Grid>
- * 
- * // Responsive grid columns
- * <Grid>
- *   <Grid.Col 
- *     span={{ xs: 12, md: 6, lg: 4 }}
- *     offset={{ xs: 0, md: 0, lg: 2 }}
- *     order={{ xs: 1, md: 2 }}
- *   >
- *     Responsive column
- *   </Grid.Col>
- * </Grid>
- * ```
- */
-const GridCol = React.forwardRef<HTMLDivElement, GridColProps>(
-  function GridCol(props, forwardedRef) {
-    const {
-      offset,
-      order,
-      span = 12,
-      containerWidth,
-      children,
-      ...boxProps
-    } = props;
-
-    // Element ref for width measurement
-    const elementRef = React.useRef<HTMLDivElement>(null);
-
-    // Use useMergedRef for proper ref management
-    const mergedRef = useMergedRef(forwardedRef, elementRef);
-
-    // Get container width - use prop value or measure element
-    const measuredWidth = useElementWidth(elementRef, {
-      disabled: containerWidth !== undefined
-    });
-    const currentWidth = containerWidth ?? measuredWidth;
-
-    // Get breakpoints configuration
-    const activeBreakpoints = React.useMemo(() => {
-      return getBreakpoints();
-    }, []);
-
-    // Resolve responsive values based on current container width
-    const resolvedOffset = React.useMemo(() => {
-      return resolveResponsiveValue(offset, currentWidth, activeBreakpoints);
-    }, [offset, currentWidth, activeBreakpoints]);
-
-    const resolvedOrder = React.useMemo(() => {
-      return resolveResponsiveValue(order, currentWidth, activeBreakpoints);
-    }, [order, currentWidth, activeBreakpoints]);
-
-    const resolvedSpan = React.useMemo(() => {
-      return resolveResponsiveValue(span, currentWidth, activeBreakpoints) ?? 12;
-    }, [span, currentWidth, activeBreakpoints]);
-
-    // Calculate grid column start and end based on span and offset
-    const gridColumnStart = React.useMemo(() => {
-      if (resolvedOffset !== undefined) {
-        return resolvedOffset + 1;
-      }
-      return undefined;
-    }, [resolvedOffset]);
-
-    const gridColumnEnd = React.useMemo(() => {
-      if (gridColumnStart !== undefined) {
-        return gridColumnStart + resolvedSpan;
-      }
-      return `span ${resolvedSpan}`;
-    }, [gridColumnStart, resolvedSpan]);
-
-    return (
-      <Box
-        {...boxProps}
-        ref={mergedRef}
-        containerWidth={currentWidth}
-        $gridColumnStart={gridColumnStart}
-        $gridColumnEnd={gridColumnEnd}
-        $order={resolvedOrder}
-      >
-        {children}
-      </Box>
-    );
-  }
-);
-
-GridCol.displayName = 'Grid.Col';
-
-// Attach GridCol to Grid as a sub-component
-(Grid as any).Col = GridCol;
-
-// Type the Grid component with its sub-component
-type GridWithCol = typeof Grid & {
+// Type the Grid component with its sub-component properly
+interface GridComponent extends React.ForwardRefExoticComponent<GridProps & React.RefAttributes<HTMLDivElement>> {
   Col: typeof GridCol;
-};
+}
 
-// Cast Grid to include the Col component for external usage
-const GridWithCol = Grid as GridWithCol;
+// Attach GridCol to Grid as a sub-component with proper typing
+const GridWithCol = Grid as GridComponent;
+GridWithCol.Col = GridCol;
 
-// Export the enhanced Grid component
+// Export the enhanced Grid component with proper typing
 export { GridWithCol as Grid };

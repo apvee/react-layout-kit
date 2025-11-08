@@ -1,4 +1,4 @@
-import { globalBreakpoints, globalSpacing } from '@/core/configuration';
+import { globalBreakpoints, globalSpacing, getBreakpoints, getSpacing } from '@/core/configuration';
 import { resolveResponsiveValue } from '@/core/responsive';
 import type { 
     IShortStyleBoxProps,
@@ -11,7 +11,7 @@ import {
     SHORT_PROP_TO_CSS_MAPPING,
     isShortProp,
     isSpacingShortProp
-} from '@/types';
+} from '@/types/short-props';
 import { css, cx } from '@emotion/css';
 
 /**
@@ -28,6 +28,8 @@ const STYLE_RESET = css({
  * @param shortProps - Short-style props object
  * @param width - Current container width for responsive resolution
  * @returns Resolved CSS styles object
+ * 
+ * @internal
  * 
  * @example
  * ```ts
@@ -81,6 +83,8 @@ export function processShortProps(
  * @param styleReset - Whether to include basic style reset
  * @returns Generated CSS class name
  * 
+ * @internal
+ * 
  * @example
  * ```ts
  * const className = generateCombinedClassName(
@@ -128,24 +132,6 @@ export function generateCombinedClassName(
         styleReset ? STYLE_RESET : '',
         stylesClass
     );
-}
-
-/**
- * Returns the current global breakpoint configuration.
- * 
- * @returns Current breakpoints object
- */
-export function getBreakpoints(): Breakpoints {
-    return { ...globalBreakpoints };
-}
-
-/**
- * Returns the current global spacing scale configuration.
- * 
- * @returns Current spacing scale object
- */
-export function getSpacing(): Spacing {
-    return { ...globalSpacing };
 }
 
 /**

@@ -1,959 +1,500 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { SpaceProps, Space } from '..';
+import { Space } from '../components/Space';
+import type { SpaceProps } from '../components/Space/Space.types';
 
-const meta: Meta<SpaceProps> = {
+/**
+ * Meta configuration for Space component stories
+ */
+const meta: Meta<typeof Space> = {
   title: 'Components/Layouts/Space',
   component: Space,
+  tags: ['autodocs'],
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         component: `
-A component that adds horizontal or vertical spacing using the theme's spacing scale.
+# Space Component
 
-## Features
-- Horizontal spacing with w prop (width)
-- Vertical spacing with h prop (height)
-- Predefined spacing scale ('xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl')
-- Custom CSS values support (rem, px, %)
-- Responsive values using breakpoint objects
-- Container width measurement for responsive calculations
-- Prevents shrinking in flex containers with flexShrink: 0
-- Useful for consistent spacing without margins
+A component that adds horizontal or vertical spacing using the theme's spacing scale. Perfect for creating consistent spacing between elements without using margins or padding.
+
+## Key Features
+
+- **Horizontal Spacing**: Use the \`w\` prop to add width-based spacing between elements
+- **Vertical Spacing**: Use the \`h\` prop to add height-based spacing between elements
+- **Spacing Scale**: Support for predefined spacing values (\`xs\`, \`sm\`, \`md\`, \`lg\`, \`xl\`, \`xxl\`, \`xxxl\`)
+- **Custom Values**: Accept any valid CSS value (rem, px, %, etc.)
+- **Responsive Spacing**: Both \`w\` and \`h\` props support responsive values using breakpoint objects
+- **Flex-Friendly**: Uses \`flex-shrink: 0\` to prevent shrinking in flex containers
+- **Semantic Separation**: Creates visual separation without affecting element margins
+- **Zero Overhead**: Renders as a simple div with width/height only when needed
+
+## When to Use
+
+- **Button Toolbars**: Consistent spacing between action buttons
+- **Content Sections**: Vertical spacing between article sections and headings
+- **Navigation**: Spacing in breadcrumbs, menus, and navigation bars
+- **Card Layouts**: Spacing between and within card elements
+- **Form Groups**: Separating form fields and labels
+- **Icon Toolbars**: Tight spacing in icon-based toolbars
+- **List Items**: Consistent spacing in custom list layouts
+
+## Spacing Scale
+
+The default spacing scale includes:
+- \`xs\`: Extra small spacing (typically 4-8px)
+- \`sm\`: Small spacing (typically 8-12px)
+- \`md\`: Medium spacing (typically 16-20px)
+- \`lg\`: Large spacing (typically 24-32px)
+- \`xl\`: Extra large spacing (typically 32-48px)
+- \`xxl\`: Double extra large spacing (typically 48-64px)
+- \`xxxl\`: Triple extra large spacing (typically 64-96px)
+
+## Responsive Behavior
+
+The \`containerWidth\` prop enables proper responsive resolution:
+- When provided, spacing values resolve based on current container width and breakpoints
+- Without it, the component measures its container for responsive calculations
+- Responsive objects like \`{ xs: 'sm', md: 'lg' }\` change spacing at different breakpoints
+
+## Accessibility
+
+The Space component is purely presentational and creates visual spacing only. It does not affect accessibility, keyboard navigation, or screen reader behavior.
+
+## Best Practices
+
+✅ **Do:**
+- Use predefined spacing scale for consistency
+- Use Space for layout spacing, not content margins
+- Combine with flex/grid layouts for powerful layouts
+- Use responsive spacing for adaptive designs
+
+❌ **Don't:**
+- Use Space as a replacement for proper layout components
+- Overuse custom values (stick to the scale when possible)
+- Use Space for structural layout (use Grid, Flex, Stack instead)
+- Apply margins or padding to Space itself
+
+## Examples
+
+\`\`\`tsx
+// Horizontal spacing in flex layout
+<div style={{ display: 'flex' }}>
+  <button>Save</button>
+  <Space w="md" />
+  <button>Cancel</button>
+</div>
+
+// Vertical spacing in content
+<div>
+  <h2>Section Title</h2>
+  <Space h="lg" />
+  <p>Section content...</p>
+</div>
+
+// Responsive spacing
+<Space 
+  w={{ xs: 'sm', md: 'lg' }}
+  h={{ xs: 'md', md: 'xl' }}
+/>
+
+// Custom spacing
+<Space w="3rem" h="40px" />
+
+// In button toolbar
+<div style={{ display: 'flex' }}>
+  <button>Edit</button>
+  <Space w="sm" />
+  <button>Copy</button>
+  <Space w="sm" />
+  <button>Delete</button>
+</div>
+\`\`\`
         `,
+      },
+      source: {
+        state: 'open',
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     // Space-specific props
     w: {
       control: 'text',
-      description: 'Horizontal spacing (width) - can use spacing scale keys (xs, s, m, l, xl, xxl) or CSS values',
+      description: 'Horizontal spacing (width). Can be a spacing scale key (xs, sm, md, lg, xl, xxl, xxxl), a number (converted to rem), or any valid CSS value. Supports responsive values using breakpoint objects.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
+
     h: {
       control: 'text',
-      description: 'Vertical spacing (height) - can use spacing scale keys (xs, s, m, l, xl, xxl) or CSS values',
+      description: 'Vertical spacing (height). Can be a spacing scale key (xs, sm, md, lg, xl, xxl, xxxl), a number (converted to rem), or any valid CSS value. Supports responsive values using breakpoint objects.',
+      table: {
+        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
 
     // Core props
     containerWidth: {
       control: 'number',
-      description: 'Fixed container width for responsive calculations',
+      description: 'Optional container width for responsive prop resolution. If not provided, the component will measure its container width.',
+      table: {
+        type: { summary: 'number' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<SpaceProps>;
+type Story = StoryObj<typeof Space>;
 
-// Basic horizontal spacing
-export const HorizontalSpacing: Story = {
-  render: () => (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center',
-      backgroundColor: '#f5f5f5',
-      padding: '1rem',
-      borderRadius: '8px',
-      border: '2px dashed #ccc'
-    }}>
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#1890ff', 
-        color: 'white', 
-        borderRadius: '4px',
-        fontWeight: '500'
-      }}>
-        Left Content
-      </div>
-      <Space w="lg" />
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#52c41a', 
-        color: 'white', 
-        borderRadius: '4px',
-        fontWeight: '500'
-      }}>
-        Right Content
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Basic horizontal spacing using Space component with w="lg" to separate elements in a flex layout.',
-      },
-    },
+/**
+ * Default usage story showcasing the Space component with interactive controls.
+ * This story demonstrates all the main features and props of the Space component.
+ */
+export const Usage: Story = {
+  args: {
+    w: 'lg',
+    h: undefined,
+    containerWidth: undefined,
   },
-};
-
-// Basic vertical spacing
-export const VerticalSpacing: Story = {
-  render: () => (
-    <div style={{ 
-      backgroundColor: '#f5f5f5',
-      padding: '1rem',
-      borderRadius: '8px',
-      border: '2px dashed #ccc'
-    }}>
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#1890ff', 
-        color: 'white', 
-        borderRadius: '4px',
-        textAlign: 'center',
-        fontWeight: '500'
-      }}>
-        Top Content
-      </div>
-      <Space h="lg" />
-      <div style={{ 
-        padding: '1rem', 
-        backgroundColor: '#52c41a', 
-        color: 'white', 
-        borderRadius: '4px',
-        textAlign: 'center',
-        fontWeight: '500'
-      }}>
-        Bottom Content
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Basic vertical spacing using Space component with h="lg" to separate elements vertically.',
-      },
-    },
-  },
-};
-
-// Different spacing sizes
-export const SpacingSizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Horizontal Spacing Sizes</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].map((size) => (
-            <div key={size} style={{
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: '#f8f9fa',
-              padding: '0.5rem',
-              borderRadius: '4px'
-            }}>
-              <span style={{ 
-                minWidth: '60px',
-                fontSize: '14px',
-                color: '#595959',
-                fontFamily: 'monospace'
-              }}>
-                {size}:
-              </span>
-              <div style={{ 
-                width: '40px', 
-                height: '30px', 
-                backgroundColor: '#1890ff', 
-                borderRadius: '2px' 
-              }} />
-              <Space w={size as any} />
-              <div style={{ 
-                width: '40px', 
-                height: '30px', 
-                backgroundColor: '#52c41a', 
-                borderRadius: '2px' 
-              }} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Vertical Spacing Sizes</h4>
-        <div style={{ display: 'flex', gap: '2rem' }}>
-          {['xs', 'sm', 'md', 'lg', 'xl'].map((size) => (
-            <div key={size} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              backgroundColor: '#f8f9fa',
-              padding: '0.5rem',
-              borderRadius: '4px'
-            }}>
-              <span style={{ 
-                fontSize: '14px',
-                color: '#595959',
-                fontFamily: 'monospace',
-                marginBottom: '0.5rem'
-              }}>
-                {size}
-              </span>
-              <div style={{ 
-                width: '30px', 
-                height: '20px', 
-                backgroundColor: '#1890ff', 
-                borderRadius: '2px' 
-              }} />
-              <Space h={size as any} />
-              <div style={{ 
-                width: '30px', 
-                height: '20px', 
-                backgroundColor: '#52c41a', 
-                borderRadius: '2px' 
-              }} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Different spacing sizes from the predefined scale: xs, s, m, l, xl, xxl.',
-      },
-    },
-  },
-};
-
-// Combined horizontal and vertical spacing
-export const CombinedSpacing: Story = {
-  render: () => (
-    <div style={{
-      backgroundColor: '#f5f5f5',
-      padding: '1rem',
-      borderRadius: '8px',
-      border: '2px dashed #ccc',
-      display: 'inline-block'
-    }}>
-      <div style={{ 
-        width: '80px',
-        height: '60px',
-        backgroundColor: '#1890ff', 
-        borderRadius: '4px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontWeight: '500',
-        fontSize: '14px'
-      }}>
-        Origin
-      </div>
-      <Space w="xl" h="lg" />
-      <div style={{ 
-        width: '80px',
-        height: '60px',
-        backgroundColor: '#52c41a', 
-        borderRadius: '4px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontWeight: '500',
-        fontSize: '14px'
-      }}>
-        Target
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Combined horizontal and vertical spacing using both w and h props.',
-      },
-    },
-  },
-};
-
-// Button toolbar with spacing
-export const ButtonToolbar: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Primary Actions (Large Spacing)</h4>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          backgroundColor: 'white',
-          padding: '1rem',
-          borderRadius: '8px',
-          border: '1px solid #f0f0f0'
-        }}>
-          <button style={{
-            padding: '0.75rem 1.5rem',
-            backgroundColor: '#1890ff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontWeight: '500'
-          }}>
-            Save
-          </button>
-          <Space w="lg" />
-          <button style={{
-            padding: '0.75rem 1.5rem',
-            backgroundColor: 'transparent',
+  render: (args) => (
+    <div
+      style={{
+        backgroundColor: '#ffffff',
+        border: '1px solid #e0e0e0',
+        borderRadius: '12px',
+        padding: '3rem',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+      }}
+    >
+      {/* Hero Section */}
+      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <div style={{ fontSize: '64px', marginBottom: '1rem' }}>↔️</div>
+        <h1
+          style={{
+            margin: '0 0 1rem 0',
+            fontSize: '36px',
+            fontWeight: '700',
+            color: '#262626',
+          }}
+        >
+          Space Component
+        </h1>
+        <p
+          style={{
+            margin: '0',
+            fontSize: '18px',
             color: '#595959',
-            border: '1px solid #d9d9d9',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}>
-            Cancel
-          </button>
-          <Space w="lg" />
-          <button style={{
-            padding: '0.75rem 1.5rem',
-            backgroundColor: '#52c41a',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontWeight: '500'
-          }}>
-            Publish
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Secondary Actions (Small Spacing)</h4>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          backgroundColor: 'white',
-          padding: '1rem',
-          borderRadius: '8px',
-          border: '1px solid #f0f0f0'
-        }}>
-          <button style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: 'transparent',
-            color: '#595959',
-            border: '1px solid #d9d9d9',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}>
-            Edit
-          </button>
-          <Space w="sm" />
-          <button style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: 'transparent',
-            color: '#595959',
-            border: '1px solid #d9d9d9',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}>
-            Copy
-          </button>
-          <Space w="sm" />
-          <button style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: 'transparent',
-            color: '#ff4d4f',
-            border: '1px solid #ff4d4f',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}>
-            Delete
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Icon Toolbar (Extra Small Spacing)</h4>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          backgroundColor: 'white',
-          padding: '1rem',
-          borderRadius: '8px',
-          border: '1px solid #f0f0f0'
-        }}>
-          {['B', 'I', 'U', 'S'].map((icon, index) => (
-            <React.Fragment key={index}>
-              <button style={{
-                width: '32px',
-                height: '32px',
-                backgroundColor: index === 0 ? '#1890ff' : 'transparent',
-                color: index === 0 ? 'white' : '#595959',
-                border: '1px solid #d9d9d9',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 'bold'
-              }}>
-                {icon}
-              </button>
-              {index < 3 && <Space w="xs" />}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Real-world example: button toolbars with different spacing sizes for different use cases.',
-      },
-    },
-  },
-};
-
-// Content sections with vertical spacing
-export const ContentSections: Story = {
-  render: () => (
-    <div style={{
-      backgroundColor: 'white',
-      padding: '2rem',
-      borderRadius: '8px',
-      border: '1px solid #f0f0f0',
-      maxWidth: '600px'
-    }}>
-      <h1 style={{ 
-        margin: '0', 
-        color: '#262626', 
-        fontSize: '28px',
-        fontWeight: '700'
-      }}>
-        Article Title
-      </h1>
-      
-      <Space h="md" />
-      
-      <div style={{ 
-        color: '#8c8c8c', 
-        fontSize: '14px',
-        display: 'flex',
-        gap: '1rem'
-      }}>
-        <span>By John Doe</span>
-        <span>•</span>
-        <span>March 15, 2024</span>
-        <span>•</span>
-        <span>5 min read</span>
-      </div>
-      
-      <Space h="lg" />
-      
-      <p style={{ 
-        margin: '0', 
-        color: '#595959', 
-        lineHeight: 1.6,
-        fontSize: '18px',
-        fontStyle: 'italic'
-      }}>
-        This is the article introduction or excerpt that provides a brief overview 
-        of what the reader can expect from the content below.
-      </p>
-      
-      <Space h="xl" />
-      
-      <h2 style={{ 
-        margin: '0', 
-        color: '#262626', 
-        fontSize: '22px',
-        fontWeight: '600'
-      }}>
-        First Section
-      </h2>
-      
-      <Space h="md" />
-      
-      <p style={{ 
-        margin: '0', 
-        color: '#595959', 
-        lineHeight: 1.7
-      }}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-        quis nostrud exercitation ullamco laboris.
-      </p>
-      
-      <Space h="lg" />
-      
-      <p style={{ 
-        margin: '0', 
-        color: '#595959', 
-        lineHeight: 1.7
-      }}>
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum 
-        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-      
-      <Space h="xl" />
-      
-      <h2 style={{ 
-        margin: '0', 
-        color: '#262626', 
-        fontSize: '22px',
-        fontWeight: '600'
-      }}>
-        Second Section
-      </h2>
-      
-      <Space h="md" />
-      
-      <p style={{ 
-        margin: '0', 
-        color: '#595959', 
-        lineHeight: 1.7
-      }}>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium 
-        doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore 
-        veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-      </p>
-      
-      <Space h="xxl" />
-      
-      <div style={{
-        backgroundColor: '#f8f9fa',
-        padding: '1.5rem',
-        borderRadius: '8px',
-        borderLeft: '4px solid #1890ff'
-      }}>
-        <h3 style={{ 
-          margin: '0 0 0.5rem 0', 
-          color: '#262626', 
-          fontSize: '16px',
-          fontWeight: '600'
-        }}>
-          💡 Pro Tip
-        </h3>
-        <p style={{ 
-          margin: '0', 
-          color: '#595959', 
-          lineHeight: 1.6
-        }}>
-          This is a highlighted callout section that stands out from the main content 
-          with proper spacing above and below.
+            maxWidth: '600px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            lineHeight: 1.6,
+          }}
+        >
+          Create consistent spacing between elements using the predefined spacing scale or custom values
         </p>
       </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Real-world example: article layout with consistent vertical spacing between sections.',
-      },
-    },
-  },
-};
 
-// Responsive spacing
-export const ResponsiveSpacing: Story = {
-  render: () => (
-    <div style={{
-      backgroundColor: '#f5f5f5',
-      padding: '1rem',
-      borderRadius: '8px',
-      border: '2px dashed #ccc'
-    }}>
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}>
-        <div style={{ 
-          padding: '1rem 2rem', 
-          backgroundColor: '#1890ff', 
-          color: 'white', 
-          borderRadius: '6px',
-          fontWeight: '500',
-          textAlign: 'center'
-        }}>
-          Responsive Content Block
-        </div>
-
-        <Space h={{ xs: "sm", md: "md", lg: "lg" }} />
-
-        <div style={{ 
-          padding: '1rem 2rem', 
-          backgroundColor: '#52c41a', 
-          color: 'white', 
-          borderRadius: '6px',
-          fontWeight: '500',
-          textAlign: 'center'
-        }}>
-          Spacing changes at breakpoints
-        </div>
-      </div>
-
-      <Space h="xl" />
-
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{ 
-          padding: '1rem', 
-          backgroundColor: '#fa8c16', 
-          color: 'white', 
-          borderRadius: '6px',
-          fontWeight: '500'
-        }}>
-          Left
-        </div>
-
-        <Space w={{ xs: "sm", md: "lg", lg: "xl" }} />
-
-        <div style={{ 
-          padding: '1rem', 
-          backgroundColor: '#722ed1', 
-          color: 'white', 
-          borderRadius: '6px',
-          fontWeight: '500'
-        }}>
-          Right
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Responsive spacing that changes size at different breakpoints using breakpoint objects.',
-      },
-    },
-    viewport: {
-      viewports: {
-        mobile: { name: 'Mobile', styles: { width: '320px', height: '568px' } },
-        tablet: { name: 'Tablet', styles: { width: '768px', height: '1024px' } },
-        desktop: { name: 'Desktop', styles: { width: '1200px', height: '800px' } },
-      },
-    },
-  },
-};
-
-// Custom spacing values
-export const CustomSpacing: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Custom CSS Values</h4>
-        <div style={{
+      {/* Interactive Demo */}
+      <div
+        style={{
           backgroundColor: '#f8f9fa',
-          padding: '1rem',
-          borderRadius: '6px'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center'
-          }}>
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#1890ff', 
-              color: 'white', 
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
-              3rem spacing
-            </div>
-            <Space w={"3rem" as any} />
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#52c41a', 
-              color: 'white', 
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
-              Next item
-            </div>
-          </div>
-          
-          <Space h={"2rem" as any} />
-          
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center'
-          }}>
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#fa8c16', 
-              color: 'white', 
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
-              40px spacing
-            </div>
-            <Space w={"40px" as any} />
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#722ed1', 
-              color: 'white', 
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
-              Next item
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Percentage Values</h4>
-        <div style={{
-          backgroundColor: '#f8f9fa',
-          padding: '1rem',
-          borderRadius: '6px',
-          width: '400px'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center'
-          }}>
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#eb2f96', 
-              color: 'white', 
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
-              Start
-            </div>
-            <Space w={"20%" as any} />
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#13c2c2', 
-              color: 'white', 
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
-              20% spacing
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 style={{ margin: '0 0 1rem 0', color: '#262626' }}>Zero Spacing</h4>
-        <div style={{
-          backgroundColor: '#f8f9fa',
-          padding: '1rem',
-          borderRadius: '6px'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center'
-          }}>
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#ff4d4f', 
-              color: 'white',
-              fontSize: '14px'
-            }}>
-              Connected
-            </div>
-            <Space w={0} />
-            <div style={{ 
-              padding: '1rem', 
-              backgroundColor: '#ff7875', 
-              color: 'white',
-              fontSize: '14px'
-            }}>
-              Items
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Custom spacing values using different CSS units: rem, px, %, and 0.',
-      },
-    },
-  },
-};
-
-// Navigation breadcrumbs
-export const NavigationBreadcrumbs: Story = {
-  render: () => (
-    <div style={{
-      backgroundColor: 'white',
-      padding: '1rem 1.5rem',
-      borderRadius: '8px',
-      border: '1px solid #f0f0f0'
-    }}>
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center',
-        fontSize: '14px'
-      }}>
-        <a href="#" style={{ 
-          color: '#1890ff', 
-          textDecoration: 'none',
-          padding: '0.25rem 0.5rem',
-          borderRadius: '4px',
-          transition: 'background-color 0.2s'
-        }}>
-          Home
-        </a>
-        <Space w="xs" />
-        <span style={{ color: '#bfbfbf' }}>›</span>
-        <Space w="xs" />
-        <a href="#" style={{ 
-          color: '#1890ff', 
-          textDecoration: 'none',
-          padding: '0.25rem 0.5rem',
-          borderRadius: '4px'
-        }}>
-          Products
-        </a>
-        <Space w="xs" />
-        <span style={{ color: '#bfbfbf' }}>›</span>
-        <Space w="xs" />
-        <a href="#" style={{ 
-          color: '#1890ff', 
-          textDecoration: 'none',
-          padding: '0.25rem 0.5rem',
-          borderRadius: '4px'
-        }}>
-          Electronics
-        </a>
-        <Space w="xs" />
-        <span style={{ color: '#bfbfbf' }}>›</span>
-        <Space w="xs" />
-        <span style={{ 
-          color: '#262626',
-          fontWeight: '500',
-          padding: '0.25rem 0.5rem'
-        }}>
-          Smartphones
-        </span>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Real-world example: navigation breadcrumbs with consistent spacing between items.',
-      },
-    },
-  },
-};
-
-// Card layout with spacing
-export const CardLayout: Story = {
-  render: () => (
-    <div style={{
-      backgroundColor: '#fafafa',
-      padding: '2rem',
-      borderRadius: '8px'
-    }}>
-      <h3 style={{ 
-        margin: '0', 
-        color: '#262626',
-        textAlign: 'center',
-        marginBottom: '2rem'
-      }}>
-        Product Showcase
-      </h3>
-      
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        gap: '1rem'
-      }}>
-        {[
-          { name: 'Product A', price: '$99', color: '#1890ff' },
-          { name: 'Product B', price: '$149', color: '#52c41a' },
-          { name: 'Product C', price: '$199', color: '#fa8c16' },
-        ].map((product, i) => (
-          <div key={i} style={{
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            width: '200px',
+          padding: '2rem',
+          borderRadius: '8px',
+          marginBottom: '3rem',
+          border: '2px dashed #d9d9d9',
+        }}
+      >
+        <h3
+          style={{
+            margin: '0 0 1.5rem 0',
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#262626',
             textAlign: 'center',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-          }}>
-            <div style={{
-              width: '100%',
-              height: '120px',
-              backgroundColor: product.color,
-              borderRadius: '6px',
+          }}
+        >
+          Live Demo - Adjust Controls Below
+        </h3>
+
+        {/* Horizontal Spacing Demo */}
+        <div style={{ marginBottom: '2rem' }}>
+          <div
+            style={{
+              fontSize: '14px',
+              color: '#8c8c8c',
               marginBottom: '1rem',
+              textAlign: 'center',
+            }}
+          >
+            Horizontal Spacing (w prop)
+          </div>
+          <div
+            style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'white',
-              fontWeight: '600'
-            }}>
-              Image
-            </div>
-            
-            <h4 style={{ 
-              margin: '0', 
-              color: '#262626',
-              fontSize: '16px',
-              fontWeight: '600'
-            }}>
-              {product.name}
-            </h4>
-            
-            <Space h="sm" />
-            
-            <p style={{ 
-              margin: '0', 
-              color: '#8c8c8c',
-              fontSize: '14px',
-              lineHeight: 1.5
-            }}>
-              Lorem ipsum dolor sit amet consectetur.
-            </p>
-            
-            <Space h="md" />
-            
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}>
-              <span style={{ 
-                fontSize: '20px', 
-                fontWeight: 'bold', 
-                color: product.color 
-              }}>
-                {product.price}
-              </span>
-              <Space w="sm" />
-              <button style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: product.color,
+            }}
+          >
+            <div
+              style={{
+                padding: '1rem 1.5rem',
+                backgroundColor: '#1890ff',
                 color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}>
-                Buy
-              </button>
+                borderRadius: '6px',
+                fontWeight: '500',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              Left Element
+            </div>
+            <Space {...args} h={undefined} />
+            <div
+              style={{
+                padding: '1rem 1.5rem',
+                backgroundColor: '#52c41a',
+                color: 'white',
+                borderRadius: '6px',
+                fontWeight: '500',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              Right Element
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Vertical Spacing Demo */}
+        <div>
+          <div
+            style={{
+              fontSize: '14px',
+              color: '#8c8c8c',
+              marginBottom: '1rem',
+              textAlign: 'center',
+            }}
+          >
+            Vertical Spacing (h prop)
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                padding: '1rem 2rem',
+                backgroundColor: '#fa8c16',
+                color: 'white',
+                borderRadius: '6px',
+                fontWeight: '500',
+                textAlign: 'center',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              Top Element
+            </div>
+            <Space {...args} w={undefined} h={args.h || 'lg'} />
+            <div
+              style={{
+                padding: '1rem 2rem',
+                backgroundColor: '#722ed1',
+                color: 'white',
+                borderRadius: '6px',
+                fontWeight: '500',
+                textAlign: 'center',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              Bottom Element
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Spacing Scale Reference */}
+      <div
+        style={{
+          backgroundColor: '#fff7e6',
+          padding: '2rem',
+          borderRadius: '8px',
+          marginBottom: '3rem',
+          border: '1px solid #ffd591',
+        }}
+      >
+        <h3
+          style={{
+            margin: '0 0 1.5rem 0',
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#d46b08',
+          }}
+        >
+          📏 Spacing Scale Reference
+        </h3>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem',
+          }}
+        >
+          {[
+            { key: 'xs', label: 'Extra Small', desc: '4-8px' },
+            { key: 'sm', label: 'Small', desc: '8-12px' },
+            { key: 'md', label: 'Medium', desc: '16-20px' },
+            { key: 'lg', label: 'Large', desc: '24-32px' },
+            { key: 'xl', label: 'Extra Large', desc: '32-48px' },
+            { key: 'xxl', label: '2X Large', desc: '48-64px' },
+          ].map((item) => (
+            <div
+              key={item.key}
+              style={{
+                backgroundColor: 'white',
+                padding: '1rem',
+                borderRadius: '6px',
+                border: '1px solid #ffe7ba',
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: 'monospace',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: '#d46b08',
+                  marginBottom: '0.25rem',
+                }}
+              >
+                {item.key}
+              </div>
+              <div style={{ fontSize: '12px', color: '#8c8c8c', marginBottom: '0.25rem' }}>
+                {item.label}
+              </div>
+              <div style={{ fontSize: '11px', color: '#ad6800' }}>
+                {item.desc}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Use Cases */}
+      <div>
+        <h3
+          style={{
+            margin: '0 0 1.5rem 0',
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#262626',
+          }}
+        >
+          💡 Common Use Cases
+        </h3>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1rem',
+          }}
+        >
+          {[
+            {
+              icon: '🔘',
+              title: 'Button Toolbars',
+              description: 'Consistent spacing between action buttons and controls',
+              color: '#1890ff',
+            },
+            {
+              icon: '📄',
+              title: 'Content Sections',
+              description: 'Vertical spacing between article sections and headings',
+              color: '#52c41a',
+            },
+            {
+              icon: '🧭',
+              title: 'Navigation',
+              description: 'Spacing in breadcrumbs, menus, and navigation items',
+              color: '#fa8c16',
+            },
+            {
+              icon: '📋',
+              title: 'Form Groups',
+              description: 'Separating form fields, labels, and input groups',
+              color: '#722ed1',
+            },
+          ].map((useCase, index) => (
+            <div
+              key={index}
+              style={{
+                padding: '1.5rem',
+                backgroundColor: '#fafafa',
+                border: '1px solid #f0f0f0',
+                borderRadius: '8px',
+              }}
+            >
+              <div style={{ fontSize: '32px', marginBottom: '0.75rem' }}>
+                {useCase.icon}
+              </div>
+              <h4
+                style={{
+                  margin: '0 0 0.5rem 0',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  color: useCase.color,
+                }}
+              >
+                {useCase.title}
+              </h4>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: '14px',
+                  color: '#595959',
+                  lineHeight: 1.5,
+                }}
+              >
+                {useCase.description}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   ),
   parameters: {
     docs: {
-      description: {
-        story: 'Real-world example: product card layout with strategic spacing for visual hierarchy.',
+      source: {
+        state: 'open',
+        code: `// Horizontal spacing between elements
+<div style={{ display: 'flex', alignItems: 'center' }}>
+  <button>Save</button>
+  <Space w="lg" />
+  <button>Cancel</button>
+</div>
+
+// Vertical spacing between sections
+<div>
+  <h2>Section Title</h2>
+  <Space h="lg" />
+  <p>Section content...</p>
+</div>
+
+// Responsive spacing
+<Space 
+  w={{ xs: 'sm', md: 'lg' }}
+  h={{ xs: 'md', md: 'xl' }}
+/>
+
+// Custom values
+<Space w="3rem" h="40px" />`,
       },
     },
   },
