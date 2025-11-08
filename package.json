@@ -7,7 +7,6 @@
   "sideEffects": false,
   "files": [
     "dist",
-    "llm-full.txt",
     "README.md"
   ],
   "exports": {
