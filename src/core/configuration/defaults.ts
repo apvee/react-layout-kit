@@ -7,11 +7,12 @@ import { Breakpoints, Spacing } from "@/types";
  */
 export const DEFAULT_BREAKPOINTS: Breakpoints = {
   xs: 0,
-  sm: 480,
-  md: 640,
-  lg: 1024,
-  xl: 1366,
-  xxl: 1920
+  sm: 479,
+  md: 639,
+  lg: 1023,
+  xl: 1365,
+  xxl: 1919,
+  xxxl: 1920
 };
 
 /**
@@ -21,6 +22,7 @@ export const DEFAULT_BREAKPOINTS: Breakpoints = {
  */
 export const DEFAULT_SPACING: Spacing = {
   none: 0,
+  xxs: 2,
   xs: 4,
   sm: 8,
   md: 12,

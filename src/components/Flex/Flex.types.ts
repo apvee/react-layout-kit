@@ -1,5 +1,5 @@
 import type { BaseBoxProps } from '@/components/Box';
-import type { ResponsiveValue, SpacingValue } from '@/types';
+import type { ResponsiveValue, SpacingKey } from '@/types';
 import * as CSS from 'csstype';
 
 /**
@@ -16,7 +16,7 @@ export type FlexProps = BaseBoxProps & {
    * column-gap CSS property.
    * Supports responsive values using breakpoint objects.
    */
-  columnGap?: ResponsiveValue<SpacingValue>;
+  columnGap?: ResponsiveValue<SpacingKey | number>;
 
   /**
    * flex-direction CSS property.
@@ -28,7 +28,7 @@ export type FlexProps = BaseBoxProps & {
    * gap CSS property.
    * Supports responsive values using breakpoint objects.
    */
-  gap?: ResponsiveValue<SpacingValue>;
+  gap?: ResponsiveValue<SpacingKey | number>;
 
   /**
    * justify-content CSS property.
@@ -40,7 +40,7 @@ export type FlexProps = BaseBoxProps & {
    * row-gap CSS property.
    * Supports responsive values using breakpoint objects.
    */
-  rowGap?: ResponsiveValue<SpacingValue>;
+  rowGap?: ResponsiveValue<SpacingKey | number>;
 
   /**
    * flex-wrap CSS property.

@@ -95,7 +95,7 @@ export type { ResponsiveValue } from '@/types';
  * Spacing resolution utility for converting spacing scale keys to CSS values.
  */
 export { resolveSpacing } from '@/core/styling';
-export type { BreakpointDefs, Spacing, SpacingValue } from '@/types';
+export type { BreakpointDefs, BreakpointKey, Breakpoints, SpacingDefs, SpacingKey, Spacing } from '@/types';
 
 /**
  * Layout measurement hooks for creating responsive custom components.

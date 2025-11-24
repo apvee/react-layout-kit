@@ -5,7 +5,7 @@ import type {
     DollarCssProps,
     Breakpoints, 
     Spacing, 
-    SpacingValue 
+    SpacingKey 
 } from '@/types';
 import {
     SHORT_PROP_TO_CSS_MAPPING,
@@ -137,29 +137,27 @@ export function generateCombinedClassName(
 /**
  * Resolves a spacing value to its final CSS value.
  * 
- * - Spacing scale keys (e.g., 'xs', 's', 'm') are resolved using the spacing configuration
- * - Numbers are treated as raw pixel values
- * - Strings are passed through as-is (assuming they're valid CSS values)
+ * - Spacing scale keys (e.g., 'xs', 'sm', 'md') are resolved using the spacing configuration
+ * - Numbers are treated as raw pixel values and passed through
  * 
- * @param value - Spacing value to resolve
+ * @param value - Spacing value to resolve (either a key from the spacing scale or a number)
  * @returns Resolved CSS value
  * 
  * @example
  * ```ts
- * resolveSpacing('m');      // Returns '1rem' (from spacing scale)
- * resolveSpacing(16);       // Returns 16 (pixels)
- * resolveSpacing('10px');   // Returns '10px' (pass-through)
- * resolveSpacing('1.5rem'); // Returns '1.5rem' (pass-through)
+ * resolveSpacing('md');  // Returns 12 (from spacing scale)
+ * resolveSpacing(16);    // Returns 16 (raw pixels)
+ * resolveSpacing('xl');  // Returns 20 (from spacing scale)
  * ```
  */
-export function resolveSpacing(value: SpacingValue): string | number {
+export function resolveSpacing(value: SpacingKey | number): string | number {
     const spacingScale = getSpacing();
 
-    // Check if value is a string and a key in the spacing scale
+    // Type guard: check if value is a string (SpacingKey) and exists in spacing scale
     if (typeof value === 'string' && value in spacingScale) {
-        return spacingScale[value as keyof Spacing];
+        return spacingScale[value];
     }
 
-    // Pass-through for numbers and non-scale string values
+    // Pass-through for numbers (raw pixel values)
     return value;
 }

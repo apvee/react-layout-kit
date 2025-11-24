@@ -1394,15 +1394,16 @@ import { configureBox } from '@apvee/react-layout-kit';
 configureBox({
   breakpoints: {
     xs: 0,
-    sm: 480,
+    sm: 479,
     md: 768,
     tablet: 900,
-    lg: 1024,
+    lg: 1023,
     xl: 1280,
     '2xl': 1440
   },
   spacing: {
     none: 0,
+    xxs: 2,
     xs: 4,
     sm: 8,
     md: 12,
@@ -1469,7 +1470,7 @@ import { getBreakpoints } from '@apvee/react-layout-kit';
 
 const breakpoints = getBreakpoints();
 console.log(breakpoints);
-// { xs: 0, sm: 480, md: 640, lg: 1024, xl: 1366, xxl: 1920 }
+// { xs: 0, sm: 479, md: 639, lg: 1023, xl: 1365, xxl: 1919, xxxl: 1920 }
 ```
 
 ---
@@ -1489,7 +1490,7 @@ import { getSpacing } from '@apvee/react-layout-kit';
 
 const spacing = getSpacing();
 console.log(spacing);
-// { none: 0, xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 }
+// { none: 0, xxs: 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 }
 ```
 
 ---

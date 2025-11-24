@@ -18,6 +18,7 @@
  */
 export interface SpacingDefs {
   none: string | number;
+  xxs: string | number;
   xs: string | number;
   sm: string | number;
   md: string | number;
@@ -31,12 +32,6 @@ export interface SpacingDefs {
  * Type representing all possible spacing scale keys.
  */
 export type SpacingKey = keyof SpacingDefs;
-
-/**
- * Type representing all possible spacing values.
- * Can be a spacing scale key, a number (converted to px), or a CSS string value.
- */
-export type SpacingValue = SpacingKey | number;
 
 /**
  * Mapping of spacing keys to their corresponding values.
