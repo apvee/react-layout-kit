@@ -19,7 +19,6 @@ export type {
 export type {
   SpacingDefs,
   SpacingKey,
-  SpacingValue,
   Spacing
 } from './spacing';
 

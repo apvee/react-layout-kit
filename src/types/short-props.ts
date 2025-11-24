@@ -4,7 +4,7 @@
 
 import * as CSS from 'csstype';
 import type { ResponsiveValue } from './responsive';
-import type { SpacingValue } from './spacing';
+import type { SpacingKey } from './spacing';
 
 /**
  * Short-style props interface for the Box component.
@@ -14,43 +14,43 @@ import type { SpacingValue } from './spacing';
 export interface IShortStyleBoxProps {
   // Margin spacing props (use spacing scale)
   /** Margin (all sides) */
-  m?: ResponsiveValue<SpacingValue>;
+  m?: ResponsiveValue<SpacingKey | number>;
   /** Margin top */
-  mt?: ResponsiveValue<SpacingValue>;
+  mt?: ResponsiveValue<SpacingKey | number>;
   /** Margin bottom */
-  mb?: ResponsiveValue<SpacingValue>;
+  mb?: ResponsiveValue<SpacingKey | number>;
   /** Margin left */
-  ml?: ResponsiveValue<SpacingValue>;
+  ml?: ResponsiveValue<SpacingKey | number>;
   /** Margin right */
-  mr?: ResponsiveValue<SpacingValue>;
+  mr?: ResponsiveValue<SpacingKey | number>;
   /** Margin inline start (logical property) */
-  ms?: ResponsiveValue<SpacingValue>;
+  ms?: ResponsiveValue<SpacingKey | number>;
   /** Margin inline end (logical property) */
-  me?: ResponsiveValue<SpacingValue>;
+  me?: ResponsiveValue<SpacingKey | number>;
   /** Margin inline (left + right) */
-  mx?: ResponsiveValue<SpacingValue>;
+  mx?: ResponsiveValue<SpacingKey | number>;
   /** Margin block (top + bottom) */
-  my?: ResponsiveValue<SpacingValue>;
+  my?: ResponsiveValue<SpacingKey | number>;
 
   // Padding spacing props (use spacing scale)
   /** Padding (all sides) */
-  p?: ResponsiveValue<SpacingValue>;
+  p?: ResponsiveValue<SpacingKey | number>;
   /** Padding top */
-  pt?: ResponsiveValue<SpacingValue>;
+  pt?: ResponsiveValue<SpacingKey | number>;
   /** Padding bottom */
-  pb?: ResponsiveValue<SpacingValue>;
+  pb?: ResponsiveValue<SpacingKey | number>;
   /** Padding left */
-  pl?: ResponsiveValue<SpacingValue>;
+  pl?: ResponsiveValue<SpacingKey | number>;
   /** Padding right */
-  pr?: ResponsiveValue<SpacingValue>;
+  pr?: ResponsiveValue<SpacingKey | number>;
   /** Padding inline start (logical property) */
-  ps?: ResponsiveValue<SpacingValue>;
+  ps?: ResponsiveValue<SpacingKey | number>;
   /** Padding inline end (logical property) */
-  pe?: ResponsiveValue<SpacingValue>;
+  pe?: ResponsiveValue<SpacingKey | number>;
   /** Padding inline (left + right) */
-  px?: ResponsiveValue<SpacingValue>;
+  px?: ResponsiveValue<SpacingKey | number>;
   /** Padding block (top + bottom) */
-  py?: ResponsiveValue<SpacingValue>;
+  py?: ResponsiveValue<SpacingKey | number>;
 
   // Size spacing props (use CSS types for width/height)
   /** Width */

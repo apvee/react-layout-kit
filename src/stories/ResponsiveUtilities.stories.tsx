@@ -316,14 +316,14 @@ const resolvedGap = React.useMemo(() => {
 ## TypeScript Support
 
 \`\`\`typescript
-import type { ResponsiveValue, SpacingValue } from '@apvee/react-layout-kit';
+import type { ResponsiveValue, SpacingKey } from '@apvee/react-layout-kit';
 
 interface MyProps {
   // Responsive prop with type
   columns?: ResponsiveValue<number>;
   
-  // Responsive spacing
-  gap?: ResponsiveValue<SpacingValue>;
+  // Responsive spacing (accepts scale keys or raw numbers)
+  gap?: ResponsiveValue<SpacingKey | number>;
   
   // Responsive string union
   direction?: ResponsiveValue<'horizontal' | 'vertical'>;
@@ -814,7 +814,7 @@ function CustomComponent({
   useElementWidth, 
   getBreakpoints 
 } from '@apvee/react-layout-kit';
-import type { ResponsiveValue, SpacingValue } from '@apvee/react-layout-kit';
+import type { ResponsiveValue, SpacingKey } from '@apvee/react-layout-kit';
 
 // Basic responsive value resolution
 const breakpoints = getBreakpoints();

@@ -1,5 +1,5 @@
 import * as CSS from 'csstype';
-import type { ResponsiveValue, SpacingValue } from '@/types';
+import type { ResponsiveValue, SpacingKey } from '@/types';
 import type { BaseBoxProps } from '@/components/Box';
 
 /**
@@ -14,12 +14,12 @@ export type StackProps = BaseBoxProps & {
   align?: ResponsiveValue<CSS.Property.AlignItems>;
 
   /**
-   * gap CSS property. Can be a spacing scale key or any valid CSS value.
-   * Numbers are converted to rem.
+   * gap CSS property. Can be a spacing scale key or a raw number.
+   * Numbers are converted to px.
    * Supports responsive values using breakpoint objects.
    * When undefined, no gap will be applied.
    */
-  gap?: ResponsiveValue<SpacingValue>;
+  gap?: ResponsiveValue<SpacingKey | number>;
 
   /**
    * justify-content CSS property.

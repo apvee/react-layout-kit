@@ -1,5 +1,5 @@
 import type { BaseBoxProps } from '@/components/Box';
-import type { ResponsiveValue, SpacingValue } from '@/types';
+import type { ResponsiveValue, SpacingKey } from '@/types';
 import * as React from 'react';
 import * as CSS from 'csstype';
 
@@ -87,7 +87,7 @@ export type AreaGridProps = BaseBoxProps & {
    * Supports responsive values using breakpoint objects.
    * 
    * Controls both row-gap and column-gap uniformly.
-   * Can use spacing scale values or custom CSS values.
+   * Can use spacing scale values or raw numbers (converted to px).
    * 
    * @default 0
    * 
@@ -96,14 +96,14 @@ export type AreaGridProps = BaseBoxProps & {
    * // Using spacing scale
    * <AreaGrid gap="md">
    * 
-   * // Custom gap
-   * <AreaGrid gap="24px">
+   * // Raw number (converted to px)
+   * <AreaGrid gap={24}>
    * 
    * // Responsive gap
    * <AreaGrid gap={{ xs: "sm", md: "md", lg: "lg" }}>
    * ```
    */
-  gap?: ResponsiveValue<SpacingValue>;
+  gap?: ResponsiveValue<SpacingKey | number>;
 
   /**
    * justify-items CSS property. Horizontal alignment of items within their grid areas.
