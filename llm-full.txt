@@ -60,11 +60,12 @@ type ResponsiveValue<T> = T | Partial<Record<BreakpointKey, T>>;
 
 **Default Breakpoints:**
 - `xs`: 0px and up
-- `sm`: 480px and up
-- `md`: 640px and up
-- `lg`: 1024px and up
-- `xl`: 1366px and up
-- `xxl`: 1920px and up
+- `sm`: 479px and up
+- `md`: 639px and up
+- `lg`: 1023px and up
+- `xl`: 1365px and up
+- `xxl`: 1919px and up
+- `xxxl`: 1920px and up
 
 **Usage:**
 ```typescript
@@ -87,6 +88,7 @@ Components support spacing props using a predefined scale or custom values.
 
 **Default Spacing Scale:**
 - `none`: 0
+- `xxs`: 2px
 - `xs`: 4px
 - `sm`: 8px
 - `md`: 12px
@@ -98,7 +100,7 @@ Components support spacing props using a predefined scale or custom values.
 **Type Signature:**
 ```typescript
 type SpacingValue = SpacingKey | number;
-type SpacingKey = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
+type SpacingKey = 'none' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
 ```
 
 **Usage:**
