@@ -13,13 +13,13 @@
  * const debouncedCallback = debounce((value) => setValue(value), 16);
  * ```
  */
-export function debounce<T extends (...args: any[]) => void>(
-  func: T,
+export function debounce<Args extends unknown[]>(
+  func: (...args: Args) => void,
   delay: number
-): (...args: Parameters<T>) => void {
+): (...args: Args) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  return (...args: Parameters<T>) => {
+  return (...args: Args) => {
     // Clear previous timeout
     if (timeoutId !== null) {
       clearTimeout(timeoutId);

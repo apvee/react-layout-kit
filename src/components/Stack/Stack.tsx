@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { getBreakpoints, resolveSpacing } from '@/core/styling';
+import { resolveSpacing } from '@/core/styling';
 import { resolveResponsiveValue } from '@/core/responsive';
-import { useElementWidth } from '@/hooks/useElementWidth';
+import { useResponsiveResolvers } from '@/core/hooks';
 import { Box } from '@/components/Box';
-import useMergedRef from '@react-hook/merged-ref';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import type { StackProps } from './Stack.types';
 
 /**
@@ -36,14 +36,14 @@ import type { StackProps } from './Stack.types';
  * </Stack>
  * 
  * // With custom gap and alignment
- * <Stack gap="l" align="center" justify="center">
+ * <Stack gap="lg" align="center" justify="center">
  *   <button>Centered Button</button>
  *   <p>Centered Text</p>
  *   <img src="image.jpg" alt="Centered Image" />
  * </Stack>
  * 
  * // Form layout
- * <Stack gap="m" align="stretch">
+ * <Stack gap="md" align="stretch">
  *   <input type="text" placeholder="Name" />
  *   <input type="email" placeholder="Email" />
  *   <textarea placeholder="Message" />
@@ -52,7 +52,7 @@ import type { StackProps } from './Stack.types';
  * 
  * // Responsive behavior
  * <Stack 
- *   gap={{ xs: "s", md: "m", lg: "l" }}
+ *   gap={{ xs: "sm", md: "md", lg: "lg" }}
  *   align={{ xs: "center", md: "stretch" }}
  *   justify={{ xs: "center", md: "flex-start" }}
  * >
@@ -93,16 +93,11 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
     // Use useMergedRef for proper ref management
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
-    // Get container width - use prop value or measure element
-    const measuredWidth = useElementWidth(elementRef, {
-      disabled: containerWidth !== undefined
+    // Get resolution utilities
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
+      elementRef,
+      containerWidth
     });
-    const currentWidth = containerWidth ?? measuredWidth;
-
-    // Get breakpoints configuration
-    const activeBreakpoints = React.useMemo(() => {
-      return getBreakpoints();
-    }, []);
 
     // Resolve responsive values based on current container width
     const resolvedAlign = React.useMemo(() => {
@@ -115,12 +110,7 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
       const gapValue = resolveResponsiveValue(gap, currentWidth, activeBreakpoints);
       if (gapValue === undefined) return undefined;
       
-      const resolvedSpacingValue = resolveSpacing(gapValue);
-      // Convert number to rem if it's a number
-      if (typeof resolvedSpacingValue === 'number') {
-        return `${resolvedSpacingValue / 16}rem`;
-      }
-      return resolvedSpacingValue;
+      return resolveSpacing(gapValue);
     }, [gap, currentWidth, activeBreakpoints]);
 
     const resolvedJustify = React.useMemo(() => {

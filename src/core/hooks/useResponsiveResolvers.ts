@@ -1,12 +1,13 @@
 import { getBreakpoints } from '@/core/styling';
+import { useBoxConfigVersion } from '@/core/hooks/useBoxConfigVersion';
 import { useElementWidth } from '@/hooks/useElementWidth';
 import type { Breakpoints } from '@/types';
 import * as React from 'react';
 
 /**
- * Configuration options for the useGridResolvers hook.
+ * Configuration options for the useResponsiveResolvers hook.
  */
-export interface UseGridResolversOptions {
+export interface UseResponsiveResolversOptions {
   /**
    * Reference to the DOM element for width measurement.
    */
@@ -20,9 +21,9 @@ export interface UseGridResolversOptions {
 }
 
 /**
- * Return type for the useGridResolvers hook.
+ * Return type for the useResponsiveResolvers hook.
  */
-export interface GridResolvers {
+export interface ResponsiveResolvers {
   /**
    * The current container width (measured or provided).
    */
@@ -35,15 +36,15 @@ export interface GridResolvers {
 }
 
 /**
- * Custom hook that provides common resolution logic for Grid components.
+ * Consolidated hook that provides common resolution logic for responsive components.
  * 
  * This hook encapsulates:
  * - Container width measurement or usage of provided width
  * - Breakpoints configuration retrieval
- * - Utilities for resolving responsive values
+ * - Common utilities for resolving responsive values
  * 
- * Used by both Grid and Grid.Col to maintain consistent
- * responsive behavior and reduce code duplication.
+ * Used across all layout components (Flex, Grid, AreaGrid, Stack, Group, SimpleGrid, etc.)
+ * to maintain consistent responsive behavior and eliminate code duplication.
  * 
  * @param options - Configuration options for the hook
  * @returns Object containing current width and breakpoints configuration
@@ -51,7 +52,7 @@ export interface GridResolvers {
  * @example
  * ```tsx
  * const elementRef = React.useRef<HTMLDivElement>(null);
- * const { currentWidth, activeBreakpoints } = useGridResolvers({
+ * const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
  *   elementRef,
  *   containerWidth: props.containerWidth
  * });
@@ -63,10 +64,13 @@ export interface GridResolvers {
  * 
  * @internal This is an internal implementation detail and should not be used directly.
  */
-export const useGridResolvers = (
-  options: UseGridResolversOptions
-): GridResolvers => {
+export const useResponsiveResolvers = (
+  options: UseResponsiveResolversOptions
+): ResponsiveResolvers => {
   const { elementRef, containerWidth } = options;
+
+  // Rerender when global configuration changes so components can pick up new breakpoints.
+  const boxConfigVersion = useBoxConfigVersion();
 
   // Get container width - use prop value or measure element
   const measuredWidth = useElementWidth(elementRef, {
@@ -77,7 +81,7 @@ export const useGridResolvers = (
   // Get breakpoints configuration
   const activeBreakpoints = React.useMemo(() => {
     return getBreakpoints();
-  }, []);
+  }, [boxConfigVersion]);
 
   return {
     currentWidth,

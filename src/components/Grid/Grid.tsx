@@ -1,11 +1,11 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
 import { resolveSpacing } from '@/core/styling';
-import useMergedRef from '@react-hook/merged-ref';
+import { useResponsiveResolvers } from '@/core/hooks';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { GridProps } from './Grid.types';
 import { GridCol } from './GridCol';
-import { useGridResolvers } from './hooks/useGridResolvers';
 
 /**
  * A component that creates a CSS Grid layout with comprehensive grid control.
@@ -86,7 +86,7 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
     // Get resolution utilities
-    const { currentWidth, activeBreakpoints } = useGridResolvers({
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
       elementRef,
       containerWidth
     });
@@ -106,11 +106,8 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
 
     const resolvedGutter = React.useMemo(() => {
       const rawValue = resolveResponsiveValue(gutter, currentWidth, activeBreakpoints) ?? "1rem";
-      // Resolve spacing scale values (xs, sm, md, etc.) to actual CSS values
-      // If it's already a CSS string (like "1rem" or "20px"), resolveSpacing will pass it through
-      return typeof rawValue === 'string' || typeof rawValue === 'number' 
-        ? resolveSpacing(rawValue as any)
-        : rawValue;
+      // Resolve spacing scale tokens (xs, sm, md, etc.) and pass through valid CSS values.
+      return resolveSpacing(rawValue as string | number);
     }, [gutter, currentWidth, activeBreakpoints]);
 
     const resolvedJustify = React.useMemo(() => {

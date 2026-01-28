@@ -1,10 +1,9 @@
 import { Box } from '@/components/Box';
 import { Slot } from '@/core/components';
 import { resolveResponsiveValue } from '@/core/responsive';
-import { getBreakpoints } from '@/core/styling';
+import { useResponsiveResolvers } from '@/core/hooks';
 import { mergeClasses, createStyles } from '@/core/styling';
-import { useElementWidth } from '@/hooks/useElementWidth';
-import useMergedRef from '@react-hook/merged-ref';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type {
   ScrollAreaProps,
@@ -91,10 +90,13 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
     // Merge refs
     const mergedRef = useMergedRef(forwardedRef, containerRef);
 
-    // Container width for responsive size resolution
-    const containerWidth = useElementWidth(containerRef);
-    const breakpoints = getBreakpoints();
-    const resolvedSize = resolveResponsiveValue(size, containerWidth, breakpoints) as ScrollAreaSize;
+    // Get resolution utilities for responsive size resolution
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
+      elementRef: containerRef,
+      containerWidth: undefined
+    });
+
+    const resolvedSize = resolveResponsiveValue(size, currentWidth, activeBreakpoints) as ScrollAreaSize;
     const trackSize = SIZE_TOKENS[resolvedSize];
     const borderRadius = RADIUS_TOKENS[radius];
 

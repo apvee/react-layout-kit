@@ -1,53 +1,66 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { AreaGrid } from '../components/AreaGrid';
+import { AreaGrid, Box, type AreaGridProps } from '..';
 
-const meta: Meta<typeof AreaGrid> = {
-  title: 'Components/Layouts/AreaGrid',
+/**
+ * Reusable panel component for story examples.
+ */
+function Panel({ title, color = '#ffffff' }: { title: string; color?: string }) {
+  return (
+    <Box
+      p="md"
+      $border="1px solid #e2e8f0"
+      $borderRadius={8}
+      $backgroundColor={color}
+      $minHeight={64}
+      $display="flex"
+      $alignItems="center"
+      $justifyContent="center"
+      style={{ fontWeight: 600, fontSize: 14 }}
+    >
+      {title}
+    </Box>
+  );
+}
+
+function ExampleFrame({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <Box $display="grid" gap="sm">
+      <Box style={{ fontSize: 12, fontWeight: 600, color: '#64748b' }}>{label}</Box>
+      {children}
+    </Box>
+  );
+}
+
+const meta: Meta<AreaGridProps> = {
+  title: 'Components/AreaGrid',
   component: AreaGrid,
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         component: `
-# AreaGrid
+AreaGrid is a layout component built on CSS Grid **template areas** (\`grid-template-areas\`). Instead of placing items via numeric rows/columns, you define a semantic template (e.g. \`header\`, \`sidebar\`, \`main\`, \`footer\`) and then assign children to those named areas via \`AreaGrid.Item\`.
 
-A powerful CSS Grid layout component that uses named grid areas for creating semantic, maintainable layouts. 
-Perfect for building complex page layouts with well-defined regions like headers, sidebars, main content areas, and footers.
+## Key ideas
 
-## Key Features
+- **Template-driven layout**: \`areas\` maps to \`grid-template-areas\`.
+- **Row/column sizing**: \`rows\` and \`columns\` map to \`grid-template-rows\` / \`grid-template-columns\`.
+- **Spacing**: \`gap\` controls the grid gap (supports spacing tokens or numbers).
+- **Alignment**: \`justifyItems\` / \`alignItems\` (default item alignment) and \`justifyContent\` / \`alignContent\` (grid distribution).
 
-- **Named Grid Areas**: Define layouts using meaningful area names via grid-template-areas
-- **Semantic Layouts**: Create self-documenting code with area names that describe content purpose
-- **Responsive Design**: All properties support responsive values using breakpoint objects
-- **Full Grid Control**: Complete control over rows, columns, gaps, and alignment properties
-- **Conditional Rendering**: AreaGrid.Item automatically hides when its area doesn't exist in current layout
-- **Type Safety**: Full TypeScript support with comprehensive prop types
+## Responsive behavior
 
-## Components
+All of the grid-related props (including \`areas\`) accept responsive values using breakpoint objects (e.g. \`{ xs, md, lg }\`). The component resolves those values using the measured **container width** (or the optional \`containerWidth\` override).
 
-### AreaGrid (Container)
-The main container component that defines the grid structure and named areas.
+## AreaGrid.Item behavior
 
-**Main Props:**
-- areas: Defines named grid areas using CSS grid-template-areas syntax
-- rows: Controls row sizing with grid-template-rows
-- columns: Controls column sizing with grid-template-columns  
-- gap: Space between grid items (supports spacing scale)
-- justifyItems: Default horizontal alignment for all items
-- alignItems: Default vertical alignment for all items
+- \`AreaGrid.Item\` assigns itself to a named \`area\` (\`grid-area\`).
+- \`area\`, \`justifySelf\`, and \`alignSelf\` also support responsive values.
+- If the resolved area name **doesn’t exist** in the current \`areas\` template, the item returns \`null\` (i.e. it does not render).
 
-### AreaGrid.Item
-Child component that positions itself in a named grid area.
-
-**Main Props:**
-- area: Name of the grid area (must match parent's areas definition)
-- justifySelf: Override horizontal alignment for this item
-- alignSelf: Override vertical alignment for this item
-        `,
-      },
-      source: {
-        state: 'open',
+See the stories below for practical configurations (basic, responsive + conditional areas, and alignment overrides).
+        `.trim(),
       },
     },
   },
@@ -55,206 +68,209 @@ Child component that positions itself in a named grid area.
   argTypes: {
     areas: {
       control: 'text',
-      description: 'Grid template areas - defines named regions using CSS grid-template-areas syntax.',
-      table: {
-        type: { summary: 'string | ResponsiveValue<string>' },
-        defaultValue: { summary: 'undefined' },
-      },
+      description: 'grid-template-areas string (responsive values are supported by the component API)',
+      table: { category: 'Layout' },
     },
     rows: {
       control: 'text',
-      description: 'Grid template rows - defines the height of each row.',
-      table: {
-        type: { summary: 'string | ResponsiveValue<string>' },
-        defaultValue: { summary: 'undefined' },
-      },
+      description: 'grid-template-rows (responsive values are supported by the component API)',
+      table: { category: 'Layout' },
     },
     columns: {
       control: 'text',
-      description: 'Grid template columns - defines the width of each column.',
-      table: {
-        type: { summary: 'string | ResponsiveValue<string>' },
-        defaultValue: { summary: 'undefined' },
-      },
+      description: 'grid-template-columns (responsive values are supported by the component API)',
+      table: { category: 'Layout' },
     },
     gap: {
-      control: 'text',
-      description: 'Space between grid items. Accepts spacing scale values or CSS values.',
-      table: {
-        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
-        defaultValue: { summary: '0' },
-      },
+      control: 'object',
+      description: 'grid gap (spacing token or number; responsive values are supported by the component API)',
+      table: { category: 'Layout' },
     },
-    justifyItems: {
-      control: 'select',
-      options: ['stretch', 'start', 'end', 'center', 'baseline'],
-      description: 'Horizontal alignment of all items within their grid areas.',
-      table: {
-        type: { summary: 'CSS.Property.JustifyItems' },
-        defaultValue: { summary: 'stretch' },
-      },
-    },
-    alignItems: {
-      control: 'select',
-      options: ['stretch', 'start', 'end', 'center', 'baseline'],
-      description: 'Vertical alignment of all items within their grid areas.',
-      table: {
-        type: { summary: 'CSS.Property.AlignItems' },
-        defaultValue: { summary: 'stretch' },
-      },
-    },
-    justifyContent: {
-      control: 'select',
-      options: ['stretch', 'start', 'end', 'center', 'space-between', 'space-around', 'space-evenly'],
-      description: 'Horizontal distribution of the entire grid within its container.',
-      table: {
-        type: { summary: 'CSS.Property.JustifyContent' },
-        defaultValue: { summary: 'stretch' },
-      },
-    },
-    alignContent: {
-      control: 'select',
-      options: ['stretch', 'start', 'end', 'center', 'space-between', 'space-around', 'space-evenly'],
-      description: 'Vertical distribution of the entire grid within its container.',
-      table: {
-        type: { summary: 'CSS.Property.AlignContent' },
-        defaultValue: { summary: 'stretch' },
-      },
+    justifyItems: { table: { category: 'Alignment' } },
+    alignItems: { table: { category: 'Alignment' } },
+    justifyContent: { table: { category: 'Alignment' } },
+    alignContent: { table: { category: 'Alignment' } },
+    containerWidth: {
+      control: { type: 'number', min: 0, max: 2000, step: 10 },
+      description: 'Override container width used to resolve responsive values',
+      table: { category: 'Responsive' },
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof AreaGrid>;
+type Story = StoryObj<AreaGridProps>;
 
-/**
- * Interactive Usage Example
- * 
- * Complete page layout with header, sidebar, main content, and footer using named grid areas.
- * Adjust the controls below to see how different properties affect the layout.
- */
-export const Usage: Story = {
+export const Playground: Story = {
   args: {
-    areas: '"header header header" "sidebar main main" "footer footer footer"',
+    areas: '"header header" "sidebar main" "footer footer"',
     rows: 'auto 1fr auto',
-    columns: '200px 1fr 1fr',
+    columns: '240px 1fr',
     gap: 'md',
-    justifyItems: 'stretch',
-    alignItems: 'stretch',
-    justifyContent: 'stretch',
-    alignContent: 'stretch',
-    style: {
-      minHeight: '500px',
-      backgroundColor: '#f5f5f5',
-      border: '1px solid #ddd',
-      borderRadius: '8px',
-    },
   },
-  render: (args: typeof Usage.args) => (
-    <AreaGrid {...args}>
-      <AreaGrid.Item 
-        area="header"
-        style={{
-          backgroundColor: '#1976d2',
-          color: 'white',
-          padding: '1.5rem',
-          textAlign: 'center',
-          fontSize: '1.5rem',
-          fontWeight: 'bold',
-          borderRadius: '6px',
-        }}
-      >
-        Header Area
+  render: (args) => (
+    <AreaGrid
+      {...args}
+      p="md"
+      $border="1px solid #e2e8f0"
+      $borderRadius={12}
+      $backgroundColor="#f8fafc"
+      $minHeight={400}
+    >
+      <AreaGrid.Item area="header">
+        <Panel title="Header" color="#dbeafe" />
       </AreaGrid.Item>
-      
-      <AreaGrid.Item 
-        area="sidebar"
-        style={{
-          backgroundColor: '#4caf50',
-          color: 'white',
-          padding: '1.5rem',
-          borderRadius: '6px',
-        }}
-      >
-        <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>Sidebar</div>
-        <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>
-          <div style={{ marginBottom: '0.5rem' }}>• Navigation Item 1</div>
-          <div style={{ marginBottom: '0.5rem' }}>• Navigation Item 2</div>
-          <div style={{ marginBottom: '0.5rem' }}>• Navigation Item 3</div>
-          <div>• Navigation Item 4</div>
-        </div>
+      <AreaGrid.Item area="sidebar">
+        <Panel title="Sidebar" color="#fef3c7" />
       </AreaGrid.Item>
-      
-      <AreaGrid.Item 
-        area="main"
-        style={{
-          backgroundColor: '#ffffff',
-          border: '1px solid #e0e0e0',
-          padding: '2rem',
-          borderRadius: '6px',
-        }}
-      >
-        <h2 style={{ margin: '0 0 1rem 0', color: '#333' }}>Main Content Area</h2>
-        <p style={{ margin: '0 0 1rem 0', color: '#666', lineHeight: 1.6 }}>
-          This is the main content area of the page. It occupies the larger portion of the layout
-          and contains the primary information or functionality.
-        </p>
-        <p style={{ margin: 0, color: '#666', lineHeight: 1.6 }}>
-          The AreaGrid component automatically handles the grid layout structure using named areas,
-          making it easy to create semantic, maintainable page layouts with CSS Grid.
-        </p>
-        <div style={{
-          marginTop: '1.5rem',
-          padding: '1rem',
-          backgroundColor: '#e3f2fd',
-          borderLeft: '4px solid #2196f3',
-          borderRadius: '4px',
-        }}>
-          <strong style={{ color: '#1976d2' }}>💡 Tip:</strong>
-          <span style={{ marginLeft: '0.5rem', color: '#555' }}>
-            Use the controls panel to experiment with different grid configurations!
-          </span>
-        </div>
+      <AreaGrid.Item area="main">
+        <Panel title="Main Content" color="#ffffff" />
       </AreaGrid.Item>
-      
-      <AreaGrid.Item 
-        area="footer"
-        style={{
-          backgroundColor: '#424242',
-          color: 'white',
-          padding: '1.5rem',
-          textAlign: 'center',
-          borderRadius: '6px',
-          fontSize: '0.9rem',
-        }}
-      >
-        Footer Area - © 2024 AreaGrid Layout Example
+      <AreaGrid.Item area="footer">
+        <Panel title="Footer" color="#e0e7ff" />
       </AreaGrid.Item>
     </AreaGrid>
   ),
+};
+
+export const ResponsiveLayout: Story = {
   parameters: {
     docs: {
       description: {
-        story: `
-### Interactive Page Layout
-
-This example demonstrates a typical page layout structure using AreaGrid with four main areas:
-
-1. **Header**: Spans the full width at the top
-2. **Sidebar**: Fixed 200px width for navigation  
-3. **Main**: Flexible content area that takes remaining space
-4. **Footer**: Spans the full width at the bottom
-
-**Key Features:**
-- Named grid areas for semantic structure
-- Mix of fixed (200px) and flexible (1fr) column sizing
-- Auto-sizing header and footer with flexible content area
-- Spacing control via the gap property
-- Item alignment within their grid areas
-
-Use the controls panel to modify grid properties and see real-time changes.
-        `,
+        story:
+          'Responsive `areas`/`rows`/`columns`/`gap` resolved via container width. Demonstrates both conditional rendering (items in non-existing areas return `null`) and responsive item placement (an item can move between areas via responsive `area`).',
       },
     },
   },
+  render: () => (
+    <Box $display="grid" gap="lg">
+      <ExampleFrame label="Mobile (containerWidth: 360) — promo row present, toolbar/aside not present">
+        <AreaGrid
+          containerWidth={360}
+          areas={{
+            xs: '"header" "promo" "main" "footer"',
+            lg: '"header header" "main toolbar" "main aside" "footer footer"',
+          }}
+          rows={{ xs: 'auto auto 1fr auto', lg: 'auto auto 1fr auto' }}
+          columns={{ xs: '1fr', lg: '1fr 260px' }}
+          gap={{ xs: 'sm', md: 'md' }}
+          p="md"
+          $border="1px solid #e2e8f0"
+          $borderRadius={12}
+          $backgroundColor="#f8fafc"
+          $minHeight={320}
+        >
+          <AreaGrid.Item area="header">
+            <Panel title="Header" color="#dbeafe" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area={{ xs: 'promo', lg: 'aside' }}>
+            <Panel title="Moves: promo → aside" color="#dcfce7" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area="toolbar">
+            <Panel title="Toolbar (won't render here)" color="#fef3c7" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area="main">
+            <Panel title="Main" color="#ffffff" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area="footer">
+            <Panel title="Footer" color="#e0e7ff" />
+          </AreaGrid.Item>
+        </AreaGrid>
+      </ExampleFrame>
+
+      <ExampleFrame label="Desktop (containerWidth: 1200) — toolbar/aside present">
+        <AreaGrid
+          containerWidth={1200}
+          areas={{
+            xs: '"header" "promo" "main" "footer"',
+            lg: '"header header" "main toolbar" "main aside" "footer footer"',
+          }}
+          rows={{ xs: 'auto auto 1fr auto', lg: 'auto auto 1fr auto' }}
+          columns={{ xs: '1fr', lg: '1fr 260px' }}
+          gap={{ xs: 'sm', md: 'md' }}
+          p="md"
+          $border="1px solid #e2e8f0"
+          $borderRadius={12}
+          $backgroundColor="#f8fafc"
+          $minHeight={320}
+        >
+          <AreaGrid.Item area="header">
+            <Panel title="Header" color="#dbeafe" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area={{ xs: 'promo', lg: 'aside' }}>
+            <Panel title="Moves: promo → aside" color="#dcfce7" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area="toolbar">
+            <Panel title="Toolbar" color="#fef3c7" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area="main">
+            <Panel title="Main" color="#ffffff" />
+          </AreaGrid.Item>
+
+          <AreaGrid.Item area="footer">
+            <Panel title="Footer" color="#e0e7ff" />
+          </AreaGrid.Item>
+        </AreaGrid>
+      </ExampleFrame>
+    </Box>
+  ),
+};
+
+export const CustomAlignment: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Container-level alignment (`justifyItems`/`alignItems` + `justifyContent`/`alignContent`) and per-item overrides (`justifySelf`/`alignSelf`).',
+      },
+    },
+  },
+  render: () => (
+    <AreaGrid
+      areas='"left center right"'
+      columns="160px 160px 160px"
+      rows="220px"
+      gap="md"
+      justifyItems="center"
+      alignItems="center"
+      justifyContent="space-between"
+      alignContent="center"
+      p="md"
+      $border="1px solid #e2e8f0"
+      $borderRadius={12}
+      $backgroundColor="#f8fafc"
+      $minHeight={320}
+    >
+      <AreaGrid.Item area="left" justifySelf="start" alignSelf="start">
+        <Panel title="start / start" color="#dbeafe" />
+      </AreaGrid.Item>
+
+      <AreaGrid.Item area="center">
+        <Panel title="centered (from container)" color="#fef3c7" />
+      </AreaGrid.Item>
+
+      <AreaGrid.Item area="right" justifySelf="stretch" alignSelf="stretch">
+        <Box
+          p="md"
+          $border="1px solid #e2e8f0"
+          $borderRadius={8}
+          $backgroundColor="#e0e7ff"
+          $height="100%"
+          $display="flex"
+          $alignItems="center"
+          $justifyContent="center"
+          style={{ fontWeight: 600, fontSize: 14 }}
+        >
+          stretch / stretch
+        </Box>
+      </AreaGrid.Item>
+    </AreaGrid>
+  ),
 };

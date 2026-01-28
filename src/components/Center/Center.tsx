@@ -1,8 +1,7 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
-import { getBreakpoints } from '@/core/styling';
-import { useElementWidth } from '@/hooks/useElementWidth';
-import useMergedRef from '@react-hook/merged-ref';
+import { useResponsiveResolvers } from '@/core/hooks';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { CenterProps } from './Center.types';
 
@@ -41,7 +40,7 @@ import type { CenterProps } from './Center.types';
  * <Center inline={{ xs: true, md: false }}>
  *   <div>Inline on mobile, block on desktop</div>
  * </Center>
- * 
+ * ```
  */
 export const Center = React.forwardRef<HTMLDivElement, CenterProps>(
   function Center(props, forwardedRef) {
@@ -58,16 +57,11 @@ export const Center = React.forwardRef<HTMLDivElement, CenterProps>(
     // Merge refs using the useMergedRef hook
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
-    // Get container width - use prop value or measure element
-    const measuredWidth = useElementWidth(elementRef, {
-      disabled: containerWidth !== undefined
+    // Get resolution utilities
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
+      elementRef,
+      containerWidth
     });
-    const currentWidth = containerWidth ?? measuredWidth;
-
-    // Get breakpoints configuration
-    const activeBreakpoints = React.useMemo(() => {
-      return getBreakpoints();
-    }, []);
 
     // Resolve the responsive inline value based on current container width
     const resolvedInline = React.useMemo(() => {

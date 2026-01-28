@@ -1,10 +1,10 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
-import useMergedRef from '@react-hook/merged-ref';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { AreaGridItemProps } from './AreaGrid.types';
 import { useAreaGridContext } from './AreaGridContext';
-import { useAreaGridResolvers } from './hooks/useAreaGridResolvers';
+import { useResponsiveResolvers } from '@/core/hooks';
 
 /**
  * A component that positions itself in a named grid area within an AreaGrid container.
@@ -74,7 +74,7 @@ export const AreaGridItem = React.forwardRef<HTMLDivElement, AreaGridItemProps>(
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
     // Get resolution utilities
-    const { currentWidth, activeBreakpoints } = useAreaGridResolvers({
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
       elementRef,
       containerWidth
     });

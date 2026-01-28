@@ -1,9 +1,9 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
-import useMergedRef from '@react-hook/merged-ref';
+import { useResponsiveResolvers } from '@/core/hooks';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { GridColProps } from './Grid.types';
-import { useGridResolvers } from './hooks/useGridResolvers';
 
 /**
  * A component that provides grid column properties for children of a Grid container.
@@ -65,7 +65,7 @@ export const GridCol = React.forwardRef<HTMLDivElement, GridColProps>(
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
     // Get resolution utilities
-    const { currentWidth, activeBreakpoints } = useGridResolvers({
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
       elementRef,
       containerWidth
     });

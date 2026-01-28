@@ -7,3 +7,4 @@ export * from './styling';
 export * from './components';
 export * from './configuration';
 export * from './utils';
+export * from './hooks';

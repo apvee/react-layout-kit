@@ -1,8 +1,11 @@
 import * as React from 'react';
 
 /**
- * Utility per combinare refs.
- * 
+ * Compose multiple React refs into a single callback ref.
+ *
+ * @param refs - Refs to compose (callback refs and/or ref objects).
+ * @returns A callback ref that updates all provided refs.
+ *
  * @internal
  */
 function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCallback<T> {
@@ -18,8 +21,17 @@ function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCall
 }
 
 /**
- * Utility per combinare event handlers.
- * 
+ * Compose two event handlers into one.
+ *
+ * The original handler runs first. The composed handler runs second, optionally
+ * skipping execution if `event.defaultPrevented` is true.
+ *
+ * @param originalEventHandler - The original handler (typically the child's handler).
+ * @param ourEventHandler - The additional handler to run after the original.
+ * @param options - Composition options.
+ * @param options.checkForDefaultPrevented - When true, skip `ourEventHandler` if default was prevented.
+ * @returns A composed event handler.
+ *
  * @internal
  */
 function composeEventHandlers<E>(
@@ -40,8 +52,12 @@ function composeEventHandlers<E>(
 }
 
 /**
- * Utility per combinare className.
- * 
+ * Merge two `className` strings.
+ *
+ * @param originalClassName - Existing className.
+ * @param ourClassName - Additional className.
+ * @returns A merged className string or undefined if both inputs are empty.
+ *
  * @internal
  */
 function composeClassName(originalClassName?: string, ourClassName?: string): string | undefined {
@@ -52,8 +68,12 @@ function composeClassName(originalClassName?: string, ourClassName?: string): st
 }
 
 /**
- * Utility per combinare style objects.
- * 
+ * Merge two style objects.
+ *
+ * @param originalStyle - Existing style object.
+ * @param ourStyle - Additional style object.
+ * @returns The merged style (with `ourStyle` taking precedence) or undefined if both inputs are empty.
+ *
  * @internal
  */
 function composeStyle(
@@ -87,7 +107,7 @@ export interface SlotProps extends React.HTMLAttributes<HTMLElement> {
  * @example
  * ```tsx
  * // Basic usage - Box renders as button but keeps Box behavior
- * <Box asChild $padding="m" $background="blue">
+ * <Box asChild p="md" $background="blue">
  *   <button onClick={handleClick}>Custom Button</button>
  * </Box>
  * 
@@ -134,15 +154,15 @@ export const Slot = React.forwardRef<HTMLElement, SlotProps>(
 
       return React.isValidElement(newElement)
         ? React.cloneElement(
-            newElement,
-            {
-              ...mergeProps(slotProps, newElement.props as Record<string, any>),
-              ref: forwardedRef
-                ? composeRefs(forwardedRef, (newElement as any).ref)
-                : (newElement as any).ref,
-            } as any,
-            newChildren.length > 1 ? newChildren : newChildren[0]
-          )
+          newElement,
+          {
+            ...mergeProps(slotProps, newElement.props as Record<string, any>),
+            ref: forwardedRef
+              ? composeRefs(forwardedRef, (newElement as any).ref)
+              : (newElement as any).ref,
+          } as any,
+          newChildren.length > 1 ? newChildren : newChildren[0]
+        )
         : null;
     }
 
@@ -183,7 +203,7 @@ export interface SlottableProps {
  * @example
  * ```tsx
  * // Mark specific child to receive props
- * <Box asChild $padding="m">
+ * <Box asChild p="md">
  *   <button>
  *     <Icon name="arrow" />
  *     <Slottable>
@@ -225,7 +245,7 @@ function mergeProps(slotProps: Record<string, any>, childProps: Record<string, a
     const childPropValue = childProps[propName];
 
     const isHandler = /^on[A-Z]/.test(propName);
-    
+
     if (isHandler) {
       // Componi event handlers
       if (slotPropValue && childPropValue) {
@@ -271,7 +291,7 @@ function mergeProps(slotProps: Record<string, any>, childProps: Record<string, a
  */
 export function useSlot(element: React.ReactElement | null) {
   const [slotRef, setSlotRef] = React.useState<HTMLElement | null>(null);
-  
+
   const ref = React.useCallback((node: HTMLElement) => {
     setSlotRef(node);
   }, []);
@@ -286,6 +306,3 @@ export function useSlot(element: React.ReactElement | null) {
 // Type utilities
 export type SlotComponentType = typeof Slot;
 export type SlottableComponentType = typeof Slottable;
-
-// Export per compatibilità con @radix-ui/react-slot
-export { Slot as Root };

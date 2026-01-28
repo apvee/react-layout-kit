@@ -1,12 +1,12 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
 import { resolveSpacing } from '@/core/styling';
-import useMergedRef from '@react-hook/merged-ref';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { AreaGridProps, AreaGridItemProps } from './AreaGrid.types';
 import { AreaGridContext } from './AreaGridContext';
 import { AreaGridItem } from './AreaGridItem';
-import { useAreaGridResolvers } from './hooks/useAreaGridResolvers';
+import { useResponsiveResolvers } from '@/core/hooks';
 
 /**
  * A component that creates CSS Grid layouts using named grid areas.
@@ -40,7 +40,7 @@ import { useAreaGridResolvers } from './hooks/useAreaGridResolvers';
  *   areas='"header header header" "sidebar main main" "footer footer footer"'
  *   rows="auto 1fr auto"
  *   columns="200px 1fr 1fr"
- *   gap="m"
+ *   gap="md"
  * >
  *   <AreaGrid.Item area="header">Header Content</AreaGrid.Item>
  *   <AreaGrid.Item area="sidebar">Sidebar Content</AreaGrid.Item>
@@ -56,7 +56,7 @@ import { useAreaGridResolvers } from './hooks/useAreaGridResolvers';
  *   }}
  *   rows={{ xs: "auto auto auto auto", md: "auto 1fr auto" }}
  *   columns={{ xs: "1fr", md: "200px 1fr" }}
- *   gap={{ xs: "s", md: "m" }}
+ *   gap={{ xs: "sm", md: "md" }}
  * >
  *   <AreaGrid.Item area="header">Header</AreaGrid.Item>
  *   <AreaGrid.Item area="sidebar">Sidebar</AreaGrid.Item>
@@ -101,7 +101,7 @@ const AreaGrid = React.forwardRef<HTMLDivElement, AreaGridProps>(
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
     // Get resolution utilities
-    const { currentWidth, activeBreakpoints } = useAreaGridResolvers({
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
       elementRef,
       containerWidth
     });

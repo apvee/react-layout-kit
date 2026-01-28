@@ -1,8 +1,8 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
-import { getBreakpoints, resolveSpacing } from '@/core/styling';
-import { useElementWidth } from '@/hooks/useElementWidth';
-import useMergedRef from '@react-hook/merged-ref';
+import { resolveSpacing } from '@/core/styling';
+import { useResponsiveResolvers } from '@/core/hooks';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { GroupProps } from './Group.types';
 
@@ -11,7 +11,8 @@ import type { GroupProps } from './Group.types';
  * Perfect for creating button groups, toolbar layouts, and other horizontal compositions.
  * 
  * Uses CSS flexbox with flex-direction: row and configurable properties.
- * All styles are applied via Box component props - no inline styles are used.
+ * Container styles are applied via Box component props.
+ * When `grow` or `preventGrowOverflow` are enabled, children receive additional inline styles.
  * 
  * **Group Properties:**
  * - `align`: Controls align-items (cross-axis alignment, default: "center")
@@ -24,7 +25,7 @@ import type { GroupProps } from './Group.types';
  * **Responsive Behavior:**
  * - All properties support responsive values for different layouts at different breakpoints
  * - Container width measurement is used for responsive prop resolution
- * - Gap values can use predefined scale keys ('xs', 's', 'm', 'l', 'xl', 'xxl') or custom CSS values
+ * - Gap values can use predefined scale keys ('none', 'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl') or custom CSS values
  * 
  * @param props - Component props including layout, styling, and responsive options
  * @returns A React element with applied layout styles
@@ -39,7 +40,7 @@ import type { GroupProps } from './Group.types';
  * </Group>
  * 
  * // With custom gap and alignment
- * <Group gap="l" align="stretch" justify="space-between">
+ * <Group gap="lg" align="stretch" justify="space-between">
  *   <div>Item 1</div>
  *   <div>Item 2</div>
  *   <div>Item 3</div>
@@ -54,7 +55,7 @@ import type { GroupProps } from './Group.types';
  * 
  * // Responsive behavior
  * <Group 
- *   gap={{ xs: "s", md: "m", lg: "l" }}
+ *   gap={{ xs: "sm", md: "md", lg: "lg" }}
  *   align={{ xs: "stretch", md: "center" }}
  *   justify={{ xs: "center", md: "flex-start" }}
  *   wrap={{ xs: "wrap", md: "nowrap" }}
@@ -91,16 +92,11 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
     // Use useMergedRef for proper ref management
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
-    // Get container width - use prop value or measure element
-    const measuredWidth = useElementWidth(elementRef, {
-      disabled: containerWidth !== undefined
+    // Get resolution utilities
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
+      elementRef,
+      containerWidth
     });
-    const currentWidth = containerWidth ?? measuredWidth;
-
-    // Get breakpoints configuration
-    const activeBreakpoints = React.useMemo(() => {
-      return getBreakpoints();
-    }, []);
 
     // Count children for preventGrowOverflow calculation
     const childrenCount = React.useMemo(() => {
@@ -118,12 +114,7 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
       const gapValue = resolveResponsiveValue(gap, currentWidth, activeBreakpoints);
       if (gapValue === undefined) return undefined;
       
-      const resolvedSpacingValue = resolveSpacing(gapValue);
-      // Convert number to rem if it's a number
-      if (typeof resolvedSpacingValue === 'number') {
-        return `${resolvedSpacingValue / 16}rem`;
-      }
-      return resolvedSpacingValue;
+      return resolveSpacing(gapValue);
     }, [gap, currentWidth, activeBreakpoints]);
 
     const resolvedGrow = React.useMemo(() => {
@@ -148,8 +139,13 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
         return children;
       }
 
-      return React.Children.map(children, (child, index) => {
+      return React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) {
+          return child;
+        }
+
+        // React.Fragment can't receive styles (and applying them can trigger warnings).
+        if (child.type === React.Fragment) {
           return child;
         }
 
@@ -170,15 +166,13 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
           return child;
         }
 
-        // Clone the child with additional styles
-        const existingStyle = (child.props as any).style || {};
+        // Clone the child with additional styles.
+        // cloneElement preserves existing props by default; we only need to merge `style`.
+        const existingStyle = (child.props as { style?: React.CSSProperties }).style;
+
         return React.cloneElement(child, {
-          ...(child.props as Record<string, any>),
-          style: {
-            ...existingStyle,
-            ...childStyles,
-          },
-        } as any);
+          style: existingStyle ? { ...existingStyle, ...childStyles } : childStyles,
+        });
       });
     }, [children, resolvedGrow, resolvedPreventGrowOverflow, childrenCount]);
 

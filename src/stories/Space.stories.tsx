@@ -1,501 +1,196 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Space } from '../components/Space';
-import type { SpaceProps } from '../components/Space/Space.types';
+import { Box, Space, Stack, type SpaceProps } from '..';
 
-/**
- * Meta configuration for Space component stories
- */
-const meta: Meta<typeof Space> = {
-  title: 'Components/Layouts/Space',
-  component: Space,
-  tags: ['autodocs'],
-  parameters: {
-    layout: 'padded',
-    docs: {
-      description: {
-        component: `
-# Space Component
+function Frame(props: {
+	title: string;
+	description?: string;
+	width?: number;
+	children: React.ReactNode;
+}) {
+	const { title, description, width, children } = props;
 
-A component that adds horizontal or vertical spacing using the theme's spacing scale. Perfect for creating consistent spacing between elements without using margins or padding.
+	return (
+		<Box
+			$border="1px solid #e5e7eb"
+			$borderRadius="12px"
+			$backgroundColor="#ffffff"
+			$boxShadow="0 1px 2px rgba(0,0,0,0.06)"
+			p="lg"
+			style={width ? { width } : undefined}
+		>
+			<Box mb="md">
+				<div style={{ fontWeight: 700 }}>{title}</div>
+				{description ? <div style={{ fontSize: 13, color: '#6b7280' }}>{description}</div> : null}
+			</Box>
+			{children}
+		</Box>
+	);
+}
 
-## Key Features
+function Chip(props: { children: React.ReactNode }) {
+	return (
+		<Box
+			$border="1px solid #cbd5e1"
+			$borderRadius="999px"
+			$backgroundColor="#f8fafc"
+			px="md"
+			py="sm"
+		>
+			<span style={{ fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>{props.children}</span>
+		</Box>
+	);
+}
 
-- **Horizontal Spacing**: Use the \`w\` prop to add width-based spacing between elements
-- **Vertical Spacing**: Use the \`h\` prop to add height-based spacing between elements
-- **Spacing Scale**: Support for predefined spacing values (\`xs\`, \`sm\`, \`md\`, \`lg\`, \`xl\`, \`xxl\`, \`xxxl\`)
-- **Custom Values**: Accept any valid CSS value (rem, px, %, etc.)
-- **Responsive Spacing**: Both \`w\` and \`h\` props support responsive values using breakpoint objects
-- **Flex-Friendly**: Uses \`flex-shrink: 0\` to prevent shrinking in flex containers
-- **Semantic Separation**: Creates visual separation without affecting element margins
-- **Zero Overhead**: Renders as a simple div with width/height only when needed
+const meta = {
+	title: 'Components/Space',
+	component: Space,
+	parameters: {
+		layout: 'padded',
+		docs: {
+			description: {
+				component: `
+\`Space\` renders a simple spacer with a configurable **width** (\`w\`) and/or **height** (\`h\`) using the theme spacing scale.
 
-## When to Use
+## Notes
 
-- **Button Toolbars**: Consistent spacing between action buttons
-- **Content Sections**: Vertical spacing between article sections and headings
-- **Navigation**: Spacing in breadcrumbs, menus, and navigation bars
-- **Card Layouts**: Spacing between and within card elements
-- **Form Groups**: Separating form fields and labels
-- **Icon Toolbars**: Tight spacing in icon-based toolbars
-- **List Items**: Consistent spacing in custom list layouts
+- Unlike most layout components, \`Space\` **does not extend Box**; it only accepts \`w\`, \`h\`, and optional \`containerWidth\`.
+- If both \`w\` and \`h\` resolve to \`undefined\`, the component **renders \`null\`**.
 
-## Spacing Scale
+## Responsive behavior
 
-The default spacing scale includes:
-- \`xs\`: Extra small spacing (typically 4-8px)
-- \`sm\`: Small spacing (typically 8-12px)
-- \`md\`: Medium spacing (typically 16-20px)
-- \`lg\`: Large spacing (typically 24-32px)
-- \`xl\`: Extra large spacing (typically 32-48px)
-- \`xxl\`: Double extra large spacing (typically 48-64px)
-- \`xxxl\`: Triple extra large spacing (typically 64-96px)
-
-## Responsive Behavior
-
-The \`containerWidth\` prop enables proper responsive resolution:
-- When provided, spacing values resolve based on current container width and breakpoints
-- Without it, the component measures its container for responsive calculations
-- Responsive objects like \`{ xs: 'sm', md: 'lg' }\` change spacing at different breakpoints
-
-## Accessibility
-
-The Space component is purely presentational and creates visual spacing only. It does not affect accessibility, keyboard navigation, or screen reader behavior.
-
-## Best Practices
-
-✅ **Do:**
-- Use predefined spacing scale for consistency
-- Use Space for layout spacing, not content margins
-- Combine with flex/grid layouts for powerful layouts
-- Use responsive spacing for adaptive designs
-
-❌ **Don't:**
-- Use Space as a replacement for proper layout components
-- Overuse custom values (stick to the scale when possible)
-- Use Space for structural layout (use Grid, Flex, Stack instead)
-- Apply margins or padding to Space itself
-
-## Examples
-
-\`\`\`tsx
-// Horizontal spacing in flex layout
-<div style={{ display: 'flex' }}>
-  <button>Save</button>
-  <Space w="md" />
-  <button>Cancel</button>
-</div>
-
-// Vertical spacing in content
-<div>
-  <h2>Section Title</h2>
-  <Space h="lg" />
-  <p>Section content...</p>
-</div>
-
-// Responsive spacing
-<Space 
-  w={{ xs: 'sm', md: 'lg' }}
-  h={{ xs: 'md', md: 'xl' }}
-/>
-
-// Custom spacing
-<Space w="3rem" h="40px" />
-
-// In button toolbar
-<div style={{ display: 'flex' }}>
-  <button>Edit</button>
-  <Space w="sm" />
-  <button>Copy</button>
-  <Space w="sm" />
-  <button>Delete</button>
-</div>
-\`\`\`
-        `,
-      },
-      source: {
-        state: 'open',
-      },
-    },
-  },
-  argTypes: {
-    // Space-specific props
-    w: {
-      control: 'text',
-      description: 'Horizontal spacing (width). Can be a spacing scale key (xs, sm, md, lg, xl, xxl, xxxl), a number (converted to rem), or any valid CSS value. Supports responsive values using breakpoint objects.',
-      table: {
-        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
-        defaultValue: { summary: 'undefined' },
-      },
-    },
-
-    h: {
-      control: 'text',
-      description: 'Vertical spacing (height). Can be a spacing scale key (xs, sm, md, lg, xl, xxl, xxxl), a number (converted to rem), or any valid CSS value. Supports responsive values using breakpoint objects.',
-      table: {
-        type: { summary: 'SpacingValue | ResponsiveValue<SpacingValue>' },
-        defaultValue: { summary: 'undefined' },
-      },
-    },
-
-    // Core props
-    containerWidth: {
-      control: 'number',
-      description: 'Optional container width for responsive prop resolution. If not provided, the component will measure its container width.',
-      table: {
-        type: { summary: 'number' },
-        defaultValue: { summary: 'undefined' },
-      },
-    },
-  },
-};
+\`w\` and \`h\` accept responsive values (breakpoint objects). Values are resolved using the measured container width; for deterministic demos you can pass \`containerWidth\`.
+				`.trim(),
+			},
+		},
+	},
+	tags: ['autodocs'],
+	argTypes: {
+		w: {
+			control: 'select',
+			options: ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 0, 4, 8, 12, 16, 24, 32],
+			table: { category: 'Spacing' },
+		},
+		h: {
+			control: 'select',
+			options: ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 0, 4, 8, 12, 16, 24, 32],
+			table: { category: 'Spacing' },
+		},
+		containerWidth: {
+			control: 'number',
+			table: { category: 'Responsive' },
+		},
+	},
+} satisfies Meta<typeof Space>;
 
 export default meta;
-type Story = StoryObj<typeof Space>;
+type Story = StoryObj<typeof meta>;
 
-/**
- * Default usage story showcasing the Space component with interactive controls.
- * This story demonstrates all the main features and props of the Space component.
- */
-export const Usage: Story = {
-  args: {
-    w: 'lg',
-    h: undefined,
-    containerWidth: undefined,
-  },
-  render: (args) => (
-    <div
-      style={{
-        backgroundColor: '#ffffff',
-        border: '1px solid #e0e0e0',
-        borderRadius: '12px',
-        padding: '3rem',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-      }}
-    >
-      {/* Hero Section */}
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <div style={{ fontSize: '64px', marginBottom: '1rem' }}>↔️</div>
-        <h1
-          style={{
-            margin: '0 0 1rem 0',
-            fontSize: '36px',
-            fontWeight: '700',
-            color: '#262626',
-          }}
-        >
-          Space Component
-        </h1>
-        <p
-          style={{
-            margin: '0',
-            fontSize: '18px',
-            color: '#595959',
-            maxWidth: '600px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            lineHeight: 1.6,
-          }}
-        >
-          Create consistent spacing between elements using the predefined spacing scale or custom values
-        </p>
-      </div>
+export const Playground: Story = {
+	args: {
+		w: 'md',
+		h: undefined,
+	} satisfies Partial<SpaceProps>,
+	render: (args: SpaceProps) => (
+		<Box $backgroundColor="#f5f5f5" p="lg">
+			<Frame title="Playground" description="Use w/h to add horizontal or vertical spacing.">
+				<Stack gap="lg">
+					<Box>
+						<div style={{ fontWeight: 700, marginBottom: 8 }}>Horizontal (flex row)</div>
+						<Box $display="flex" $alignItems="center">
+							<Chip>Left</Chip>
+							<Space {...args} />
+							<Chip>Right</Chip>
+						</Box>
+					</Box>
 
-      {/* Interactive Demo */}
-      <div
-        style={{
-          backgroundColor: '#f8f9fa',
-          padding: '2rem',
-          borderRadius: '8px',
-          marginBottom: '3rem',
-          border: '2px dashed #d9d9d9',
-        }}
-      >
-        <h3
-          style={{
-            margin: '0 0 1.5rem 0',
-            fontSize: '20px',
-            fontWeight: '600',
-            color: '#262626',
-            textAlign: 'center',
-          }}
-        >
-          Live Demo - Adjust Controls Below
-        </h3>
-
-        {/* Horizontal Spacing Demo */}
-        <div style={{ marginBottom: '2rem' }}>
-          <div
-            style={{
-              fontSize: '14px',
-              color: '#8c8c8c',
-              marginBottom: '1rem',
-              textAlign: 'center',
-            }}
-          >
-            Horizontal Spacing (w prop)
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <div
-              style={{
-                padding: '1rem 1.5rem',
-                backgroundColor: '#1890ff',
-                color: 'white',
-                borderRadius: '6px',
-                fontWeight: '500',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              Left Element
-            </div>
-            <Space {...args} h={undefined} />
-            <div
-              style={{
-                padding: '1rem 1.5rem',
-                backgroundColor: '#52c41a',
-                color: 'white',
-                borderRadius: '6px',
-                fontWeight: '500',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              Right Element
-            </div>
-          </div>
-        </div>
-
-        {/* Vertical Spacing Demo */}
-        <div>
-          <div
-            style={{
-              fontSize: '14px',
-              color: '#8c8c8c',
-              marginBottom: '1rem',
-              textAlign: 'center',
-            }}
-          >
-            Vertical Spacing (h prop)
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              style={{
-                padding: '1rem 2rem',
-                backgroundColor: '#fa8c16',
-                color: 'white',
-                borderRadius: '6px',
-                fontWeight: '500',
-                textAlign: 'center',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              Top Element
-            </div>
-            <Space {...args} w={undefined} h={args.h || 'lg'} />
-            <div
-              style={{
-                padding: '1rem 2rem',
-                backgroundColor: '#722ed1',
-                color: 'white',
-                borderRadius: '6px',
-                fontWeight: '500',
-                textAlign: 'center',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              Bottom Element
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Spacing Scale Reference */}
-      <div
-        style={{
-          backgroundColor: '#fff7e6',
-          padding: '2rem',
-          borderRadius: '8px',
-          marginBottom: '3rem',
-          border: '1px solid #ffd591',
-        }}
-      >
-        <h3
-          style={{
-            margin: '0 0 1.5rem 0',
-            fontSize: '20px',
-            fontWeight: '600',
-            color: '#d46b08',
-          }}
-        >
-          📏 Spacing Scale Reference
-        </h3>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-          }}
-        >
-          {[
-            { key: 'xs', label: 'Extra Small', desc: '4-8px' },
-            { key: 'sm', label: 'Small', desc: '8-12px' },
-            { key: 'md', label: 'Medium', desc: '16-20px' },
-            { key: 'lg', label: 'Large', desc: '24-32px' },
-            { key: 'xl', label: 'Extra Large', desc: '32-48px' },
-            { key: 'xxl', label: '2X Large', desc: '48-64px' },
-          ].map((item) => (
-            <div
-              key={item.key}
-              style={{
-                backgroundColor: 'white',
-                padding: '1rem',
-                borderRadius: '6px',
-                border: '1px solid #ffe7ba',
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'monospace',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#d46b08',
-                  marginBottom: '0.25rem',
-                }}
-              >
-                {item.key}
-              </div>
-              <div style={{ fontSize: '12px', color: '#8c8c8c', marginBottom: '0.25rem' }}>
-                {item.label}
-              </div>
-              <div style={{ fontSize: '11px', color: '#ad6800' }}>
-                {item.desc}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Use Cases */}
-      <div>
-        <h3
-          style={{
-            margin: '0 0 1.5rem 0',
-            fontSize: '20px',
-            fontWeight: '600',
-            color: '#262626',
-          }}
-        >
-          💡 Common Use Cases
-        </h3>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '1rem',
-          }}
-        >
-          {[
-            {
-              icon: '🔘',
-              title: 'Button Toolbars',
-              description: 'Consistent spacing between action buttons and controls',
-              color: '#1890ff',
-            },
-            {
-              icon: '📄',
-              title: 'Content Sections',
-              description: 'Vertical spacing between article sections and headings',
-              color: '#52c41a',
-            },
-            {
-              icon: '🧭',
-              title: 'Navigation',
-              description: 'Spacing in breadcrumbs, menus, and navigation items',
-              color: '#fa8c16',
-            },
-            {
-              icon: '📋',
-              title: 'Form Groups',
-              description: 'Separating form fields, labels, and input groups',
-              color: '#722ed1',
-            },
-          ].map((useCase, index) => (
-            <div
-              key={index}
-              style={{
-                padding: '1.5rem',
-                backgroundColor: '#fafafa',
-                border: '1px solid #f0f0f0',
-                borderRadius: '8px',
-              }}
-            >
-              <div style={{ fontSize: '32px', marginBottom: '0.75rem' }}>
-                {useCase.icon}
-              </div>
-              <h4
-                style={{
-                  margin: '0 0 0.5rem 0',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  color: useCase.color,
-                }}
-              >
-                {useCase.title}
-              </h4>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: '14px',
-                  color: '#595959',
-                  lineHeight: 1.5,
-                }}
-              >
-                {useCase.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        state: 'open',
-        code: `// Horizontal spacing between elements
-<div style={{ display: 'flex', alignItems: 'center' }}>
-  <button>Save</button>
-  <Space w="lg" />
-  <button>Cancel</button>
-</div>
-
-// Vertical spacing between sections
-<div>
-  <h2>Section Title</h2>
-  <Space h="lg" />
-  <p>Section content...</p>
-</div>
-
-// Responsive spacing
-<Space 
-  w={{ xs: 'sm', md: 'lg' }}
-  h={{ xs: 'md', md: 'xl' }}
-/>
-
-// Custom values
-<Space w="3rem" h="40px" />`,
-      },
-    },
-  },
+					<Box>
+						<div style={{ fontWeight: 700, marginBottom: 8 }}>Vertical (stacked)</div>
+						<Chip>Top</Chip>
+						<Space h={args.h ?? 'md'} w={undefined} />
+						<Chip>Bottom</Chip>
+					</Box>
+				</Stack>
+			</Frame>
+		</Box>
+	),
 };
+
+export const LayoutExamples: Story = {
+	render: () => (
+		<Box $backgroundColor="#f5f5f5" p="lg">
+			<Stack gap="lg">
+				<Frame
+					title="1) Button row spacing"
+					description="In a flex container, Space prevents shrink and acts like a consistent gap."
+				>
+					<Box $display="flex" $alignItems="center" $flexWrap="wrap">
+						<Chip>Action 1</Chip>
+						<Space w="sm" />
+						<Chip>Action 2</Chip>
+						<Space w="sm" />
+						<Chip>Action 3</Chip>
+					</Box>
+				</Frame>
+
+				<Frame title="2) Vertical rhythm" description="Use Space(h) to separate sections without margins.">
+					<Chip>Section A</Chip>
+					<Space h="md" />
+					<Chip>Section B</Chip>
+					<Space h="xl" />
+					<Chip>Section C</Chip>
+				</Frame>
+
+				<Frame
+					title="3) Both dimensions"
+					description="You can set both w and h (useful as a fixed-size spacer in a grid of demos)."
+				>
+					<Box $display="flex" $alignItems="center">
+						<Chip>Start</Chip>
+						<Space w="lg" h="lg" />
+						<Chip>End</Chip>
+					</Box>
+				</Frame>
+			</Stack>
+		</Box>
+	),
+};
+
+export const Responsive: Story = {
+	render: () => {
+		const Viewport = (props: { label: string; width: number }) => {
+			const { label, width } = props;
+
+			return (
+				<Frame title={label} description={`containerWidth: ${width}px`} width={width}>
+					<Box $display="flex" $alignItems="center" $flexWrap="wrap">
+						<Chip>Left</Chip>
+						<Space
+							containerWidth={width}
+							w={{ xs: 'sm', md: 'lg' }}
+						/>
+						<Chip>Right</Chip>
+					</Box>
+
+					<Space h="md" />
+
+					<Chip>
+						Spacer w: {'{ xs: "sm", md: "lg" }'}
+					</Chip>
+				</Frame>
+			);
+		};
+
+		return (
+			<Box $backgroundColor="#f5f5f5" p="lg">
+				<Frame title="Responsive spacing" description="Same responsive prop, different containerWidth values.">
+					<Box $display="flex" $flexWrap="wrap" $gap="16px">
+						<Viewport label="Small" width={360} />
+						<Viewport label="Large" width={1100} />
+					</Box>
+				</Frame>
+			</Box>
+		);
+	},
+};
+

@@ -1,10 +1,10 @@
 import type { IShortStyleBoxProps } from '@/types';
 import { isShortProp } from '@/types/short-props';
-import { generateCombinedClassName } from '@/core/styling';
-import { mergeClasses } from '@/core/styling';
+import { generateCombinedClassName, mergeClasses } from '@/core/styling';
+import { useBoxConfigVersion } from '@/core/hooks/useBoxConfigVersion';
 import { useElementWidth } from '@/hooks/useElementWidth';
 import { Slot } from '@/core/components';
-import useMergedRef from '@react-hook/merged-ref';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { BoxProps } from './Box.types';
 
@@ -29,20 +29,20 @@ import type { BoxProps } from './Box.types';
  * </Box>
  * 
  * // Using short-hand props
- * <Box m="m" p="l" w="100%">
+ * <Box m="md" p="lg" w="100%">
  *   Content with spacing scale
  * </Box>
  * 
  * // Responsive values
  * <Box 
  *   $display={{ xs: "block", md: "flex" }}
- *   p={{ xs: "s", md: "m", lg: "l" }}
+ *   p={{ xs: "sm", md: "md", lg: "lg" }}
  * >
  *   Responsive layout
  * </Box>
  * 
  * // Polymorphic with asChild
- * <Box asChild $padding="m">
+ * <Box asChild p="md">
  *   <button>Renders as button with Box styles</button>
  * </Box>
  * ```
@@ -58,25 +58,24 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       ...rest
     } = props;
 
-    // Separate dollar props, short props, and regular HTML props with memoization
-    const { dollarProps, shortProps, htmlProps } = React.useMemo(() => {
-      const dollarProps: Record<string, any> = {};
-      const shortProps: Record<string, any> = {};
-      const htmlProps: Record<string, any> = {};
+    // Rerender when global configuration changes so spacing/breakpoints updates are reflected.
+    const boxConfigVersion = useBoxConfigVersion();
 
-      // Use Object.entries for better performance
-      for (const [key, value] of Object.entries(rest)) {
-        if (key.startsWith('$')) {
-          dollarProps[key] = value;
-        } else if (isShortProp(key)) {
-          shortProps[key] = value;
-        } else {
-          htmlProps[key] = value;
-        }
+    // Separate dollar props, short props, and regular HTML props.
+    // Note: `rest` is recreated on every render (destructuring), so memoizing this work is ineffective.
+    const dollarProps: Record<string, any> = {};
+    const shortProps: Record<string, any> = {};
+    const htmlProps: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(rest)) {
+      if (key.startsWith('$')) {
+        dollarProps[key] = value;
+      } else if (isShortProp(key)) {
+        shortProps[key] = value;
+      } else {
+        htmlProps[key] = value;
       }
-
-      return { dollarProps, shortProps, htmlProps };
-    }, [rest]);
+    }
 
     // Element ref for width measurement
     const elementRef = React.useRef<HTMLDivElement>(null);
@@ -98,7 +97,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
         currentWidth,
         styleReset
       );
-    }, [dollarProps, shortProps, currentWidth, styleReset]);
+    }, [dollarProps, shortProps, currentWidth, styleReset, boxConfigVersion]);
 
     // Merge class names
     const finalClassName = mergeClasses(generatedClassName, className);

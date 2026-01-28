@@ -1,11 +1,11 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
 import { resolveSpacing } from '@/core/styling';
-import useMergedRef from '@react-hook/merged-ref';
+import { useResponsiveResolvers } from '@/core/hooks';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { FlexProps } from './Flex.types';
 import { FlexItem } from './FlexItem';
-import { useFlexResolvers } from './hooks/useFlexResolvers';
 
 /**
  * A component that creates a flex container with comprehensive flexbox control.
@@ -91,7 +91,7 @@ const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
     // Get resolution utilities
-    const { currentWidth, activeBreakpoints } = useFlexResolvers({
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
       elementRef,
       containerWidth
     });
