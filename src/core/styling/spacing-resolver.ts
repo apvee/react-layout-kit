@@ -1,4 +1,4 @@
-import { globalBreakpoints, globalSpacing, getBreakpoints, getSpacing } from '@/core/configuration';
+import { getBreakpoints, getSpacing } from '@/core/configuration';
 import { resolveResponsiveValue } from '@/core/responsive';
 import type { 
     IShortStyleBoxProps,
@@ -13,6 +13,10 @@ import {
     isSpacingShortProp
 } from '@/types/short-props';
 import { css, cx } from '@emotion/css';
+
+type StyleValue = string | number | undefined | null;
+type StyleObject = Record<string, StyleValue>;
+type CssInterpolation = Parameters<typeof css>[0];
 
 /**
  * Basic style reset for box-sizing.
@@ -34,8 +38,8 @@ const STYLE_RESET = css({
  * @example
  * ```ts
  * const styles = processShortProps({
- *   m: 'm',
- *   p: { xs: 's', md: 'l' },
+ *   m: 'md',
+ *   p: { xs: 'sm', md: 'lg' },
  *   top: '10px'
  * }, 800);
  * ```
@@ -43,9 +47,9 @@ const STYLE_RESET = css({
 export function processShortProps(
     shortProps: IShortStyleBoxProps,
     width: number
-): Record<string, any> {
+): StyleObject {
     const breakpoints = getBreakpoints();
-    const resolvedStyles: Record<string, any> = {};
+    const resolvedStyles: StyleObject = {};
 
     // Process all short props
     for (const [shortProp, value] of Object.entries(shortProps)) {
@@ -89,7 +93,7 @@ export function processShortProps(
  * ```ts
  * const className = generateCombinedClassName(
  *   { $display: 'flex', $margin: 16 },
- *   { m: 'm', p: { xs: 's', md: 'l' } },
+ *   { m: 'md', p: { xs: 'sm', md: 'lg' } },
  *   800, 
  *   true
  * );
@@ -107,7 +111,7 @@ export function generateCombinedClassName(
     const shortStyles = processShortProps(shortProps, width);
 
     // Process dollar props (these take precedence)
-    const dollarStyles: Record<string, any> = {};
+    const dollarStyles: StyleObject = {};
     for (const [key, value] of Object.entries(dollarProps)) {
         if (key.startsWith('$') && value !== undefined) {
             const cssProperty = key.slice(1);
@@ -120,11 +124,11 @@ export function generateCombinedClassName(
     }
 
     // Merge styles with dollar props taking precedence
-    const mergedStyles = { ...shortStyles, ...dollarStyles };
+    const mergedStyles: StyleObject = { ...shortStyles, ...dollarStyles };
 
     // Generate the main styles class
     const stylesClass = Object.keys(mergedStyles).length > 0
-        ? css(mergedStyles as any)
+        ? css(mergedStyles as unknown as CssInterpolation)
         : '';
 
     // Combine with reset if needed
@@ -150,12 +154,12 @@ export function generateCombinedClassName(
  * resolveSpacing('xl');  // Returns 20 (from spacing scale)
  * ```
  */
-export function resolveSpacing(value: SpacingKey | number): string | number {
+export function resolveSpacing(value: string | number): string | number {
     const spacingScale = getSpacing();
 
     // Type guard: check if value is a string (SpacingKey) and exists in spacing scale
     if (typeof value === 'string' && value in spacingScale) {
-        return spacingScale[value];
+        return spacingScale[value as SpacingKey];
     }
 
     // Pass-through for numbers (raw pixel values)

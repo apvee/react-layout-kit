@@ -102,11 +102,7 @@ export type { BreakpointDefs, BreakpointKey, Breakpoints, SpacingDefs, SpacingKe
  */
 export { useElementWidth } from '@/hooks/useElementWidth';
 export { useContainerWidth } from '@/hooks/useContainerWidth';
-
-/**
- * React utilities for robust component composition.
- */
-export { default as useMergedRef } from '@react-hook/merged-ref';
+export { useMergedRef } from '@/hooks/useMergedRef';
 
 /**
  * Styling utilities for creating CSS classes and managing styles.

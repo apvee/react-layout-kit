@@ -1,8 +1,7 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
-import { getBreakpoints } from '@/core/styling';
-import { useElementWidth } from '@/hooks/useElementWidth';
-import useMergedRef from '@react-hook/merged-ref';
+import { useResponsiveResolvers } from '@/core/hooks';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { AspectRatioProps } from './AspectRatio.types';
 
@@ -99,16 +98,11 @@ export const AspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
     // Use useMergedRef for proper ref management
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
-    // Get container width - use prop value or measure element
-    const measuredWidth = useElementWidth(elementRef, {
-      disabled: containerWidth !== undefined
+    // Get resolution utilities
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
+      elementRef,
+      containerWidth
     });
-    const currentWidth = containerWidth ?? measuredWidth;
-
-    // Get breakpoints configuration
-    const activeBreakpoints = React.useMemo(() => {
-      return getBreakpoints();
-    }, []);
 
     // Resolve the responsive ratio value based on current container width
     const resolvedRatio = React.useMemo(() => {

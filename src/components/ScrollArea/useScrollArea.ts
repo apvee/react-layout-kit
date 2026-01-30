@@ -7,8 +7,20 @@ import type { ScrollAreaType, ScrollMetrics, ThumbMetrics, VisibilityState } fro
 const MIN_THUMB_SIZE = 44;
 
 /**
- * Unified hook for managing all ScrollArea functionality.
- * Consolidates scroll metrics, visibility management, and drag interactions.
+ * Internal hook powering the `ScrollArea` component.
+ *
+ * Computes overflow and scroll metrics, derives thumb sizes/offsets, manages visibility
+ * behavior (`hover`/`scroll`/`always`), and implements pointer-based dragging for thumbs.
+ *
+ * @param viewportRef - Ref to the scrollable viewport element.
+ * @param trackSize - Thickness of the scrollbar track (in px). Used for layout and calculations.
+ * @param type - Scrollbar visibility mode.
+ * @param scrollHideDelay - Delay (ms) before hiding scrollbars for `hover`/`scroll` modes.
+ * @param disabled - When true, prevents observers/listeners from being attached and stops updates.
+ * @returns An object containing scroll/overflow metrics, thumb metrics, visibility state, drag state,
+ * and event handlers for the container/viewport/thumbs.
+ *
+ * @internal
  */
 export function useScrollArea(
   viewportRef: React.RefObject<HTMLElement>,

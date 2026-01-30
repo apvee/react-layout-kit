@@ -1,8 +1,8 @@
 import { Box } from '@/components/Box';
 import { resolveResponsiveValue } from '@/core/responsive';
-import { getBreakpoints, resolveSpacing } from '@/core/styling';
-import { useElementWidth } from '@/hooks/useElementWidth';
-import useMergedRef from '@react-hook/merged-ref';
+import { resolveSpacing } from '@/core/styling';
+import { useResponsiveResolvers } from '@/core/hooks';
+import { useMergedRef } from '@/hooks/useMergedRef';
 import * as React from 'react';
 import type { SimpleGridProps } from './SimpleGrid.types';
 
@@ -22,7 +22,7 @@ import type { SimpleGridProps } from './SimpleGrid.types';
  * **Responsive Behavior:**
  * - All properties support responsive values for different layouts at different breakpoints
  * - Container width measurement is used for responsive prop resolution
- * - Spacing values can use predefined scale keys ('xs', 's', 'm', 'l', 'xl', 'xxl') or custom CSS values
+ * - Spacing values can use predefined scale keys ('none', 'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl') or custom CSS values
  * 
  * @param props - Component props including layout, styling, and responsive options
  * @returns A React element with applied layout styles
@@ -38,7 +38,7 @@ import type { SimpleGridProps } from './SimpleGrid.types';
  * </SimpleGrid>
  * 
  * // Custom spacing
- * <SimpleGrid cols={2} spacing="xl" verticalSpacing="s">
+ * <SimpleGrid cols={2} spacing="xl" verticalSpacing="sm">
  *   <div>Large horizontal gap, small vertical gap</div>
  *   <div>Large horizontal gap, small vertical gap</div>
  * </SimpleGrid>
@@ -46,7 +46,7 @@ import type { SimpleGridProps } from './SimpleGrid.types';
  * // Responsive layout
  * <SimpleGrid 
  *   cols={{ xs: 1, sm: 2, md: 3, lg: 4 }}
- *   spacing={{ xs: "s", md: "m", lg: "l" }}
+ *   spacing={{ xs: "sm", md: "md", lg: "lg" }}
  * >
  *   <div>Responsive Item 1</div>
  *   <div>Responsive Item 2</div>
@@ -79,16 +79,11 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
     // Use useMergedRef for proper ref management
     const mergedRef = useMergedRef(forwardedRef, elementRef);
 
-    // Get container width - use prop value or measure element
-    const measuredWidth = useElementWidth(elementRef, {
-      disabled: containerWidth !== undefined
+    // Get resolution utilities
+    const { currentWidth, activeBreakpoints } = useResponsiveResolvers({
+      elementRef,
+      containerWidth
     });
-    const currentWidth = containerWidth ?? measuredWidth;
-
-    // Get breakpoints configuration
-    const activeBreakpoints = React.useMemo(() => {
-      return getBreakpoints();
-    }, []);
 
     // Resolve responsive values based on current container width
     const resolvedCols = React.useMemo(() => {
@@ -122,15 +117,11 @@ export const SimpleGrid = React.forwardRef<HTMLDivElement, SimpleGridProps>(
 
     // Calculate gap values - support both single value and row/column values
     const columnGap = React.useMemo(() => {
-      // Convert number to px if needed
-      const spacing = resolvedSpacing;
-      return typeof spacing === 'number' ? `${spacing}px` : spacing;
+      return resolvedSpacing;
     }, [resolvedSpacing]);
 
     const rowGap = React.useMemo(() => {
-      // Convert number to px if needed
-      const spacing = resolvedVerticalSpacing;
-      return typeof spacing === 'number' ? `${spacing}px` : spacing;
+      return resolvedVerticalSpacing;
     }, [resolvedVerticalSpacing]);
 
     return (

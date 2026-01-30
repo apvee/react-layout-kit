@@ -28,13 +28,27 @@ export function resolveResponsiveValue<T>(
     return value as T;
   }
 
+  const isBreakpointKey = (key: string): key is BreakpointKey => {
+    return Object.prototype.hasOwnProperty.call(breakpoints, key);
+  };
+
+  // Only treat objects as responsive maps if they contain at least one known breakpoint key.
+  const valueObj = value as Record<string, T>;
+  const hasAnyBreakpointKey = Object.keys(valueObj).some((key) => {
+    return isBreakpointKey(key) && valueObj[key] !== undefined;
+  });
+
+  if (!hasAnyBreakpointKey) {
+    return value as T;
+  }
+
   // Get all breakpoints that have values, sorted by min-width ascending
-  const entries = Object.entries(value as Record<BreakpointKey, T>)
-    .filter(([, val]) => val !== undefined)
+  const entries = Object.entries(valueObj)
+    .filter(([key, val]) => isBreakpointKey(key) && val !== undefined)
     .map(([key, val]) => ({
       key: key as BreakpointKey,
-      value: val,
-      minWidth: breakpoints[key as BreakpointKey] || 0,
+      value: val as T,
+      minWidth: breakpoints[key as BreakpointKey],
     }))
     .sort((a, b) => a.minWidth - b.minWidth);
 
